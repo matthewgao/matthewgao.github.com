@@ -1,0 +1,789 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="bitcoin," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Matthew Note" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="Bitcoin 最近犹豫冲上了250USD的高点，成为了世界瞩目的焦点，2年前我接触过Bitcoin写下了这篇文章。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Bitcoin 原理">
+<meta property="og:url" content="http://matthewgao.github.io/2013-5-13-Bitcoin/index.html">
+<meta property="og:site_name" content="Matthew Note">
+<meta property="og:description" content="Bitcoin 最近犹豫冲上了250USD的高点，成为了世界瞩目的焦点，2年前我接触过Bitcoin写下了这篇文章。">
+<meta property="og:updated_time" content="2016-04-18T14:54:14.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Bitcoin 原理">
+<meta name="twitter:description" content="Bitcoin 最近犹豫冲上了250USD的高点，成为了世界瞩目的焦点，2年前我接触过Bitcoin写下了这篇文章。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://matthewgao.github.io/2013-5-13-Bitcoin/"/>
+
+
+
+
+
+  <title> Bitcoin 原理 | Matthew Note </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?0d7319169ed36fc7c6c76a85b1353472";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Matthew Note</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://matthewgao.github.io/2013-5-13-Bitcoin/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Matthew Gao">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/avatar.gif">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Matthew Note">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="Matthew Note" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Bitcoin 原理
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <a href="/2013-5-13-Bitcoin/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2013-5-13-Bitcoin/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+              <div class="post-description">
+                  Bitcoin 最近犹豫冲上了250USD的高点，成为了世界瞩目的焦点，2年前我接触过Bitcoin写下了这篇文章。
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Bitcoin是最早实现“加密货币”这一概念的系统，该设想最早由戴伟（Dai Wei,音译）于1998年在cypherpunks函件用户组首次提出的。 它建立在这样一个概念之上，即货币可以是任何东西或记录，只要它在一个国家或社会经济体系内被接受为商品服务的支付方式，或是债务偿还的方式。比特币的设计核心思想是以数学题答案作为货币，其发行权独立于任何中央机构之外。</p>
+<p>我是最近接触Bitcoin的，他的复杂的机制和需要大规模的计算来换取BTC（bitcoin的缩写）很吸引我，我花了些时间简单的了解他的机理，由于网上对他的介绍的中文很少，而且有些写得不是很对，容易误导，官网wiki中文只翻译了部分，所以我写了这个，供大家参考。</p>
+<h2 id="明确概念"><a href="#明确概念" class="headerlink" title="明确概念"></a>明确概念</h2><ul>
+<li>第一个是BTC，就是这个货币，和RMB一样是个单位</li>
+<li>第二，Transaction，表示一条交易记录，里面包含了货币接收方的address和BTC数量</li>
+<li>第三，Block，多个Transaction打包存为一个Block，每一个人的机器上都会自动下载所有的Blocks，从而才能够进行转账和查看address中金额，也就是说每个人的电脑都存数了网络上所有的交易（Transaction）</li>
+<li>第四，Blocks-chain，所有的Block都是连起来的，组成一个Block链。address相当于我们现实生活中的帐号，是你账户的唯一标识。</li>
+</ul>
+<h2 id="密码学的知识"><a href="#密码学的知识" class="headerlink" title="密码学的知识"></a>密码学的知识</h2><p>公开密钥加密（Public-key cryptography，也称为非对称密钥加密），该加密算法使用两个不同的密钥，各名为加密密钥和解密密钥。前者公开，又称公开密钥，简称公钥。后者保密，又称私有密钥，简称私钥。这两个金钥是数学相关，用某用户加密密钥加密后所得的信息，只能用该用户的解密密钥才能解密。公钥加密的另一用途是身份验证：用私钥加密的信息，可以用公钥对其解密。接收者由此可知：这条信息确实来自于拥有私钥的某人，公钥的形式就是数字证书。Bitcoin正是利用了这个加密方法的密钥不对称性的优点。address（例如1KTj9TdiXtPcerF4XsCsFWU5NEPpFfdLiv）实际上就是一个公钥，每一个有address的人的计算机中都会存有这个公钥对应的私钥，每一次对这个address中的BTC的转出交易必须有私钥进行签署，如果你的私钥丢失了，那么你的这个address里的BTC就再也拿不出来了。</p>
+<h2 id="工作原理"><a href="#工作原理" class="headerlink" title="工作原理"></a>工作原理</h2><p>转账的过程是这样的：把你要转到的address和金额合并成一个Transaction，并用你自己的私钥进行签署，并发到整个P2P的网络上，所以网络上所有的拥有你address的人都可以看的到这笔Transaction是要从哪里转到哪里转了多少钱，但是由于没有私钥，他们没有办法修改。</p>
+<p>我们有了一个新的Transaction就要有一个Block来存储它，所以要不断的生成Block，按照计划平均每十分钟生成一个Block，这个block成功生成后会给生成这个Block的人一笔奖赏，这就是miner赚钱的方法，这个我们一会再说。生成了一个存有这个transaction的block之后，那么整个blocks-chain的长度就增加了一个，所以网络上会以丢弃所有比这个短的block-chain的分支，所有的在线节点也会自动下载这个新的Block加到自己的index中来，当在网络上有一定人数的人认可你的transaction了，那么交易就认为合法。</p>
+<h2 id="防伪造"><a href="#防伪造" class="headerlink" title="防伪造"></a>防伪造</h2><p>怎么防止伪造货币？由于每一笔Transaction中都存数了来源address和目的addresss，所以每一笔钱都是可以追根溯源的，如果你想非法造币，那么你要修改整条chain，还要保证你的chain最后最长，所以如果你想自己伪造BTC货币那么你就要控制P2P网络上相当大一部分的机器，要他们生成新Block的速度比你自己伪造的速度慢，这样你伪造的才可能被公认，但是这个是相当小概率事件，几乎绝对不可能。</p>
+<p>如果 p2p 网络过大，交易Transaction不能尽量的迅速的广播到全网络。就会出来 p2p 的网络的局部保持有小群体共同认可的一份全局Transaction。多个全局Transaction的分支同时发展是有可能的。因为每个小群体都可能认为他们看见的那部分更长更有效。但是， 只有有人发现另一条分支更长，它就会转换阵营。所以，有一定的可能性，你的Transaction被一个小群体接受，但在一段时间后，被更大的阵营抛弃，所以非法的总会是非法的。</p>
+<h2 id="挖矿"><a href="#挖矿" class="headerlink" title="挖矿"></a>挖矿</h2><p>下面我们说怎么赚钱，也就是mining，挖矿，block的生成非常苛刻，一定要保证block的hash值的前几位为0，这个0的个数越多，需要计算的时间就越长，复杂度越大，所以如果网络中有一个人用了最短的时间生成了这个Block他将有权利在这个block中生成一个Transaction，而这个Transaction是给他的address中存取一定数额的BTC，现在这个数额是50BTC，按照规则，每四年数额减半，那么若干年后，BTC的数额少的可怜时候，谁来做miner，那么有另一个机制，就是可以从你给打包的Transaction那里收取fee，也就是消费，如果他给的多那么你当然会把它加进你的Block中来，从而你可以从所有的Block中的所有Transactions的fee中获得利润。</p>
+<p>所以现在开始mining吧，根据现在的BTC对USD的汇率是8.1，这个汇率每天都在浮动，如果你能自己创建一个block，那你就有50*8.1美元了。</p>
+<p>首先你要有一个address，所以你要去下载一个client，然后安装它，运行时会自动生成一个address，之后他会自动从网上下载所有的blocks，现在大概有128000个blocks，这个时候你的address才能够进行转账和查看transaction信息等等。</p>
+<p>如果你想自己mining，那可能你能制造一个block的概率很低，所以你不如加入一个mining pool，这样你的每一部分贡献会得到一定回报，相当于你贡献出你的计算量大家一起来挖一个。另外，CPU的挖矿能力也不太行了，都要用GPU，我用过一个AMD的CPU只能达到3Mhash/s，但是用GPU就完全不同了，nVIDIA的GPU采用CUDA架构在双精度计算上有优势，但是hash都是整型计算，CUDA似乎并不太适合，也可能是他用openCL的标准性能不高，总是ATI要比nVIDA的效率高，我用两张Tesla C1060的卡只能达到104Mhash/s，但是用ati的5870一张卡就能达到370Mhash/s。</p>
+<p>总之下载好GPU挖矿的软件，去注册个mining pool的帐号，我用的是<a href="http://deepbit.net/，然后绑定你的address，设置好最小的收款金额，就可以开始挖矿啦。我挖了两天已经有0.34BTC了。" target="_blank" rel="external">http://deepbit.net/，然后绑定你的address，设置好最小的收款金额，就可以开始挖矿啦。我挖了两天已经有0.34BTC了。</a></p>
+<p>对了，由于你的address是要你自己维护的，要备份好wallet.dat文件，因为这里存储的是你的私钥，如果这个丢了那么你的钱就没有了，为了避免这个悲剧发生，简易你去注册个wallet，我用的是<a href="https://www.mybitcoin.com" target="_blank" rel="external">https://www.mybitcoin.com</a> 这样wallet都有他们来托管，我们只要用账户登录就可以了（和支付宝有那么一点相似）</p>
+<h2 id="参考连接"><a href="#参考连接" class="headerlink" title="参考连接"></a>参考连接</h2><ul>
+<li>[1] <a href="https://en.bitcoin.it/wiki/Main_Page" target="_blank" rel="external">https://en.bitcoin.it/wiki/Main_Page</a>   官方WIKI</li>
+<li>[2] <a href="http://www.bitcoin.org/" target="_blank" rel="external">http://www.bitcoin.org/</a>  官方网站</li>
+<li>[3] <a href="http://shaneliu.org/archives/506" target="_blank" rel="external">http://shaneliu.org/archives/506</a>  强烈推荐看看这篇</li>
+<li>[4] <a href="http://btcchina.com/index.php" target="_blank" rel="external">http://btcchina.com/index.php</a> 一个中文论坛</li>
+<li>[5] <a href="https://github.com/downloads/Kiv/poclbm/guiminer-20110521.exe" target="_blank" rel="external">https://github.com/downloads/Kiv/poclbm/guiminer-20110521.exe</a>  GUI的GPU挖矿程序</li>
+</ul>
+<p>如果你觉得我写的对你有帮助可以denote我，我的address是：1H8FR8aWYCBd8MoXCBoEQUqw6pH7bq6kXi</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/bitcoin/" rel="tag"># bitcoin</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2013-5-13-Apache/" rel="next" title="Apache Module 开发入门">
+                <i class="fa fa-chevron-left"></i> Apache Module 开发入门
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2013-5-14-Apache-with-cpp/" rel="prev" title="用C++进行 Apache Module 开发">
+                用C++进行 Apache Module 开发 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+  <a class="jiathis_button_tsina"></a>
+  <a class="jiathis_button_tqq"></a>
+  <a class="jiathis_button_weixin"></a>
+  <a class="jiathis_button_cqq"></a>
+  <a class="jiathis_button_douban"></a>
+  <a class="jiathis_button_renren"></a>
+  <a class="jiathis_button_qzone"></a>
+  <a class="jiathis_button_kaixin001"></a>
+  <a class="jiathis_button_copy"></a>
+  <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>
+  <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" >
+  var jiathis_config={
+    hideMore:false
+  }
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2013-5-13-Bitcoin/"
+           data-title="Bitcoin 原理" data-url="http://matthewgao.github.io/2013-5-13-Bitcoin/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="Matthew Gao" />
+          <p class="site-author-name" itemprop="name">Matthew Gao</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">40</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">23</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">48</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/matthewgao" target="_blank" title="Github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  Github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/xxiaogao" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  Twitter
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/334332999" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/gaoshen" target="_blank" title="Zhihu">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  Zhihu
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#明确概念"><span class="nav-number">1.</span> <span class="nav-text">明确概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#密码学的知识"><span class="nav-number">2.</span> <span class="nav-text">密码学的知识</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#工作原理"><span class="nav-number">3.</span> <span class="nav-text">工作原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#防伪造"><span class="nav-number">4.</span> <span class="nav-text">防伪造</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#挖矿"><span class="nav-number">5.</span> <span class="nav-text">挖矿</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考连接"><span class="nav-number">6.</span> <span class="nav-text">参考连接</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2012 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Matthew Gao</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="http://cdn.bootcss.com/jquery/2.1.3/jquery.min.js"></script>
+
+  
+  <script type="text/javascript" src="http://cdn.bootcss.com/fastclick/1.0.5/fastclick.min.js"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="http://cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"matthewgao"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+
+</body>
+</html>

@@ -1,0 +1,1166 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="c,c++," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Matthew Note" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="记录下C\C++开发过程中不断学到的新东西:C++11, STL, Boost, 多线程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C\C++ Notes">
+<meta property="og:url" content="http://matthewgao.github.io/2014-9-12-cpp-note/index.html">
+<meta property="og:site_name" content="Matthew Note">
+<meta property="og:description" content="记录下C\C++开发过程中不断学到的新东西:C++11, STL, Boost, 多线程">
+<meta property="og:updated_time" content="2017-01-06T05:44:44.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="C\C++ Notes">
+<meta name="twitter:description" content="记录下C\C++开发过程中不断学到的新东西:C++11, STL, Boost, 多线程">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://matthewgao.github.io/2014-9-12-cpp-note/"/>
+
+
+
+
+
+  <title> C\C++ Notes | Matthew Note </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?0d7319169ed36fc7c6c76a85b1353472";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Matthew Note</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://matthewgao.github.io/2014-9-12-cpp-note/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Matthew Gao">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/avatar.gif">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Matthew Note">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="Matthew Note" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                C\C++ Notes
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <a href="/2014-9-12-cpp-note/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2014-9-12-cpp-note/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+              <div class="post-description">
+                  记录下C\C++开发过程中不断学到的新东西:C++11, STL, Boost, 多线程
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="双重指针"><a href="#双重指针" class="headerlink" title="双重指针"></a>双重指针</h2><pre><code>#include &lt;stdio.h&gt;
+
+int main(){
+
+    char **p=NULL;
+    printf(&quot;2 level ptr is:%p\n&quot;,&amp;p);
+    printf(&quot;1 level ptr is:%p\n&quot;,p);
+    return 0;
+}
+</code></pre><p>输出结果为</p>
+<pre><code>2 level ptr is:0x7fff2b440768
+1 level ptr is:(nil)
+</code></pre><p>分配地址传给子函数可行，指针传给子函数，让子函数分配地址回传不可行。</p>
+<h2 id="数组指针"><a href="#数组指针" class="headerlink" title="数组指针"></a>数组指针</h2><pre><code>char addr[256];
+memset(addr+4, 0,20);
+</code></pre><p>这样实际上是错误的，虽然说addr本质上是一个指针，但是在<code>addr+4</code>还需要强制转换为<code>void*</code>才可以。</p>
+<h2 id="memset-memcpy"><a href="#memset-memcpy" class="headerlink" title="memset/memcpy"></a>memset/memcpy</h2><p>具体内容man</p>
+<h2 id="GDB"><a href="#GDB" class="headerlink" title="GDB"></a>GDB</h2><h3 id="检查core-dump"><a href="#检查core-dump" class="headerlink" title="检查core dump"></a>检查core dump</h3><figure class="highlight lasso"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">thread</span> apply <span class="literal">all</span> bt <span class="literal">full</span></div></pre></td></tr></table></figure>
+<h3 id="检查backtrace的每一层"><a href="#检查backtrace的每一层" class="headerlink" title="检查backtrace的每一层"></a>检查backtrace的每一层</h3><ul>
+<li>up 向上一层</li>
+<li>down 向下一层</li>
+</ul>
+<h3 id="显示变量类型"><a href="#显示变量类型" class="headerlink" title="显示变量类型"></a>显示变量类型</h3><figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">whatis (<span class="name">param</span>)</div></pre></td></tr></table></figure>
+<h3 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h3><ul>
+<li><code>backtrace</code> 显示程序中的当前位置和表示如何到达当前位置的栈跟踪（同义词：<code>where</code>）</li>
+<li><code>breakpoint</code> 在程序中设置一个断点</li>
+<li><code>cd</code> 改变当前工作目录</li>
+<li><code>clear</code> 删除刚才停止处的断点</li>
+<li><code>commands</code> 命中断点时，列出将要执行的命令</li>
+<li><code>continue</code> 从断点开始继续执行</li>
+<li><code>delete</code> 删除一个断点或监测点；也可与其他命令一起使用</li>
+<li><code>display</code> 程序停止时显示变量和表达时</li>
+<li><code>down</code> 下移栈帧，使得另一个函数成为当前函数</li>
+<li><code>frame</code> 选择下一条continue命令的帧</li>
+<li><code>info</code> 显示与该程序有关的各种信息</li>
+<li><code>jump</code> 在源程序中的另一点开始运行</li>
+<li><code>kill</code> 异常终止在gdb 控制下运行的程序</li>
+<li><code>list</code> 列出相应于正在执行的程序的原文件内容</li>
+<li><code>next</code> 执行下一个源程序行，从而执行其整体中的一个函数</li>
+<li><code>print</code> 显示变量或表达式的值</li>
+<li><code>pwd</code> 显示当前工作目录</li>
+<li><code>pype</code> 显示一个数据结构（如一个结构或C++类）的内容</li>
+<li><code>quit</code> 退出gdb</li>
+<li><code>reverse-search</code> 在源文件中反向搜索正规表达式</li>
+<li><code>run</code> 执行该程序</li>
+<li><code>search</code> 在源文件中搜索正规表达式</li>
+<li><code>set variable</code> 给变量赋值</li>
+<li><code>signal</code> 将一个信号发送到正在运行的进程</li>
+<li><code>step</code> 执行下一个源程序行，必要时进入下一个函数</li>
+<li><code>undisplay display</code> 命令的反命令，不要显示表达式</li>
+<li><code>until</code> 结束当前循环</li>
+<li><code>up</code> 上移栈帧，使另一函数成为当前函数</li>
+<li><code>watch</code> 在程序中设置一个监测点(即数据断点)</li>
+</ul>
+<h3 id="其他小诡计"><a href="#其他小诡计" class="headerlink" title="其他小诡计"></a>其他小诡计</h3><p>在程序中加<code>abort()</code> 从而可以在想拿到东西的地方得到core dump</p>
+<h2 id="Valgrind-Memory-leak-check-tool"><a href="#Valgrind-Memory-leak-check-tool" class="headerlink" title="Valgrind: Memory leak check tool"></a>Valgrind: Memory leak check tool</h2><figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">sudo apt-get install valgrind</div><div class="line">valgrind (<span class="name">option</span>) (<span class="name">program</span>) (<span class="name">program</span> option)</div></pre></td></tr></table></figure>
+<ul>
+<li><a href="http://www.ibm.com/developerworks/cn/linux/l-cn-valgrind/" target="_blank" rel="external">参考网站</a></li>
+</ul>
+<figure class="highlight clean"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">#<span class="number">0</span>  <span class="number">0xb7fe1424</span> <span class="keyword">in</span> __kernel_vsyscall ()</div><div class="line">#<span class="number">1</span>  <span class="number">0xb7d5c571</span> <span class="keyword">in</span> raise () <span class="keyword">from</span> /lib/libc.so<span class="number">.6</span></div><div class="line">#<span class="number">2</span>  <span class="number">0xb7d5dd72</span> <span class="keyword">in</span> abort () <span class="keyword">from</span> /lib/libc.so<span class="number">.6</span></div><div class="line">#<span class="number">3</span>  <span class="number">0xb7f9352f</span> <span class="keyword">in</span> __gnu_cxx::__verbose_terminate_handler() () <span class="keyword">from</span> /usr/lib/libstdc++.so<span class="number">.6</span></div><div class="line">#<span class="number">4</span>  <span class="number">0xb7f90eb5</span> <span class="keyword">in</span> __cxxabiv1::__terminate(void (*)()) () <span class="keyword">from</span> /usr/lib/libstdc++.so<span class="number">.6</span></div><div class="line">#<span class="number">5</span>  <span class="number">0xb7f90ef2</span> <span class="keyword">in</span> std::terminate() () <span class="keyword">from</span> /usr/lib/libstdc++.so<span class="number">.6</span></div><div class="line">#<span class="number">6</span>  <span class="number">0xb7f92155</span> <span class="keyword">in</span> __cxa_pure_virtual () <span class="keyword">from</span> /usr/lib/libstdc++.so<span class="number">.6</span></div></pre></td></tr></table></figure>
+<p>__cxa_pure_virtual() 调用虚函数，会导致一个runtime error， abort()</p>
+<h2 id="dynamic-cast"><a href="#dynamic-cast" class="headerlink" title="dynamic_cast"></a>dynamic_cast</h2><p>转换失败会返回一个NULL指针，基本只限于对于引用和指针，从父类转子类 或者从子类转父类，所谓的downcast和upcast</p>
+<ul>
+<li>去<code>const</code>属性用<code>const_cast</code>。</li>
+<li>基本类型转换用<code>static_cast</code>。</li>
+<li>多态类之间的类型转换用<code>dynamic_cast</code>。</li>
+<li>不同类型的指针类型转换用<code>reinterpret_cast</code>。</li>
+</ul>
+<p>尽量使用C++的新式装换，尽量不用老式转换</p>
+<h2 id="switch-case"><a href="#switch-case" class="headerlink" title="switch-case"></a>switch-case</h2><p>case 在没有{}指定范围的时候在其中声明变量会导致编译时候crosses initialization of “XXX” 错误</p>
+<figure class="highlight clean"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">case</span> <span class="string">'0'</span>...<span class="string">'9'</span>: <span class="comment">//合法</span></div></pre></td></tr></table></figure>
+<h3 id="Parameters"><a href="#Parameters" class="headerlink" title="Parameters"></a>Parameters</h3><h4 id="str"><a href="#str" class="headerlink" title="str"></a>str</h4><p>C string to truncate.<br>Notice that this string is modified by being broken into smaller strings (tokens).<br>Alternativelly, a null pointer may be specified, in which case the function continues scanning where a previous successful call to the function ended.</p>
+<h4 id="delimiters"><a href="#delimiters" class="headerlink" title="delimiters"></a>delimiters</h4><p>C string containing the delimiter characters.<br>These can be different from one call to another.</p>
+<h3 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/* strtok example */</span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span> <span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">  <span class="keyword">char</span> str[] =<span class="string">"- This, a sample string."</span>;</div><div class="line">  <span class="keyword">char</span> * pch;</div><div class="line">  <span class="built_in">printf</span> (<span class="string">"Splitting string \"%s\" into tokens:\n"</span>,str);</div><div class="line">  pch = strtok (str,<span class="string">" ,.-"</span>);</div><div class="line">  <span class="keyword">while</span> (pch != <span class="literal">NULL</span>)</div><div class="line">  &#123;</div><div class="line">    <span class="built_in">printf</span> (<span class="string">"%s\n"</span>,pch);</div><div class="line">    pch = strtok (<span class="literal">NULL</span>, <span class="string">" ,.-"</span>);</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="C99-支持可变长数组"><a href="#C99-支持可变长数组" class="headerlink" title="C99 支持可变长数组"></a>C99 支持可变长数组</h2><h3 id="基本用法"><a href="#基本用法" class="headerlink" title="基本用法"></a>基本用法</h3><ul>
+<li>变长数组只能是局部变量，不能是静态变量和全局变量，因为这两者的长度是编译时决定的，而变长数组的长度要到运行时才能确定。变长数组是局部变量，所以是有生命周期的，其生命周期仅在当前域内，即<code>{}</code>内。</li>
+<li>变长数组使用的内存是栈内存，所以需要注意数组长度不能太大超过栈内存大小限制。linux 上可以用 ulimit -s 查看栈大小，一般为 8M.</li>
+<li>同样适用于支持C99的C++程序</li>
+</ul>
+<blockquote>
+<p>例如：</p>
+</blockquote>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"> </div><div class="line"><span class="keyword">int</span> n = <span class="number">10</span>;</div><div class="line"><span class="keyword">int</span> a[n];        <span class="comment">/*非法，VM类型不能具有文件作用域*/</span></div><div class="line"><span class="keyword">int</span> (*p)[n];      <span class="comment">/*非法，VM类型不能具有文件作用域*/</span></div><div class="line"><span class="keyword">struct</span> test</div><div class="line">&#123;</div><div class="line">       <span class="keyword">int</span> k;</div><div class="line">       <span class="keyword">int</span> a[n];     <span class="comment">/*非法，a不是普通标识符*/</span></div><div class="line">       <span class="keyword">int</span> (*p)[n];   <span class="comment">/*非法，p不是普通标识符*/</span></div><div class="line">&#125;;</div><div class="line"> </div><div class="line"><span class="keyword">int</span> main( <span class="keyword">void</span> )</div><div class="line">&#123;</div><div class="line">       <span class="keyword">int</span> m = <span class="number">20</span>;</div><div class="line">       <span class="keyword">struct</span> test1</div><div class="line">       &#123;</div><div class="line">              <span class="keyword">int</span> k;</div><div class="line">              <span class="keyword">int</span> a[n];         <span class="comment">/*非法，a不是普通标识符*/</span></div><div class="line">              <span class="keyword">int</span> (*p)[n];       <span class="comment">/*非法，a不是普通标识符*/</span></div><div class="line">       &#125;;</div><div class="line">       <span class="keyword">extern</span> <span class="keyword">int</span> a[n];       <span class="comment">/*非法，VLA不能具有链接性*/</span></div><div class="line">       <span class="keyword">static</span> <span class="keyword">int</span> b[n];        <span class="comment">/*非法，VLA不能具有静态存储周期*/</span></div><div class="line">       <span class="keyword">int</span> c[n];             <span class="comment">/*合法，自动VLA*/</span></div><div class="line">       <span class="keyword">int</span> d[m][n];          <span class="comment">/*合法，自动VLA*/</span></div><div class="line">       <span class="keyword">static</span> <span class="keyword">int</span> (*p1)[n] = d;  <span class="comment">/*合法，静态VM指针*/</span></div><div class="line">       n = <span class="number">20</span>;</div><div class="line">       <span class="keyword">static</span> <span class="keyword">int</span> (*p2)[n] = d;  <span class="comment">/*未定义行为*/</span></div><div class="line">       <span class="built_in">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="作为形参"><a href="#作为形参" class="headerlink" title="作为形参"></a>作为形参</h3><p>除了可以作为自动对象外，还可以作为函数的形参，下面几个函数原型声明是一样的：</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">void func( int a[<span class="string">m</span>][<span class="symbol">n</span>] );</div><div class="line">void func( int a[<span class="string">*</span>][<span class="symbol">n</span>] );</div><div class="line">void func( int a[<span class="string"> </span>][<span class="symbol">n</span>] );</div><div class="line">void func( int a[<span class="string">*</span>][<span class="symbol">*</span>] );</div><div class="line">void func( int a[<span class="string"> </span>][<span class="symbol">*</span>] );</div><div class="line">void func( int (<span class="emphasis">*a)[*</span>] );</div></pre></td></tr></table></figure>
+<h3 id="各种限定词"><a href="#各种限定词" class="headerlink" title="各种限定词"></a>各种限定词</h3><p>除了<em>标记外，形参中的数组还可以使用类型限定词const、volatile、restrict和static关键字。由于形参中的VLA被自动调整为等效的指针，因此这些类型限定词实际上限定的是一个指针，例如：`void func( int, int, int a[const][</em>] );<code>等效于</code>void func( int, int, int ( <em>const a )[</em>] );` 它指出a是一个const对象，不能在func内部直接通过a修改其代表的对象。例如：</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">void func( int, int, int a[<span class="string">const</span>][<span class="symbol">*</span>] );</div><div class="line">……</div><div class="line">void func( int m, int n, int a[<span class="string">const m</span>][<span class="symbol">n</span>] )</div><div class="line">&#123;</div><div class="line"><span class="code">       int b[m][n];</span></div><div class="line"><span class="code">       a = b;        /*错误，不能通过a修改其代表的对象*/</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>static表示传入的实参的值至少要跟其所修饰的长度表达式的值一样大。例如：</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">void func( int, int, int a[<span class="string">const static 20</span>][<span class="symbol">*</span>] );</div><div class="line">……</div><div class="line">int m = 20, n = 10;</div><div class="line">int a[<span class="string">m</span>][<span class="symbol">n</span>];</div><div class="line">int b[<span class="string">n</span>][<span class="symbol">m</span>];</div><div class="line">func( m, n, a );</div><div class="line">func( m, n, b );     /<span class="emphasis">*错误，b的第一维长度小于static 20*</span>/</div></pre></td></tr></table></figure>
+<p>类型限定词和static关键字只能用于具有数组类型的函数形参的第一维中。这里的用词是数组类型，意味着它们不仅能用于VLA，也能用于一般数组形参。</p>
+<h2 id="const-函数"><a href="#const-函数" class="headerlink" title="const 函数"></a>const 函数</h2><ul>
+<li>常成员函数不能更新对象的数据成员 </li>
+<li>不能调用该类中没有const修饰的成员函数</li>
+<li>当类的实例为一个const object的时候只能调用const函数</li>
+</ul>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> <span class="built_in">Object</span>* obj = <span class="keyword">new</span> <span class="built_in">Object</span>();</div><div class="line">obj.func(); <span class="comment">//这里func必须为const函数 不然就不对</span></div></pre></td></tr></table></figure>
+<h2 id="友元-friend"><a href="#友元-friend" class="headerlink" title="友元 friend"></a>友元 friend</h2><ul>
+<li>友元函数可以访问其类中的成员，并且不受private protect的限制</li>
+<li>类也可以是友元，友元类可以访问其所在类的成员</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">class</span> A&#123;</div><div class="line">  <span class="keyword">public</span>：</div><div class="line">    <span class="function"><span class="keyword">friend</span> <span class="keyword">bool</span> <span class="title">func</span><span class="params">()</span></span>; <span class="comment">//声明友元</span></div><div class="line">  <span class="keyword">private</span>:</div><div class="line">    <span class="keyword">int</span> a;</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">friend</span> <span class="keyword">bool</span> <span class="title">func</span><span class="params">()</span></span>&#123;</div><div class="line">	some code <span class="comment">//友元的定义</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="STL和boost"><a href="#STL和boost" class="headerlink" title="STL和boost"></a>STL和boost</h2><ul>
+<li>make_pair(obj) 和 push_back(obj) 都会调用obj的拷贝构造函数，构造一个新函数，所以使用时要注意obj是否有一个合适的拷贝构造函数 </li>
+<li>Copy in, copy out.</li>
+</ul>
+<h3 id="shared-ptr"><a href="#shared-ptr" class="headerlink" title="shared_ptr"></a>shared_ptr</h3><ul>
+<li>注意循环引用（cycle）</li>
+<li>可以正确的在STL container中使用</li>
+</ul>
+<p>这里bad()的使用方法会可能导致临时shared_ptr指向对象不会被正确释放（在exception case下）<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">ok</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">    <span class="built_in">shared_ptr</span>&lt;<span class="keyword">int</span>&gt; p( <span class="keyword">new</span> <span class="keyword">int</span>(<span class="number">2</span>) );</div><div class="line">    f( p, g() );</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">bad</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">    f( <span class="built_in">shared_ptr</span>&lt;<span class="keyword">int</span>&gt;( <span class="keyword">new</span> <span class="keyword">int</span>(<span class="number">2</span>) ), g() );</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<figure class="highlight cos"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">shared_ptr&lt;<span class="keyword">Job</span>&gt; <span class="keyword">j</span> = make_shared&lt;<span class="keyword">Job</span>&gt;()<span class="comment">; //make_shared比用new更加高效，</span></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">//这个函数会在传入时候复制一次shared_ptr，导致引用计数+1，之后return的时候又复制一次，导致引用计数又+1，但是这都会在函数执行后</span></div><div class="line"><span class="comment">//被正确释放掉</span></div><div class="line">shared_ptr&lt;<span class="keyword">Job</span>&gt; func(shared_ptr&lt;<span class="keyword">Job</span>&gt; <span class="keyword">job</span>)&#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">job</span><span class="comment">;</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//全程不会增加引用计数，但是要小心，如果这个shared_ptr的会被其他线程赋值，那么这可能会有问题</span></div><div class="line">shared_ptr&lt;<span class="keyword">Job</span>&gt;&amp; func(shared_ptr&lt;<span class="keyword">Job</span>&gt;&amp; <span class="keyword">job</span>)&#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">job</span><span class="comment">;</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//这个时候job会被赋值，job所指的老的对象会被释放掉，job会继续跟踪这个新建对象。</span></div><div class="line">shared_ptr&lt;<span class="keyword">Job</span>&gt;&amp; func(shared_ptr&lt;<span class="keyword">Job</span>&gt;&amp; <span class="keyword">job</span>)&#123;</div><div class="line">    <span class="keyword">job</span> = make_shared&lt;<span class="keyword">Job</span>&gt;()<span class="comment">;</span></div><div class="line">    <span class="keyword">return</span> <span class="keyword">job</span><span class="comment">;</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>如果以引用传递shared_ptr参数，那么他不能操纵他自己，不然会编译报错</li>
+</ul>
+<figure class="highlight maxima"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Association::addToManager(shared_ptr&lt;Association&gt;&amp; <span class="built_in">assoc</span>);</div><div class="line"><span class="built_in">assoc</span>-&gt;addToManager(<span class="built_in">assoc</span>);// 这里addToManager无法接受一个<span class="built_in">assoc</span>的引用</div></pre></td></tr></table></figure>
+<ul>
+<li><p>shared_ptr不能用static_cast等直接做转换，要用它提供的“</p>
+<ul>
+<li>static_pointer_cast<t></t></li>
+<li>const_pointer_cast<t></t></li>
+<li>dynamic_pointer_cast<t></t></li>
+</ul>
+</li>
+<li><p><a href="http://herbsutter.com/2013/06/05/gotw-91-solution-smart-pointer-parameters/" target="_blank" rel="external">91 Solution: Smart Pointer Parameters</a></p>
+</li>
+</ul>
+<h3 id="string是否是有引用实现的"><a href="#string是否是有引用实现的" class="headerlink" title="string是否是有引用实现的"></a>string是否是有引用实现的</h3><p>如果是引用实现的，在多线程条件下，可能因为要加锁所以带来性能上的影响，但是如果非引用实现，每个对象都是独立的copy则无影响。</p>
+<h3 id="vector-的增长"><a href="#vector-的增长" class="headerlink" title="vector 的增长"></a>vector 的增长</h3><p>vector的每次增长都会耗费一定时间去拷贝原有数据，所以如果能够预计大小，则预先reserve(size)会更好</p>
+<h3 id="vector赋值"><a href="#vector赋值" class="headerlink" title="vector赋值"></a>vector赋值</h3><p>最快的是用assign，其次是copy，最后是赋值操作符</p>
+<h3 id="STL容器"><a href="#STL容器" class="headerlink" title="STL容器"></a>STL容器</h3><ul>
+<li>迭代器(iterator) 实际上是一个指针所以</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt;::iterator it = &amp;svec[<span class="number">10</span>]</div></pre></td></tr></table></figure>
+<p>是正确的</p>
+<pre><code>*iter; //返回迭代器所指元素的引用
+c.push_back(str); //新元素的值为str的副本
+c.begin()/end(); //返回的是迭代器（即指针）
+c.front()/back(); //返回的是元素的引用
+</code></pre><ul>
+<li>string可以看做为一个字符容器</li>
+</ul>
+<h3 id="Allocator"><a href="#Allocator" class="headerlink" title="Allocator"></a>Allocator</h3><p>虽然分配器的定制有所限制，但在许多情况下，仍需要用到自定义的分配器，而这一般是为封装对不同类型内存空间（如共享内存与已回收内存）的访问方式，或在使用内存池进行内存分配时提高性能而为。除此以外，从内存占用和运行时间的角度看，在频繁进行少量内存分配的程序中，若引入为之专门定制的分配器，也会获益良多。</p>
+<p>任意满足分配器使用需求的C++类都可作分配器使用。具体来说，当一个类（在此设为类A）有为一个特定类型（在此设为类型T）的对象分配内存的能力时，该类就必须提供以下类型的定义：</p>
+<ul>
+<li>A::pointer 指针</li>
+<li>A::const_pointer 常量指针</li>
+<li>A::reference 引用</li>
+<li>A::const_reference 常量引用</li>
+<li>A::value_type 值类型</li>
+<li>A::size_type 所用内存大小的类型，表示类A所定义的分配模型中的单个对象最大尺寸的无符号整型</li>
+<li>A::difference_type 指针差值的类型，为带符号整型，用于表示分配模型内的两个指针的差异值。</li>
+</ul>
+<h3 id="map-unordered-map"><a href="#map-unordered-map" class="headerlink" title="map, unordered_map"></a>map, unordered_map</h3><p>如果key是一个对象，那么需要对此对象定义一个hash function</p>
+<h3 id="STL-TIP"><a href="#STL-TIP" class="headerlink" title="STL TIP"></a>STL TIP</h3><ul>
+<li>调用<code>empty()</code>去检查是否是空，而不是用<code>size()==0</code>检查</li>
+<li><code>Vector&lt;bool&gt;</code>会变成bitset</li>
+<li>巧用swap()可以出去vector中的多余容量</li>
+<li>vector extend长度很耗时，可以事前<code>reserve()</code></li>
+</ul>
+<h3 id="std-function与std-bind-函数指针"><a href="#std-function与std-bind-函数指针" class="headerlink" title="std::function与std::bind 函数指针"></a>std::function与std::bind 函数指针</h3><p>function模板类和bind模板函数，使用它们可以实现类似函数指针的功能，但却却比函数指针更加灵活，特别是函数指向类 的非静态成员函数时。</p>
+<p><code>std::function</code>可以绑定到全局函数/类静态成员函数(类静态成员函数与全局函数没有区别),如果要绑定到类的非静态成员函数，则需要使用<code>std::bind</code>。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;functional&gt;</span></span></div><div class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</div><div class="line"></div><div class="line"><span class="keyword">typedef</span> <span class="built_in">std</span>::function&lt;<span class="keyword">void</span> ()&gt; fp;</div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">g_fun</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">	<span class="built_in">cout</span>&lt;&lt;<span class="string">"g_fun()"</span>&lt;&lt;<span class="built_in">endl</span>;</div><div class="line">&#125;</div><div class="line"><span class="keyword">class</span> A</div><div class="line">&#123;</div><div class="line"><span class="keyword">public</span>:</div><div class="line">	<span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">A_fun_static</span><span class="params">()</span></span></div><div class="line">	&#123;</div><div class="line">		<span class="built_in">cout</span>&lt;&lt;<span class="string">"A_fun_static()"</span>&lt;&lt;<span class="built_in">endl</span>;</div><div class="line">	&#125;</div><div class="line">	<span class="function"><span class="keyword">void</span> <span class="title">A_fun</span><span class="params">()</span></span></div><div class="line">	&#123;</div><div class="line">		<span class="built_in">cout</span>&lt;&lt;<span class="string">"A_fun()"</span>&lt;&lt;<span class="built_in">endl</span>;</div><div class="line">	&#125;</div><div class="line">	<span class="function"><span class="keyword">void</span> <span class="title">A_fun_int</span><span class="params">(<span class="keyword">int</span> i)</span></span></div><div class="line">	&#123;</div><div class="line">		<span class="built_in">cout</span>&lt;&lt;<span class="string">"A_fun_int() "</span>&lt;&lt;i&lt;&lt;<span class="built_in">endl</span>;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="comment">//非静态类成员，因为含有this指针，所以需要使用bind</span></div><div class="line">	<span class="function"><span class="keyword">void</span> <span class="title">init</span><span class="params">()</span></span></div><div class="line">	&#123;</div><div class="line">		fp fp1=<span class="built_in">std</span>::bind(&amp;A::A_fun,<span class="keyword">this</span>);</div><div class="line">		fp1();</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">void</span> <span class="title">init2</span><span class="params">()</span></span></div><div class="line">	&#123;</div><div class="line">		<span class="keyword">typedef</span> <span class="built_in">std</span>::function&lt;<span class="keyword">void</span> (<span class="keyword">int</span>)&gt; fpi;</div><div class="line">		<span class="comment">//对于参数要使用占位符 std::placeholders::_1</span></div><div class="line">		fpi f=<span class="built_in">std</span>::bind(&amp;A::A_fun_int,<span class="keyword">this</span>,<span class="built_in">std</span>::placeholders::_1);</div><div class="line">		f(<span class="number">5</span>);</div><div class="line">	&#125;</div><div class="line">&#125;;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">	<span class="comment">//绑定到全局函数</span></div><div class="line">	fp f2=fp(&amp;g_fun);</div><div class="line">	f2();</div><div class="line"></div><div class="line">	<span class="comment">//绑定到类静态成员函数</span></div><div class="line">	fp f1=fp(&amp;A::A_fun_static);</div><div class="line">	f1();</div><div class="line"></div><div class="line">	A().init();</div><div class="line">	A().init2();</div><div class="line">	<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>同时，<code>std::bind</code>绑定到虚函数时会表现出多态行为。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;functional&gt;</span></span></div><div class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</div><div class="line"></div><div class="line"><span class="keyword">typedef</span> <span class="built_in">std</span>::function&lt;<span class="keyword">void</span> ()&gt; fp;</div><div class="line"></div><div class="line"><span class="keyword">class</span> A</div><div class="line">&#123;</div><div class="line"><span class="keyword">public</span>:</div><div class="line">	<span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">f</span><span class="params">()</span></span></div><div class="line">	&#123;</div><div class="line">		<span class="built_in">cout</span>&lt;&lt;<span class="string">"A::f()"</span>&lt;&lt;<span class="built_in">endl</span>;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">void</span> <span class="title">init</span><span class="params">()</span></span></div><div class="line">	&#123;</div><div class="line">		<span class="comment">//std::bind可以表现出多态行为</span></div><div class="line">		fp f=<span class="built_in">std</span>::bind(&amp;A::f,<span class="keyword">this</span>);</div><div class="line">		f();</div><div class="line">	&#125;</div><div class="line">&#125;;</div><div class="line"><span class="keyword">class</span> B:<span class="keyword">public</span> A</div><div class="line">&#123;</div><div class="line"><span class="keyword">public</span>:</div><div class="line">	<span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">f</span><span class="params">()</span></span></div><div class="line">	&#123;</div><div class="line">		<span class="built_in">cout</span>&lt;&lt;<span class="string">"B::f()"</span>&lt;&lt;<span class="built_in">endl</span>;</div><div class="line">	&#125;</div><div class="line">&#125;;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">	A* pa=<span class="keyword">new</span> B;</div><div class="line">	pa-&gt;init();</div><div class="line"></div><div class="line">	<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="预处理注释代码"><a href="#预处理注释代码" class="headerlink" title="预处理注释代码"></a>预处理注释代码</h2><p><code>#if 0</code>可以用作注释一段代码，因为<code>/* */</code>不支持迭代，所以有时候用预处理方式更好</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">if</span> 0</span></div><div class="line">	<span class="comment">//code</span></div><div class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></div></pre></td></tr></table></figure>
+<h2 id="new-operator-和-operator-new"><a href="#new-operator-和-operator-new" class="headerlink" title="new operator 和 operator new"></a>new operator 和 operator new</h2><ul>
+<li><code>new operator</code> 就是我们经常在用的new，他会分配地址，构造对象，这个不能重构。（等同于<code>operator new</code>，之后调用构造函数）</li>
+<li><code>operator new</code> 只分配内存，不构造对象，功能和malloc一样，可以重构。</li>
+<li>placement new 在已有的空间上，构造对象</li>
+</ul>
+<h2 id="operator重载"><a href="#operator重载" class="headerlink" title="operator重载"></a>operator重载</h2><p>重载有两种方法，一种是在类中对于类的操作符重载，另外一种是全局重载，全局重载有一个条件，就是参数至少有一个是自定义类型，这个是C++标准特别限制的</p>
+<ul>
+<li><code>b.operator+(a)</code>等同于<code>b+a</code>, 等同于operator+(b,a)<figure class="highlight cs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">int</span> <span class="keyword">operator</span>+(Factor &amp;lhs, <span class="keyword">int</span> rhs)&#123;</div><div class="line">    <span class="comment">//do something</span></div><div class="line">    <span class="keyword">return</span> lhs.<span class="keyword">get</span>() + rhs;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//下面的方法是错误的</span></div><div class="line"><span class="keyword">int</span> <span class="keyword">operator</span>+(Int lhs, <span class="keyword">int</span> rhs)&#123;</div><div class="line">    <span class="comment">//do something</span></div><div class="line">    <span class="keyword">return</span> lhs + rhs;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//类中重载的例子</span></div><div class="line"><span class="keyword">class</span> <span class="title">cls</span>&#123;</div><div class="line">    <span class="keyword">int</span> <span class="keyword">operator</span>+(cls &amp;rhs)&#123;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">this</span> + rhs;    </div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="解决-static-属性的初始化赋值问题"><a href="#解决-static-属性的初始化赋值问题" class="headerlink" title="解决 static 属性的初始化赋值问题"></a>解决 static 属性的初始化赋值问题</h2><figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">c1</span></span>&#123;</div><div class="line">  <span class="keyword">private</span>：</div><div class="line">    <span class="keyword">static</span> const size_t <span class="built_in">max</span> = <span class="number">10</span>;</div><div class="line">&#125; <span class="comment">//此种方法是通常不允许的</span></div><div class="line"></div><div class="line"><span class="comment">//可以采用以下workaround</span></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">c1</span></span>&#123;</div><div class="line">  <span class="keyword">private</span>：</div><div class="line">    <span class="keyword">static</span> const size_t <span class="built_in">max</span>;</div><div class="line">&#125;</div><div class="line">const size_t c1::<span class="built_in">max</span> =<span class="number">10</span>;</div><div class="line"></div><div class="line"><span class="comment">//或者</span></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">c1</span></span>&#123;</div><div class="line">  <span class="keyword">private</span>：</div><div class="line">    <span class="class"><span class="keyword">enum</span></span>&#123; <span class="built_in">max</span> = <span class="number">10</span>&#125;;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="操作符"><a href="#操作符" class="headerlink" title="操作符"></a>操作符</h2><h3 id="operator-char-const"><a href="#operator-char-const" class="headerlink" title="operator char() const"></a>operator char() const</h3><p>这是一个类型转换的操作符</p>
+<h2 id="Misc"><a href="#Misc" class="headerlink" title="Misc"></a>Misc</h2><h3 id="inline函数不一定inline"><a href="#inline函数不一定inline" class="headerlink" title="inline函数不一定inline"></a>inline函数不一定inline</h3><ul>
+<li>他只是给编译器的一个建议，inline函数中不建议有循环指令</li>
+<li>在类的声明中实现的类（头文件中），默认就为inline函数</li>
+<li>不建议inline 和 static 一起使用，因为会造成大量internal副本。最新版本的C++编译器已经修复此问题。</li>
+</ul>
+<h3 id="尽量以引用和指针方式传参"><a href="#尽量以引用和指针方式传参" class="headerlink" title="尽量以引用和指针方式传参"></a>尽量以引用和指针方式传参</h3><ul>
+<li>这样可以减少对象被构造和解析的过程</li>
+<li>尽量推迟变量声明的时间</li>
+</ul>
+<h3 id="itr-和-itr"><a href="#itr-和-itr" class="headerlink" title="itr++ 和 ++itr"></a>itr++ 和 ++itr</h3><p>在不考虑返回值的时候<code>++itr</code>效率更高，因为他不需要做一次数据拷贝，对于基本类型可以忽略，对于Class和迭代器，尽量使用前置自增（减）<br>所以++++itr合法，而itr++++不合法</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//前置</span></div><div class="line">UPInt&amp; UPInt::<span class="keyword">operator</span>++()&#123;</div><div class="line">    *<span class="keyword">this</span>+= <span class="number">1</span>;</div><div class="line">	<span class="keyword">return</span> *<span class="keyword">this</span>;</div><div class="line">&#125;</div><div class="line"><span class="comment">//后置</span></div><div class="line">UPInt&amp; UPInt::<span class="keyword">operator</span>++(int)&#123;</div><div class="line">    UPInt oldValue = *<span class="keyword">this</span>;</div><div class="line">	++(*<span class="keyword">this</span>);</div><div class="line">	<span class="keyword">return</span> oldValue;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="using"><a href="#using" class="headerlink" title="using"></a>using</h3><p>如果子类中的属性或者局部变量的名称与父类的重名，可以用using指定使用哪个</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">using</span> base::m_attr;</div></pre></td></tr></table></figure>
+<h3 id="纯虚函数可以有实现"><a href="#纯虚函数可以有实现" class="headerlink" title="纯虚函数可以有实现"></a>纯虚函数可以有实现</h3><figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">base</span></span>&#123;</div><div class="line">  <span class="keyword">public</span>:</div><div class="line">    vitural bool <span class="function"><span class="keyword">func</span><span class="params">()</span></span> = <span class="number">0</span>;</div><div class="line">	....</div><div class="line">&#125;</div><div class="line">bool base::<span class="function"><span class="keyword">func</span><span class="params">()</span></span>&#123;</div><div class="line">	<span class="comment">//something</span></div><div class="line">&#125;</div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">derived</span> : <span class="title">public</span> <span class="title">base</span></span>&#123;</div><div class="line">  </div><div class="line">&#125;</div><div class="line">derived* d = new derived();</div><div class="line">d-&gt;base::<span class="function"><span class="keyword">func</span><span class="params">()</span></span>; <span class="comment">//调用纯虚函数的默认实现</span></div></pre></td></tr></table></figure>
+<h3 id="mutable-作用"><a href="#mutable-作用" class="headerlink" title="mutable 作用"></a>mutable 作用</h3><p>mutable修饰过的属性，即便在const函数中也可以被修改。另外我们也有另一种办法来实现，就是通过一个fake this指针，在const函数中，把const this指针cast成 this，这样就可以通过这个fake this指针做赋值操作了</p>
+<h3 id="const-调用规则"><a href="#const-调用规则" class="headerlink" title="const 调用规则"></a>const 调用规则</h3><p>类中二函数都存在的情况下：</p>
+<ul>
+<li>const对象默认调用const成员函数，非const对象默认调用非const成员函数；</li>
+<li>若非const对象想调用const成员函数，则需显式转化，如(const Student&amp;)obj.getAge();</li>
+<li>若const对象想调用非const成员函数，同理const_cast<student&>(constObj).getAge();(注意：constObj要加括号)</student&></li>
+</ul>
+<p>类中只有一函数存在的情况下：</p>
+<ul>
+<li>非const对象可以调用const成员函数或非const成员函数；</li>
+<li>const对象只能调用const成员函数,直接调用非const函数时编译器会报错；</li>
+</ul>
+<h3 id="指针和引用"><a href="#指针和引用" class="headerlink" title="指针和引用"></a>指针和引用</h3><p>引用不可以为空，如果变量需要为空，则要用指针，如果希望不为空则尽量用引用，避免了不必要的验NULL检查</p>
+<h3 id="绝对不要以多态（Polymorphically）方式处理数组"><a href="#绝对不要以多态（Polymorphically）方式处理数组" class="headerlink" title="绝对不要以多态（Polymorphically）方式处理数组"></a>绝对不要以多态（Polymorphically）方式处理数组</h3><p>数组的基本原理是依靠数组下标来寻找对应的对象，所以在多态情况下，跳过的指针偏移不一样，所以用Base指正来使用Derived类数组会有错误。</p>
+<h3 id="避免类中Implicit的类型装换函数"><a href="#避免类中Implicit的类型装换函数" class="headerlink" title="避免类中Implicit的类型装换函数"></a>避免类中Implicit的类型装换函数</h3><p>Implicit的类型转换（或者重载操作符），如果出现任何问题会非常难调试，所以尽量显示的进行类型转换，比如<code>o.asInt()</code>, <code>o.asDouble()</code>这样输出。或者以explicit修饰构造函数。</p>
+<h3 id="复合操作符（-）"><a href="#复合操作符（-）" class="headerlink" title="复合操作符（+=）"></a>复合操作符（+=）</h3><p>复合操作符（+=）比单独操作符效率要高，不需要产生临时变量</p>
+<h3 id="size-t"><a href="#size-t" class="headerlink" title="size_t"></a>size_t</h3><p>size_t 解决了在不同系统32、64位系统上 strlen类型大小的问题， 32bit系统strlen返回4字节的值，而64是8字节</p>
+<h3 id="全局符号"><a href="#全局符号" class="headerlink" title="全局符号"></a>全局符号</h3><p>全局符号<code>::</code>表示调用global的变量或者方法，也适用于如下情况<br><figure class="highlight subunit"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">//如果test类重构了operator new，则`::new`表示使用默认的new构造，而不是重构之后的</div><div class="line"><span class="keyword">test </span>t = ::new test();</div></pre></td></tr></table></figure></p>
+<h2 id="fork-execl"><a href="#fork-execl" class="headerlink" title="fork execl"></a>fork execl</h2><ul>
+<li>fork 会复制父进程的所有资源，包括文件描述符，会建立一个全新的pid，他的文件描述符复制父进程的</li>
+<li>execl 会开始一个全新的程序全面覆盖父进程，但是他的pid依旧是是他父进程的pid，他也会继续share父进程已经打开的文件描述符，popen实际上就是调用了这个来运行一个新的程序。execl一旦运行 execl后面的code将不会被执行了，因为已经被覆盖掉了</li>
+<li>vfork 父子空间共享内存空间，使得由子函数调用vfork创建的子进程（架设子进程为先执行函数的进程）调用其它函数或运行其他程序后会，父进程会出现段错误，</li>
+</ul>
+<h2 id="dup-dup2"><a href="#dup-dup2" class="headerlink" title="dup dup2"></a>dup dup2</h2><p>使newfd指向fd的文件</p>
+<figure class="highlight haxe"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">new</span><span class="type">fd</span> = dup(fd)</div><div class="line">dup(fd,<span class="keyword">new</span><span class="type">fd</span>)</div></pre></td></tr></table></figure>
+<h2 id="strncpy-and-snprintf"><a href="#strncpy-and-snprintf" class="headerlink" title="strncpy and snprintf"></a>strncpy and snprintf</h2><ul>
+<li>strncpy：如果字符串超过 size n， 那么他不会再字符串结尾加上\0</li>
+<li>snprintf: 如果字符串超出 n，他会在最后一个字符加上\0， 所以这个更安全</li>
+<li><code>strncat(char *dest, const char *src, size_t n)</code>: 最多从源中拷贝n个字符到目标串中，并在后面加一个0；也就是说，最多会有n+1个字符被写进dest。如果dest的容量为n，那么将会dest将会溢出。</li>
+</ul>
+<h2 id="execl与execlp的区别"><a href="#execl与execlp的区别" class="headerlink" title="execl与execlp的区别"></a>execl与execlp的区别</h2><ul>
+<li>execl只当前路径（不是当前路径必须加绝对路径）</li>
+<li>execlp使用系统的搜索路径</li>
+<li>带l的exec函数：execl,execlp,execle，表示后边的参数以可变参数的形式给出且都以一个空指针结束。</li>
+<li>带 p的exec函数：execlp,execvp，表示第一个参数path不用输入完整路径，只有给出命令名即可，它会在环境变量PATH当中查找命令</li>
+<li>不带l的exec函数：execv,execvp表示命令所需的参数以char *arg[]形式给出且arg最后一个元素必须是NULL</li>
+<li>带e的exec函数：execle表示，将环境变量传递给需要替换的进程</li>
+</ul>
+<h3 id="system"><a href="#system" class="headerlink" title="system()"></a>system()</h3><p>system函数对返回值的处理，涉及3个阶段：</p>
+<ul>
+<li>阶段1：创建子进程等准备工作。如果失败，返回-1。</li>
+<li>阶段2：调用/bin/sh拉起shell脚本,如果拉起失败或者shell未正常执行结束，原因值被写入到status的低8~15比特位中。system的man中只说明了会写了127这个值, 但实测发现还会写126等值。</li>
+<li>阶段3：如果shell脚本正常执行结束，将shell返回值填到status的低8~15比特位中。</li>
+</ul>
+<p>判断一个system函数调用shell脚本是否正常结束的方法应该是如下3个条件同时成立：</p>
+<ol>
+<li>-1 != status</li>
+<li>WIFEXITED(status)为真</li>
+<li>0 == WEXITSTATUS(status)</li>
+</ol>
+<h2 id="setbuf"><a href="#setbuf" class="headerlink" title="setbuf()"></a>setbuf()</h2><p>函数setbuf()用于将指定缓冲区与特定的文件流相关联，实现操作缓冲区时直接操作文件流的功能。其原型如下：<br>    <code>void setbuf(FILE * stream, char * buf);</code></p>
+<h2 id="unlink"><a href="#unlink" class="headerlink" title="unlink()"></a>unlink()</h2><p><code>unlink(char* filename)</code>用于删除link，如果没有任何link，且所有操作这个文件的fd已经关闭，unlink会删除文件, 这是个古老的UNIX方法</p>
+<h2 id="unordered-map-和-map"><a href="#unordered-map-和-map" class="headerlink" title="unordered_map 和 map"></a>unordered_map 和 map</h2><p>unordered_map 要比 map更快，同样是唯一键值，如果只关心键值，可以使用unordered_set</p>
+<h2 id="多态和类型转换"><a href="#多态和类型转换" class="headerlink" title="多态和类型转换"></a>多态和类型转换</h2><p>考虑如下程序</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="keyword">class</span> A</div><div class="line">&#123;</div><div class="line"> <span class="keyword">public</span>:</div><div class="line">     <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">f</span><span class="params">()</span></span></div><div class="line">     &#123;</div><div class="line">	 <span class="built_in">printf</span>(<span class="string">"A::f()\n"</span>);</div><div class="line">     &#125;</div><div class="line">    </div><div class="line">     <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">g</span><span class="params">()</span></span></div><div class="line">     &#123;</div><div class="line"> 	<span class="comment">//printf("A::g(), %d\n",a);</span></div><div class="line"> 	<span class="built_in">printf</span>(<span class="string">"A::g()\n"</span>);</div><div class="line">     &#125;</div><div class="line">     </div><div class="line">     <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">g</span><span class="params">(<span class="keyword">int</span> a)</span></span></div><div class="line">     &#123;</div><div class="line"> 	<span class="built_in">printf</span>(<span class="string">"A::g(), %d\n"</span>,a);</div><div class="line"> 	<span class="comment">//printf("A::g()\n");</span></div><div class="line">        g();</div><div class="line">     &#125;</div><div class="line">    </div><div class="line">     <span class="function"><span class="keyword">void</span> <span class="title">h</span><span class="params">()</span> </span></div><div class="line">     &#123;</div><div class="line">	 <span class="built_in">printf</span>(<span class="string">"A::h()\n"</span>);</div><div class="line">         f(); </div><div class="line">         g(); </div><div class="line">     &#125;</div><div class="line">     </div><div class="line">     <span class="comment">//virtual</span></div><div class="line">     ~A()&#123;<span class="built_in">printf</span>(<span class="string">"destruct A\n"</span>);&#125;</div><div class="line">&#125;;</div><div class="line"><span class="keyword">class</span> B: <span class="keyword">public</span> A</div><div class="line">&#123;</div><div class="line"> <span class="keyword">public</span>:</div><div class="line">    <span class="keyword">using</span> A::g; \\ <span class="keyword">this</span> C++<span class="number">11</span> <span class="function">keyword can make the derived <span class="keyword">class</span> call a redefinited base <span class="keyword">class</span> function</span></div><div class="line">     <span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">f</span><span class="params">()</span></div><div class="line">    &#123; <span class="built_in">printf</span>(<span class="string">"B::f()\n"</span>);&#125;</div><div class="line">    </div><div class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">g</span><span class="params">()</span></span></div><div class="line">    &#123;<span class="built_in">printf</span>(<span class="string">"B::g()\n"</span>);&#125;</div><div class="line">    </div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">h</span><span class="params">()</span></span></div><div class="line">    &#123;<span class="built_in">printf</span>(<span class="string">"B::h()\n"</span>);g();f();&#125;</div><div class="line">    </div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">u</span><span class="params">()</span></span></div><div class="line">    &#123;<span class="built_in">printf</span>(<span class="string">"B::u()\n"</span>);&#125;</div><div class="line">    </div><div class="line">     <span class="comment">//virtual</span></div><div class="line">     ~B()&#123;<span class="built_in">printf</span>(<span class="string">"destruct B\n"</span>);&#125;</div><div class="line"></div><div class="line">&#125;;</div><div class="line"> </div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">    B b;</div><div class="line">    <span class="comment">//b.g(1);</span></div><div class="line">    A * p=&amp;b;</div><div class="line">    A* p1 = <span class="keyword">new</span> B();</div><div class="line">    p-&gt;h();</div><div class="line">    p-&gt;g();</div><div class="line">    p-&gt;g(<span class="number">2</span>);</div><div class="line">    A *a = <span class="keyword">dynamic_cast</span>&lt;A*&gt;(&amp;b);</div><div class="line">    <span class="built_in">printf</span>(<span class="string">"\n"</span>);</div><div class="line">    a-&gt;h();</div><div class="line">    a-&gt;g();</div><div class="line">    a-&gt;g(<span class="number">2</span>);</div><div class="line">    <span class="comment">//a-&gt;u();</span></div><div class="line">    <span class="built_in">printf</span>(<span class="string">"\n"</span>);</div><div class="line">    B* pb = &amp;b;</div><div class="line">    pb-&gt;g(<span class="number">2</span>);</div><div class="line">    pb-&gt;g();</div><div class="line"></div><div class="line">    <span class="built_in">printf</span>(<span class="string">"\n"</span>);</div><div class="line">    <span class="keyword">delete</span> p1;</div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>对应输出为：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">A::h()</div><div class="line">B::f()</div><div class="line">B::g()</div><div class="line">B::g()</div><div class="line">A::g(), <span class="number">2</span></div><div class="line">B::g()</div><div class="line"></div><div class="line">A::h()</div><div class="line">B::f()</div><div class="line">B::g()</div><div class="line">B::g()</div><div class="line">A::g(), <span class="number">2</span></div><div class="line">B::g()</div><div class="line"></div><div class="line">A::g(), <span class="number">2</span></div><div class="line">B::g()</div><div class="line">B::g()</div><div class="line"></div><div class="line">destruct A</div><div class="line">destruct B</div><div class="line">destruct A</div></pre></td></tr></table></figure>
+<p>结论</p>
+<ul>
+<li>如果不是虚函数，指针类型的转换会导致调用对应类型的种的函数，即不为多态</li>
+<li>如果是虚函数则，按照多态显示</li>
+<li>如果是虚函数调用所在子类的非虚函数或者虚函数，则调用的都是子类中的函数，即便是非虚函数也不会调用到父类中的对应函数</li>
+<li>如果Base指针去访问一个子类中的非虚函数，则编译报错 </li>
+<li>如果子类有父类的同名函数（不论是否是虚函数），则父类的所有同名的函数都被redefine（不同参数的），<code>using</code>keyword可以改进这个问题，<code>using A::g()</code>可以使B调用到<code>A::g()</code>，但是如果B已经有了g()，则无效?, 直接用<code>Base::f()</code>可以調用到父類的方法，但是this指针还是子类的，所以多台依旧</li>
+<li>如果不是new出的对象不用考虑析构问题，系统可以很好的析构父类和子类</li>
+<li>如果是new，需要虚析构函数，以保证父类指针也能正常析构一个指向子类的对象</li>
+</ul>
+<h2 id="C-11"><a href="#C-11" class="headerlink" title="C++11"></a>C++11</h2><h3 id="auto"><a href="#auto" class="headerlink" title="auto"></a>auto</h3><p>注意auto使用不当会导致vector被复制，而不是被引用</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span></div><div class="line"> </div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span></div><div class="line">&#123;</div><div class="line">    <span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; v = &#123;<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>&#125;;</div><div class="line"> </div><div class="line">    <span class="keyword">for</span> (<span class="keyword">const</span> <span class="keyword">int</span> &amp;i : v) <span class="comment">// access by const reference</span></div><div class="line">        <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; i &lt;&lt; <span class="string">' '</span>;</div><div class="line">    <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">'\n'</span>;</div><div class="line"> </div><div class="line">    <span class="keyword">for</span> (<span class="keyword">auto</span> i : v) <span class="comment">// access by value, the type of i is int</span></div><div class="line">        <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; i &lt;&lt; <span class="string">' '</span>;</div><div class="line">    <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">'\n'</span>;</div><div class="line"> </div><div class="line">    <span class="keyword">for</span> (<span class="keyword">auto</span>&amp;&amp; i : v) <span class="comment">// access by reference, the type of i is int&amp;</span></div><div class="line">        <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; i &lt;&lt; <span class="string">' '</span>;</div><div class="line">    <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">'\n'</span>;</div><div class="line"> </div><div class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> n : &#123;<span class="number">0</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>&#125;) <span class="comment">// the initializer may be a braced-init-list</span></div><div class="line">        <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; n &lt;&lt; <span class="string">' '</span>;</div><div class="line">    <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">'\n'</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="Range-based-for-loop"><a href="#Range-based-for-loop" class="headerlink" title="Range-based for loop"></a>Range-based for loop</h3><p>此方法常用语STL中内容的遍历，注意使用不当会导致容器中对象被复制 最佳用法是 <code>for (auto&amp; elem : range)</code>， 对于性能这和手动写的没什么区别。</p>
+<p><code>for (auto elem : range)</code> is very tempting and very bad. It produces <code>auto elem = *__begin;</code> (see 6.5.4 [stmt.ranged]/1), which copies each element, which is bad because:</p>
+<ul>
+<li>It might not compile - for example, unique_ptr elements aren’t copyable. This is problematic both for users who won’t understand the resulting compiler errors, and for users writing generic code that’ll happily compile until someone instantiates it for movable-only elements.</li>
+<li>It might misbehave at runtime - for example, “elem = val;” will modify the copy, but not the original element in the range. Additionally, &amp;elem will be invalidated after each iteration.</li>
+<li>It might be inefficient - for example, unnecessarily copying std::string.</li>
+</ul>
+<h2 id="重写-重载"><a href="#重写-重载" class="headerlink" title="重写 重载"></a>重写 重载</h2><p>如果父类定义了一个g(int)，子类定义了一个g()，那么用子类的对象访问g(int)那么会编译出错，因为子类定义的g()函数覆盖了g(int)所以子类不能访问。<br>如果父类定义了一个virtual g(int)，子类定义了一个virtualg()，那么用子类的对象访问(用.访问)virtual g(int)那么会编译出错，因为子类定义的virtual g()函数覆盖了virtual g(int)所以子类不能访问， 但是如果用指针（-&gt;）访问则会得到预期结果<br>override-&gt;重写(=覆盖)、overload-&gt;重载、polymorphism -&gt; 多态</p>
+<ul>
+<li><p>重定义（redefining）也叫隐藏，子类重新定义父类中的非虚函数，屏蔽了父类的同名函数</p>
+<ul>
+<li>子类和父类的函数名称相同，但参数不同，此时不管父类函数是不是virtual函数，都将被隐藏(如果不用父类指针访问的话)。</li>
+<li>子类和父类的函数名称相同，参数也相同，但是父类函数不是virtual函数，父类的函数将被隐藏。</li>
+<li>using Base::f 可以手动指定使用哪个函数（子类父类会保留下来）子类和父类冲突时，保留父类的</li>
+</ul>
+</li>
+<li>重写（override）也称为覆盖，子类重新定义父类中有相同名称和参数的虚函数，主要在继承关系中出现。</li>
+<li>重载（overload）函数有同样的名称，但是参数列表不相同的情形，这样的同名不同参数的函数之间，互相称之为重载函数。</li>
+</ul>
+<p><em>NOTICE</em> 除了赋值运算符重载函数以外，所有的运算符重载函数都可以被派生类继承。也就是说复制运算操作符不能被继承</p>
+<h2 id="attribute-constructor"><a href="#attribute-constructor" class="headerlink" title="attribute ((constructor))"></a><strong>attribute</strong> ((constructor))</h2><p> gcc为函数提供了几种类型的属性，其中包含：构造函数(constructors)和析构函数(destructors)。<br>程序员应当使用类似下面的方式来指定这些属性：<br>    static void start(void) <strong>attribute</strong> ((constructor));<br>    static void stop(void) <strong>attribute</strong> ((destructor));<br>带有”构造函数”属性的函数将在main()函数之前或者动态库被load之前被执行，而声明为”析构函数”属性的函数则将在main()或者动态库unload的时候退出时执行。</p>
+<ul>
+<li>reference：<a href="https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#Common-Function-Attributes" target="_blank" rel="external">https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#Common-Function-Attributes</a></li>
+</ul>
+<h2 id="多线程"><a href="#多线程" class="headerlink" title="多线程"></a>多线程</h2><h3 id="互斥量"><a href="#互斥量" class="headerlink" title="互斥量"></a>互斥量</h3><ul>
+<li>注意互斥量的粒度，通常来讲对于一个变量就要对应一个互斥量，这是最优方案，另外可以增加粒度比如多个变量对应同一个互斥量，这样会影响效率，如果允许可以这样</li>
+<li>互斥量尽量存在于基类中，这样对于使用者是透明的。</li>
+</ul>
+<h3 id="pthread-attr-setscope"><a href="#pthread-attr-setscope" class="headerlink" title="pthread_attr_setscope"></a>pthread_attr_setscope</h3><p>pthread_attr_setscope函数的作用是设置线程的在什么范围内竞争CPU资源，可以取值PTHREAD_SCOPE_SYSTEM或PTHREAD_SCOPE_PROCESS，前者表示在整个系统内竞争CPU资源，后者表示在同一进程内竞争CPU资源，默认为前者，原型如下：<br><code>int pthread_attr_setscope(pthread_attr_t *attr, int scope);</code></p>
+<h3 id="pthread-attr-setstacksize"><a href="#pthread-attr-setstacksize" class="headerlink" title="pthread_attr_setstacksize"></a>pthread_attr_setstacksize</h3><p>设置线程栈的大小, 单位是字节，在默认情况下线程的栈是比较大的</p>
+<h3 id="pthread-attr-setdetachstate"><a href="#pthread-attr-setdetachstate" class="headerlink" title="pthread_attr_setdetachstate"></a>pthread_attr_setdetachstate</h3><p>pthread_attr_setdetachstate函数的作用是设置线程的detachedstate属性，可以取值PTHREAD_CREATE_JOINABLE和PTHREAD_CREATE_DETACHED，前者是默认值，表示其他线程可以使用pthread_join函数等待本线程结束，后者表示其他线程不可以对本线程使用pthread_join</p>
+<h3 id="pthread-attr-setschedpolicy"><a href="#pthread-attr-setschedpolicy" class="headerlink" title="pthread_attr_setschedpolicy"></a>pthread_attr_setschedpolicy</h3><p>pthread_attr_setschedpolicy函数的作用是设置schedpolicy属性，即线程调度算法。schedpolicy属性值可以是SCHED_RR、SCHED_FIFO、SCHED_OTHER，其中SCHED_RR表示轮训调度，SCHED_FIFO表示先进先出调度，SCHED_OTHER表示其他。拥有管理员权限的进程才可以创建具有SCHED_RR或SCHED_FIFO调度算法的线程，一般线程的默认调度算法都是SCHED_OTHER。</p>
+<h3 id="pthread-once"><a href="#pthread-once" class="headerlink" title="pthread_once"></a>pthread_once</h3><figure class="highlight arduino"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;pthread.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="keyword">int</span> pthread_once(pthread_once_t *once_control, </div><div class="line">    <span class="keyword">void</span> (*init_routine)(<span class="keyword">void</span>));</div><div class="line">pthread_once_t once_control = PTHREAD_ONCE_INIT;</div></pre></td></tr></table></figure>
+<p>The first call to pthread_once() by any thread in a process, with a given once_control, will call the init_routine() with no arguments. Subsequent calls of pthread_once() with the same once_control will not call the init_routine(). On return from pthread_once(), it is guaranteed that init_routine() has completed. The once_control parameter is used to determine whether the associated initialisation routine has been called.<br>The function pthread_once() is not a cancellation point. However, if init_routine() is a cancellation point and is canceled, the effect on once_control is as if pthread_once() was never called.</p>
+<p>The constant PTHREAD_ONCE_INIT is defined by the header <pthread.h>.</pthread.h></p>
+<p>The behaviour of pthread_once() is undefined if once_control has automatic storage duration or is not initialised by PTHREAD_ONCE_INIT.</p>
+<h3 id="pthread-cond-signal"><a href="#pthread-cond-signal" class="headerlink" title="pthread_cond_signal()"></a>pthread_cond_signal()</h3><p>也要配合mutex来使用，不然会可能丢失signal，考虑如下：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">Process A                             Process B</div><div class="line"></div><div class="line">pthread_mutex_lock(<span class="name">&amp;mutex</span>)<span class="comment">;</span></div><div class="line">while (<span class="name">condition</span> == FALSE)</div><div class="line"></div><div class="line">                                      condition = TRUE<span class="comment">;</span></div><div class="line">                                      pthread_cond_signal(<span class="name">&amp;cond</span>)<span class="comment">;</span></div><div class="line"></div><div class="line">pthread_cond_wait(<span class="name">&amp;cond</span>, <span class="symbol">&amp;mutex</span>)<span class="comment">;</span></div></pre></td></tr></table></figure>
+<p>如果刚好是这个情形，那么由于B没加锁，那么本来符合条件的A也再次被阻塞</p>
+<h3 id="fseek-线程不安全"><a href="#fseek-线程不安全" class="headerlink" title="fseek 线程不安全"></a>fseek 线程不安全</h3><p>可考虑用pread，替代fseek和fread组合</p>
+<h3 id="strtok"><a href="#strtok" class="headerlink" title="strtok()"></a>strtok()</h3><p>strtok是一个线程不安全的函数，他的安全版本是strtok_r()</p>
+<h2 id="网络和进程通信"><a href="#网络和进程通信" class="headerlink" title="网络和进程通信"></a>网络和进程通信</h2><h3 id="readv-和writev"><a href="#readv-和writev" class="headerlink" title="readv()和writev()"></a>readv()和writev()</h3><p>这两个函数类似于read和write，不过readv和writev允许单个系统调用读入到或写出自一个或多个缓冲区。这些操作分别称为分散读（scatter read）和集中写（gather write），因为来自读操作的输入数据被分散到多个应用缓冲区中，而来自应用缓冲区的输出数据则被集中提供给单个写操作。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/uio.h&gt;</span></span></div><div class="line"><span class="keyword">ssize_t</span> readv(<span class="keyword">int</span> filedes, <span class="keyword">const</span> <span class="keyword">struct</span> iovec *iov, <span class="keyword">int</span> iovcnt);</div><div class="line"><span class="keyword">ssize_t</span> writev(<span class="keyword">int</span> filedes, <span class="keyword">const</span> <span class="keyword">struct</span> iovec *iov, <span class="keyword">int</span> iovcnt);</div><div class="line"></div><div class="line"><span class="keyword">struct</span> iovec &#123;</div><div class="line">    <span class="keyword">void</span>     *iov_base;       <span class="comment">/* starting address of buffer */</span></div><div class="line">    <span class="keyword">size_t</span>    iov_len;        <span class="comment">/* size of buffer */</span></div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h3 id="TCP"><a href="#TCP" class="headerlink" title="TCP"></a>TCP</h3><p>当服务器close了一个连接之后，如果client接着发送数据，会收到一个RST相应，client再发送数据时，就会收到一个SIGPIPE给进程，默认动作是结束client进程，我们可以使用如下方法来指定信号的处理</p>
+<figure class="highlight autoit"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;signal.h&gt;</span></span></div><div class="line"></div><div class="line">signal(SIGPIPE, SIG_IGN)<span class="comment">;</span></div><div class="line">signal(SIGCHLD, SIG_IGN)<span class="comment">;</span></div></pre></td></tr></table></figure>
+<h3 id="read-and-write"><a href="#read-and-write" class="headerlink" title="read and write"></a>read and write</h3><p>他们有不同的buffer，所以是全双工运行， </p>
+<ul>
+<li>read返回0：表示连接关闭，或者说EOF</li>
+<li>read返回&lt;0: 表示发生错误，check errno</li>
+</ul>
+<h3 id="DNS-Lookup"><a href="#DNS-Lookup" class="headerlink" title="DNS Lookup"></a>DNS Lookup</h3><figure class="highlight rust"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">hostent</span></span> *gethostbyname(<span class="keyword">const</span> <span class="keyword">char</span> *name);</div><div class="line"><span class="keyword">int</span> gethostbyname_r(<span class="keyword">const</span> <span class="keyword">char</span> *name,</div><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">hostent</span></span> *ret, <span class="keyword">char</span> *buf, size_t buflen,</div><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">hostent</span></span> **result, <span class="keyword">int</span> *h_errnop);</div><div class="line">	</div><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">hostent</span></span> &#123;</div><div class="line">	<span class="keyword">char</span>  *h_name;            <span class="comment">/* official name of host */</span></div><div class="line">	<span class="keyword">char</span> **h_aliases;         <span class="comment">/* alias list */</span></div><div class="line">	<span class="keyword">int</span>    h_addrtype;        <span class="comment">/* host address type */</span></div><div class="line">	<span class="keyword">int</span>    h_length;          <span class="comment">/* length of address */</span></div><div class="line">	<span class="keyword">char</span> **h_addr_list;       <span class="comment">/* list of addresses */</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><code>gethostbyname_r</code>线程安全，<code>gethostbyname</code>不是线程安全的。</p>
+<h3 id="Network-Address-Convert"><a href="#Network-Address-Convert" class="headerlink" title="Network Address Convert"></a>Network Address Convert</h3><pre><code>const char *inet_ntop(int af, const void *src,
+                         char *dst, socklen_t size);
+</code></pre><ul>
+<li>This function converts the network address structure src in the af address family into a character string.  The resulting string is copied to the buffer pointed to by dst, which must be a non-NULL pointer.  The caller specifies the number of bytes available in this  buffer in the argument size.</li>
+<li>与此相似的还有<code>inet_ntoa</code>, 但是他是线程不安全的。</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">inet_pton</span><span class="params">(<span class="keyword">int</span> af, <span class="keyword">const</span> <span class="keyword">char</span> *src, <span class="keyword">void</span> *dst)</span></span>;</div></pre></td></tr></table></figure>
+<p>反向转换</p>
+<h3 id="多种sockaddr"><a href="#多种sockaddr" class="headerlink" title="多种sockaddr"></a>多种sockaddr</h3><ul>
+<li>struct sockaddr</li>
+<li>struct sockaddr_in</li>
+<li>struct sockaddr_storage</li>
+</ul>
+<h3 id="网络字节序"><a href="#网络字节序" class="headerlink" title="网络字节序"></a>网络字节序</h3><ul>
+<li>htons</li>
+<li>ntohs</li>
+<li>htonl</li>
+<li>ntohl</li>
+</ul>
+<h2 id="类内初始化和初始化列表"><a href="#类内初始化和初始化列表" class="headerlink" title="类内初始化和初始化列表"></a>类内初始化和初始化列表</h2><p>好像C++11之后就支持类内初始化了，在之前类内初始化是不允许的</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">class</span> <span class="title">A</span>&#123;</div><div class="line">    <span class="keyword">static</span> <span class="keyword">const</span> <span class="keyword">int</span> a = <span class="number">7</span>; <span class="comment">//C++98允许</span></div><div class="line">    <span class="keyword">int</span> b = <span class="number">8</span>; <span class="comment">//C++11允许，而98不允许</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>如果两者同时出现 那么初始化列表会覆盖类内初始化</li>
+</ul>
+<h2 id="虚继承"><a href="#虚继承" class="headerlink" title="虚继承"></a>虚继承</h2><figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">class</span> <span class="selector-tag">A</span>&#123;</div><div class="line"><span class="attribute">public</span>:</div><div class="line">    void <span class="built_in">print</span>()&#123;</div><div class="line">    //</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="selector-tag">class</span> <span class="selector-tag">B</span>&#123;</div><div class="line"><span class="attribute">public</span>:</div><div class="line">    void <span class="built_in">print</span>()&#123;</div><div class="line">    //</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="selector-tag">class</span> <span class="selector-tag">C</span><span class="selector-pseudo">:public</span> <span class="selector-tag">A</span>, <span class="selector-tag">B</span>&#123;</div><div class="line">    </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>如上例子如果我们使用c.print就会出现二义性的问题，采用虚继承可以解决这个问题</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">C</span>:<span class="title">public</span> <span class="title">virtual</span> <span class="title">A</span>, <span class="title">B</span></span>&#123;</div><div class="line">    </div><div class="line">&#125;</div><div class="line"></div><div class="line">int main()&#123;</div><div class="line">    <span class="type">C</span> <span class="built_in">c</span>();</div><div class="line">    <span class="built_in">c</span>.<span class="built_in">print</span>()</div><div class="line"></div><div class="line">    <span class="built_in">c</span>.<span class="type">A</span>::<span class="built_in">print</span>()<span class="comment">//可以指定使用哪个版本</span></div><div class="line">    <span class="built_in">c</span>.<span class="type">B</span>::<span class="built_in">print</span>()</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="Deamon"><a href="#Deamon" class="headerlink" title="Deamon"></a>Deamon</h2><p>一个守护进程需要fork两次，并且调用setsid()，两次是为了摆脱终端对于程序生命周期的控制，使其成为init 1进程的子进程，setsid会设置一个新的回话，不然进程会随着本回话的退出而结束。<br>The second fork(2) is there to ensure that the new process is not a session leader。</p>
+<h2 id="mmap"><a href="#mmap" class="headerlink" title="mmap"></a>mmap</h2><ul>
+<li>mmap allows all those processes to share the same physical memory pages, saving a lot of memory.</li>
+<li>在swap的时候，如果是使用malloc的部分要交换到swap区，但是如果是mmap则不用，因为他可以找到对应文件，在swap back的时候可以重新映射，这在处理大文件的时候非常有用</li>
+<li>限制是，如果是32位的系统，地址空间有限</li>
+<li>不会拷贝到内存空间，不论是不论是物理内存还是虚拟内存，但是占用地址</li>
+</ul>
+<h2 id="删除一个已经打开的文件"><a href="#删除一个已经打开的文件" class="headerlink" title="删除一个已经打开的文件"></a>删除一个已经打开的文件</h2><ul>
+<li><p>If the file is moved (in the same filesystem) or renamed, then the file handle remains open and can still be used to read and write the file.</p>
+</li>
+<li><p>If the file is deleted, the file handle remains open and can still be used (This is not what some people expect). The file will not really be deleted until the last handle is closed.</p>
+</li>
+<li><p>If the file is replaced by a new file, it depends exactly how. Either the file is overwritten, in which case the file handle will still be valid and access the new file, or the existing file is unlinked and a new one created with the same name, in which case it’s the same as deletion (see above).</p>
+</li>
+<li><p>In general, once the file is open, the file is open, and nobody changing the directory structure can change that - they can move, rename the file, or put something else in its place, it simply remains open.</p>
+</li>
+</ul>
+<h2 id="typename"><a href="#typename" class="headerlink" title="typename"></a>typename</h2><p>泛型编程中，经常出现泛型和变量混淆的情况例如<code>FooClass::type * p</code>，这里的歧义是，到底是声明一个指针，还是做乘法，这个时候我们就可以显示的告诉他<code>typename FooClass::type* p</code></p>
+<h2 id="泛型的实例化和特例化"><a href="#泛型的实例化和特例化" class="headerlink" title="泛型的实例化和特例化"></a>泛型的实例化和特例化</h2><ul>
+<li>由于泛型是在编译期间，由编译器生成类或者函数的，所以编译器需要知道类或者方法的定义，不仅仅只是声明</li>
+<li>特例化发生在，模板类不能被直接套用的时候，用<code>tempalate &lt;&gt;</code>特例化一个模板</li>
+</ul>
+<h2 id="extern-“C”"><a href="#extern-“C”" class="headerlink" title="extern “C”"></a>extern “C”</h2><p>理论上我们在写C++程序的时候调用C标准库都需要告诉编译器这些C标准库的函数需要<code>extern C</code>，但是实际上标准库都为我们做好了</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> __cplusplus</span></div><div class="line"><span class="keyword">extern</span> <span class="string">"C"</span>&#123;</div><div class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></div><div class="line"></div><div class="line"><span class="comment">//declare.</span></div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> __cplusplus</span></div><div class="line">&#125;</div><div class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></div></pre></td></tr></table></figure>
+<h2 id="ranged-for"><a href="#ranged-for" class="headerlink" title="ranged-for"></a>ranged-for</h2><p>下面两者等同</p>
+<figure class="highlight elixir"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">RecordMap&lt;T&gt; replica_map;</div><div class="line"><span class="keyword">for</span>(auto&amp; itr : replica_map)&#123;&#125;</div><div class="line"><span class="keyword">for</span>(typename RecordMap&lt;T&gt;<span class="symbol">:</span><span class="symbol">:iterator</span><span class="symbol">:</span><span class="symbol">:value_type&amp;</span> itr : replica_map)&#123;&#125;</div></pre></td></tr></table></figure>
+<h2 id="另类Singleton"><a href="#另类Singleton" class="headerlink" title="另类Singleton"></a>另类Singleton</h2><p>The friend declaration appears in a class body and grants a function or another class access to private and protected members of the class where the friend declaration appears.<br><figure class="highlight gauss"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">Writer</span>* getWriter()&#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Writer</span>();</div><div class="line">&#125;</div><div class="line"></div><div class="line">class <span class="built_in">Writer</span>&#123;</div><div class="line">  <span class="comment">//这里的一个声明确保了外部的同名 函数可以访问内部protected资源，也是一种单例的模式</span></div><div class="line">  friend <span class="built_in">Writer</span>* getWriter();</div><div class="line">  protected:</div><div class="line">    <span class="built_in">Writer</span>()&#123;&#125;</div><div class="line">    ~<span class="built_in">Writer</span>()&#123;&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="C-Idioms-Execute-Around-Pointer"><a href="#C-Idioms-Execute-Around-Pointer" class="headerlink" title="C++ Idioms/Execute-Around Pointer"></a>C++ Idioms/Execute-Around Pointer</h2><p>有些时候我们需要像python装饰器一样的东西，这个时候Execute-Around Pointer是一个很好的技巧，如下code完成了在每次push_back之前后打印Size</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">class</span> VisualizableVector &#123;</div><div class="line">  <span class="keyword">public</span>:</div><div class="line">    <span class="keyword">class</span> proxy &#123;</div><div class="line">      <span class="keyword">public</span>:</div><div class="line">        proxy (<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; *v) : vect (v) &#123;</div><div class="line">          <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"Before size is: "</span> &lt;&lt; vect-&gt;size ();</div><div class="line">        &#125;</div><div class="line">        <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; * <span class="keyword">operator</span> -&gt; () &#123;</div><div class="line">          <span class="keyword">return</span> vect;</div><div class="line">        &#125;</div><div class="line">        ~proxy () &#123;</div><div class="line">          <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"After size is: "</span> &lt;&lt; vect-&gt;size ();</div><div class="line">        &#125;</div><div class="line">      <span class="keyword">private</span>:</div><div class="line">        <span class="built_in">vector</span> &lt;<span class="keyword">int</span>&gt; * vect;</div><div class="line">    &#125;;</div><div class="line">    VisualizableVector (<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; *v) : vect(v) &#123;&#125;    </div><div class="line">    proxy <span class="keyword">operator</span> -&gt; () &#123;</div><div class="line">       <span class="keyword">return</span> proxy (vect);</div><div class="line">    &#125;</div><div class="line">  <span class="keyword">private</span>:</div><div class="line">    <span class="built_in">vector</span> &lt;<span class="keyword">int</span>&gt; * vect;</div><div class="line">&#125;;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">  <span class="function">VisualizableVector <span class="title">vecc</span> <span class="params">(<span class="keyword">new</span> <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;)</span></span>;</div><div class="line">  <span class="comment">//...</span></div><div class="line">  vecc-&gt;push_back (<span class="number">10</span>); <span class="comment">// Note use of -&gt; operator instead of . operator</span></div><div class="line">  vecc-&gt;push_back (<span class="number">20</span>); <span class="comment">//等同于vecc.operator-&gt;()</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li><a href="https://en.wikibooks.org/wiki/More_C%2B%2B_Idioms/Execute-Around_Pointer" target="_blank" rel="external">C++ Idioms/Execute-Around Pointer</a></li>
+<li><a href="http://en.cppreference.com/w/cpp/language/operators" target="_blank" rel="external">operators overload</a></li>
+</ul>
+<h2 id="Hack-with-LD-PRELOAD"><a href="#Hack-with-LD-PRELOAD" class="headerlink" title="Hack with LD_PRELOAD"></a>Hack with LD_PRELOAD</h2><p>这个可以用来覆盖要load的动态库中的方法或者类什么的，可以做hack，是个hook</p>
+<ul>
+<li><a href="https://www.exploit-db.com/papers/13233/" target="_blank" rel="external">Reverse Engineering with LD_PRELOAD</a></li>
+<li><a href="http://blog.csdn.net/haoel/article/details/1602108" target="_blank" rel="external">利用LD_PRELOAD进行hook</a></li>
+</ul>
+<h2 id="尾递归"><a href="#尾递归" class="headerlink" title="尾递归"></a>尾递归</h2><p>Tail call是一个处理递归爆栈的好方案，但是并不是说Tail call就一点栈开销的没有，另外C++有时候虽然使用了Tall call但是并没达到预期效果，因为一些对象的析构可能会影响他，可以采取一些传引用或者传指正的方法处理，不过如果能用循环就别用递归</p>
+<h2 id="FILE-线程安全"><a href="#FILE-线程安全" class="headerlink" title="FILE 线程安全"></a>FILE 线程安全</h2><ul>
+<li>在同一个进程内, 针对同一个FILE*的操作(比如fwrite), 是线程安全的(Windows不是哦)</li>
+<li>As an example, the POSIX standard requires that C stdio FILE<em> operations are atomic. POSIX-conforming C libraries (e.g, on Solaris and GNU/Linux) have an internal mutex to serialize operations on FILE</em>s. However, you still need to not do stupid things like calling fclose(fs) in one thread followed by an access of fs in another.</li>
+<li>对于PIPE和FIFO, 只要写入数据不超过PIPE_BUF size那么也是atomic<a href="http://man7.org/linux/man-pages/man7/pipe.7.html" target="_blank" rel="external">PIPE DOC</a>, 但是对于文件：This volume of POSIX.1-2008 does not specify behavior of concurrent writes to a file from multiple processes. Applications should use some form of concurrency control.</li>
+<li>O_APPEND<br>  The file is opened in append mode.  Before each write(2), the file offset is positioned at the end of the file, as if with lseek(2).  O_APPEND may lead to corrupted files on NFS filesystems if more than one process appends data to a file at once.  This is because NFS does not support appending to a file, so the client kernel has to simulate it, which can’t be done without a race condition.<br><a href="http://man7.org/linux/man-pages/man2/open.2.html" target="_blank" rel="external">O_APPEND DOC</a></li>
+<li>OpenBSD 的代码里 fwrite是有文件锁的。。。</li>
+</ul>
+<p>有人写了程序验证超过PIPE_BUF会不会乱序，答复是这样的：</p>
+<blockquote>
+<p>It’s not luck, in the sense that if you dig into the kernel you can probably prove that in your particular circumstances it will never happen that one processes’ write is interleaved with another one. I am assuming that:</p>
+<ul>
+<li>You are not hitting any file size limits</li>
+<li>You are not filling the filesystem in which you create the test file</li>
+<li>The file is a regular file (not a socket, pipe, or something else)</li>
+<li>The filesystem is local</li>
+<li>The buffer does not span multiple virtual memory mappings (this one is known to be true, because it’s malloc()ed, which puts it on the heap, which it contiguous.</li>
+<li>The processes aren’t interrupted, signaled, or traced while write() is busy.</li>
+<li>There are no disk I/O errors, RAM failures, or any other abnormal conditions.</li>
+<li>(Maybe others)<br>You will probably indeed find that if all those assumptions hold, it is the case that the kernel of the operating system you happen to be using always accomplishes a single write() system call with a single atomic contiguous write to the following file.</li>
+</ul>
+<p>That doesn’t mean you can count on this always being true. You never know when it might not be true when:</p>
+<p>the program is run on a different operating system<br>the file moves to an NFS filesystem<br>the process gets a signal while the write() is in progress and the write() returns a partial result (fewer bytes than requested). Not sure if POSIX really allows this to happen but I program defensively!<br>etc…<br>So your experiment can’t prove that you can could on non-interleaved writes.</p>
+</blockquote>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/c/" rel="tag"># c</a>
+          
+            <a href="/tags/c/" rel="tag"># c++</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2014-9-2-linux-command-note/" rel="next" title="Linux Command Notes">
+                <i class="fa fa-chevron-left"></i> Linux Command Notes
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/firstjob/" rel="prev" title="回顾我的第一份工作">
+                回顾我的第一份工作 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+  <a class="jiathis_button_tsina"></a>
+  <a class="jiathis_button_tqq"></a>
+  <a class="jiathis_button_weixin"></a>
+  <a class="jiathis_button_cqq"></a>
+  <a class="jiathis_button_douban"></a>
+  <a class="jiathis_button_renren"></a>
+  <a class="jiathis_button_qzone"></a>
+  <a class="jiathis_button_kaixin001"></a>
+  <a class="jiathis_button_copy"></a>
+  <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>
+  <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" >
+  var jiathis_config={
+    hideMore:false
+  }
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2014-9-12-cpp-note/"
+           data-title="C\C++ Notes" data-url="http://matthewgao.github.io/2014-9-12-cpp-note/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="Matthew Gao" />
+          <p class="site-author-name" itemprop="name">Matthew Gao</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">40</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">23</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">48</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/matthewgao" target="_blank" title="Github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  Github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/xxiaogao" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  Twitter
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/334332999" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/gaoshen" target="_blank" title="Zhihu">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  Zhihu
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#双重指针"><span class="nav-number">1.</span> <span class="nav-text">双重指针</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数组指针"><span class="nav-number">2.</span> <span class="nav-text">数组指针</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#memset-memcpy"><span class="nav-number">3.</span> <span class="nav-text">memset/memcpy</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GDB"><span class="nav-number">4.</span> <span class="nav-text">GDB</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#检查core-dump"><span class="nav-number">4.1.</span> <span class="nav-text">检查core dump</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#检查backtrace的每一层"><span class="nav-number">4.2.</span> <span class="nav-text">检查backtrace的每一层</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#显示变量类型"><span class="nav-number">4.3.</span> <span class="nav-text">显示变量类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#常用命令"><span class="nav-number">4.4.</span> <span class="nav-text">常用命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#其他小诡计"><span class="nav-number">4.5.</span> <span class="nav-text">其他小诡计</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Valgrind-Memory-leak-check-tool"><span class="nav-number">5.</span> <span class="nav-text">Valgrind: Memory leak check tool</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dynamic-cast"><span class="nav-number">6.</span> <span class="nav-text">dynamic_cast</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#switch-case"><span class="nav-number">7.</span> <span class="nav-text">switch-case</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Parameters"><span class="nav-number">7.1.</span> <span class="nav-text">Parameters</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#str"><span class="nav-number">7.1.1.</span> <span class="nav-text">str</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#delimiters"><span class="nav-number">7.1.2.</span> <span class="nav-text">delimiters</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Example"><span class="nav-number">7.2.</span> <span class="nav-text">Example</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C99-支持可变长数组"><span class="nav-number">8.</span> <span class="nav-text">C99 支持可变长数组</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#基本用法"><span class="nav-number">8.1.</span> <span class="nav-text">基本用法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#作为形参"><span class="nav-number">8.2.</span> <span class="nav-text">作为形参</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#各种限定词"><span class="nav-number">8.3.</span> <span class="nav-text">各种限定词</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#const-函数"><span class="nav-number">9.</span> <span class="nav-text">const 函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#友元-friend"><span class="nav-number">10.</span> <span class="nav-text">友元 friend</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#STL和boost"><span class="nav-number">11.</span> <span class="nav-text">STL和boost</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#shared-ptr"><span class="nav-number">11.1.</span> <span class="nav-text">shared_ptr</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#string是否是有引用实现的"><span class="nav-number">11.2.</span> <span class="nav-text">string是否是有引用实现的</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#vector-的增长"><span class="nav-number">11.3.</span> <span class="nav-text">vector 的增长</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#vector赋值"><span class="nav-number">11.4.</span> <span class="nav-text">vector赋值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#STL容器"><span class="nav-number">11.5.</span> <span class="nav-text">STL容器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Allocator"><span class="nav-number">11.6.</span> <span class="nav-text">Allocator</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#map-unordered-map"><span class="nav-number">11.7.</span> <span class="nav-text">map, unordered_map</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#STL-TIP"><span class="nav-number">11.8.</span> <span class="nav-text">STL TIP</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#std-function与std-bind-函数指针"><span class="nav-number">11.9.</span> <span class="nav-text">std::function与std::bind 函数指针</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#预处理注释代码"><span class="nav-number">12.</span> <span class="nav-text">预处理注释代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#new-operator-和-operator-new"><span class="nav-number">13.</span> <span class="nav-text">new operator 和 operator new</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#operator重载"><span class="nav-number">14.</span> <span class="nav-text">operator重载</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#解决-static-属性的初始化赋值问题"><span class="nav-number">15.</span> <span class="nav-text">解决 static 属性的初始化赋值问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#操作符"><span class="nav-number">16.</span> <span class="nav-text">操作符</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#operator-char-const"><span class="nav-number">16.1.</span> <span class="nav-text">operator char() const</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Misc"><span class="nav-number">17.</span> <span class="nav-text">Misc</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#inline函数不一定inline"><span class="nav-number">17.1.</span> <span class="nav-text">inline函数不一定inline</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#尽量以引用和指针方式传参"><span class="nav-number">17.2.</span> <span class="nav-text">尽量以引用和指针方式传参</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#itr-和-itr"><span class="nav-number">17.3.</span> <span class="nav-text">itr++ 和 ++itr</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#using"><span class="nav-number">17.4.</span> <span class="nav-text">using</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#纯虚函数可以有实现"><span class="nav-number">17.5.</span> <span class="nav-text">纯虚函数可以有实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mutable-作用"><span class="nav-number">17.6.</span> <span class="nav-text">mutable 作用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#const-调用规则"><span class="nav-number">17.7.</span> <span class="nav-text">const 调用规则</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#指针和引用"><span class="nav-number">17.8.</span> <span class="nav-text">指针和引用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#绝对不要以多态（Polymorphically）方式处理数组"><span class="nav-number">17.9.</span> <span class="nav-text">绝对不要以多态（Polymorphically）方式处理数组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#避免类中Implicit的类型装换函数"><span class="nav-number">17.10.</span> <span class="nav-text">避免类中Implicit的类型装换函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#复合操作符（-）"><span class="nav-number">17.11.</span> <span class="nav-text">复合操作符（+=）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#size-t"><span class="nav-number">17.12.</span> <span class="nav-text">size_t</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#全局符号"><span class="nav-number">17.13.</span> <span class="nav-text">全局符号</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#fork-execl"><span class="nav-number">18.</span> <span class="nav-text">fork execl</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dup-dup2"><span class="nav-number">19.</span> <span class="nav-text">dup dup2</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#strncpy-and-snprintf"><span class="nav-number">20.</span> <span class="nav-text">strncpy and snprintf</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#execl与execlp的区别"><span class="nav-number">21.</span> <span class="nav-text">execl与execlp的区别</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#system"><span class="nav-number">21.1.</span> <span class="nav-text">system()</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#setbuf"><span class="nav-number">22.</span> <span class="nav-text">setbuf()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#unlink"><span class="nav-number">23.</span> <span class="nav-text">unlink()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#unordered-map-和-map"><span class="nav-number">24.</span> <span class="nav-text">unordered_map 和 map</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#多态和类型转换"><span class="nav-number">25.</span> <span class="nav-text">多态和类型转换</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C-11"><span class="nav-number">26.</span> <span class="nav-text">C++11</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#auto"><span class="nav-number">26.1.</span> <span class="nav-text">auto</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Range-based-for-loop"><span class="nav-number">26.2.</span> <span class="nav-text">Range-based for loop</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#重写-重载"><span class="nav-number">27.</span> <span class="nav-text">重写 重载</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#attribute-constructor"><span class="nav-number">28.</span> <span class="nav-text">attribute ((constructor))</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#多线程"><span class="nav-number">29.</span> <span class="nav-text">多线程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#互斥量"><span class="nav-number">29.1.</span> <span class="nav-text">互斥量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pthread-attr-setscope"><span class="nav-number">29.2.</span> <span class="nav-text">pthread_attr_setscope</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pthread-attr-setstacksize"><span class="nav-number">29.3.</span> <span class="nav-text">pthread_attr_setstacksize</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pthread-attr-setdetachstate"><span class="nav-number">29.4.</span> <span class="nav-text">pthread_attr_setdetachstate</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pthread-attr-setschedpolicy"><span class="nav-number">29.5.</span> <span class="nav-text">pthread_attr_setschedpolicy</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pthread-once"><span class="nav-number">29.6.</span> <span class="nav-text">pthread_once</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pthread-cond-signal"><span class="nav-number">29.7.</span> <span class="nav-text">pthread_cond_signal()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fseek-线程不安全"><span class="nav-number">29.8.</span> <span class="nav-text">fseek 线程不安全</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#strtok"><span class="nav-number">29.9.</span> <span class="nav-text">strtok()</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#网络和进程通信"><span class="nav-number">30.</span> <span class="nav-text">网络和进程通信</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#readv-和writev"><span class="nav-number">30.1.</span> <span class="nav-text">readv()和writev()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TCP"><span class="nav-number">30.2.</span> <span class="nav-text">TCP</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#read-and-write"><span class="nav-number">30.3.</span> <span class="nav-text">read and write</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DNS-Lookup"><span class="nav-number">30.4.</span> <span class="nav-text">DNS Lookup</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Network-Address-Convert"><span class="nav-number">30.5.</span> <span class="nav-text">Network Address Convert</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#多种sockaddr"><span class="nav-number">30.6.</span> <span class="nav-text">多种sockaddr</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#网络字节序"><span class="nav-number">30.7.</span> <span class="nav-text">网络字节序</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#类内初始化和初始化列表"><span class="nav-number">31.</span> <span class="nav-text">类内初始化和初始化列表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#虚继承"><span class="nav-number">32.</span> <span class="nav-text">虚继承</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Deamon"><span class="nav-number">33.</span> <span class="nav-text">Deamon</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mmap"><span class="nav-number">34.</span> <span class="nav-text">mmap</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#删除一个已经打开的文件"><span class="nav-number">35.</span> <span class="nav-text">删除一个已经打开的文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#typename"><span class="nav-number">36.</span> <span class="nav-text">typename</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#泛型的实例化和特例化"><span class="nav-number">37.</span> <span class="nav-text">泛型的实例化和特例化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#extern-“C”"><span class="nav-number">38.</span> <span class="nav-text">extern “C”</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ranged-for"><span class="nav-number">39.</span> <span class="nav-text">ranged-for</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#另类Singleton"><span class="nav-number">40.</span> <span class="nav-text">另类Singleton</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C-Idioms-Execute-Around-Pointer"><span class="nav-number">41.</span> <span class="nav-text">C++ Idioms/Execute-Around Pointer</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Hack-with-LD-PRELOAD"><span class="nav-number">42.</span> <span class="nav-text">Hack with LD_PRELOAD</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#尾递归"><span class="nav-number">43.</span> <span class="nav-text">尾递归</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#FILE-线程安全"><span class="nav-number">44.</span> <span class="nav-text">FILE 线程安全</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2012 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Matthew Gao</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="http://cdn.bootcss.com/jquery/2.1.3/jquery.min.js"></script>
+
+  
+  <script type="text/javascript" src="http://cdn.bootcss.com/fastclick/1.0.5/fastclick.min.js"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="http://cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"matthewgao"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+
+</body>
+</html>

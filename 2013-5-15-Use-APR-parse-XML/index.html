@@ -1,0 +1,784 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="apache,xml," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Matthew Note" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="在编写SOAP module的时候遇到了需要解析soap request的问题，发现APR中已经有写好的XML parser，所以这里简单介绍下怎么使用APR中的XML Parser。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="用APR解析XML文件">
+<meta property="og:url" content="http://matthewgao.github.io/2013-5-15-Use-APR-parse-XML/index.html">
+<meta property="og:site_name" content="Matthew Note">
+<meta property="og:description" content="在编写SOAP module的时候遇到了需要解析soap request的问题，发现APR中已经有写好的XML parser，所以这里简单介绍下怎么使用APR中的XML Parser。">
+<meta property="og:updated_time" content="2016-07-19T05:43:35.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="用APR解析XML文件">
+<meta name="twitter:description" content="在编写SOAP module的时候遇到了需要解析soap request的问题，发现APR中已经有写好的XML parser，所以这里简单介绍下怎么使用APR中的XML Parser。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://matthewgao.github.io/2013-5-15-Use-APR-parse-XML/"/>
+
+
+
+
+
+  <title> 用APR解析XML文件 | Matthew Note </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?0d7319169ed36fc7c6c76a85b1353472";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Matthew Note</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://matthewgao.github.io/2013-5-15-Use-APR-parse-XML/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Matthew Gao">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/avatar.gif">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Matthew Note">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="Matthew Note" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                用APR解析XML文件
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <a href="/2013-5-15-Use-APR-parse-XML/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2013-5-15-Use-APR-parse-XML/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+              <div class="post-description">
+                  在编写SOAP module的时候遇到了需要解析soap request的问题，发现APR中已经有写好的XML parser，所以这里简单介绍下怎么使用APR中的XML Parser。
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="Apache-portable-runtime（APR）"><a href="#Apache-portable-runtime（APR）" class="headerlink" title="Apache portable runtime（APR）"></a>Apache portable runtime（APR）</h2><p>Apache server中一个非常关键的部分，他剥离了Apache server对于OS的依赖，使得它更容易在不同系统中迁移，另外他实现了垃圾的自动回收，解决了C/C++程序编写中非常头疼的问题。</p>
+<p>这个APR中自带了大量的库文件，XML Parser便是其中一个。</p>
+<h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><p>使用XMLParser需要引用apr_xml.h头文件，文件中定义了基本数据类型，和部分函数。主要的有：</p>
+<ul>
+<li>apr_xml_attr</li>
+<li>apr_xml_elem</li>
+<li>apr_text_header</li>
+<li>apr_text</li>
+<li>apr_xml_doc</li>
+</ul>
+<p>他们的定义如下，看清楚这些结构体有助于更好的使用它：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div></pre></td><td class="code"><pre><div class="line">typedef <span class="class"><span class="keyword">struct</span> <span class="title">apr_text</span></span> apr_text;</div><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">apr_text</span></span> &#123;</div><div class="line"> <span class="keyword">const</span> <span class="keyword">char</span> *text;</div><div class="line"> <span class="class"><span class="keyword">struct</span> <span class="title">apr_text</span></span> *next;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">typedef <span class="class"><span class="keyword">struct</span> <span class="title">apr_text_header</span></span> apr_text_header;</div><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">apr_text_header</span></span> &#123;</div><div class="line"> apr_text *first;</div><div class="line"> apr_text *last;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">typedef <span class="class"><span class="keyword">struct</span> <span class="title">apr_xml_attr</span></span> apr_xml_attr;</div><div class="line">typedef <span class="class"><span class="keyword">struct</span> <span class="title">apr_xml_elem</span></span> apr_xml_elem;</div><div class="line">typedef <span class="class"><span class="keyword">struct</span> <span class="title">apr_xml_doc</span></span> apr_xml_doc;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">apr_xml_attr</span></span> &#123;</div><div class="line"> <span class="keyword">const</span> <span class="keyword">char</span> *name;</div><div class="line"> <span class="keyword">int</span> ns;</div><div class="line"></div><div class="line"> <span class="keyword">const</span> <span class="keyword">char</span> *value;</div><div class="line"></div><div class="line"> <span class="class"><span class="keyword">struct</span> <span class="title">apr_xml_attr</span></span> *next;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">apr_xml_elem</span></span> &#123;</div><div class="line"> <span class="keyword">const</span> <span class="keyword">char</span> *name;</div><div class="line"> <span class="keyword">int</span> ns;</div><div class="line"> <span class="keyword">const</span> <span class="keyword">char</span> *lang;</div><div class="line"></div><div class="line"> apr_text_header first_cdata;</div><div class="line"> apr_text_header following_cdata;</div><div class="line"></div><div class="line"> <span class="class"><span class="keyword">struct</span> <span class="title">apr_xml_elem</span></span> *parent;        </div><div class="line"> <span class="class"><span class="keyword">struct</span> <span class="title">apr_xml_elem</span></span> *next;  </div><div class="line"> <span class="class"><span class="keyword">struct</span> <span class="title">apr_xml_elem</span></span> *first_child;</div><div class="line"> <span class="class"><span class="keyword">struct</span> <span class="title">apr_xml_attr</span></span> *attr;          </div><div class="line"></div><div class="line"> <span class="comment">/* used only during parsing */</span></div><div class="line"> <span class="class"><span class="keyword">struct</span> <span class="title">apr_xml_elem</span></span> *last_child;</div><div class="line"> <span class="class"><span class="keyword">struct</span> <span class="title">apr_xml_ns_scope</span></span> *ns_scope;</div><div class="line"></div><div class="line"> <span class="comment">/* used by modules during request processing */</span></div><div class="line"> void *<span class="keyword">priv</span>;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">#define APR_XML_ELEM_IS_EMPTY(e) ((e)-&gt;first_child == NULL &amp;&amp; \</div><div class="line">							   (e)-&gt;first_cdata.first == NULL)</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">apr_xml_doc</span></span> &#123;</div><div class="line"> apr_xml_elem *root; </div><div class="line"> apr_array_header_t *namespaces;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>所有关于xml的数据都存储在apr_xml_doc中，这里记录了他的子节点，父节点，每个节点的名称，属性和cdata（也就是value），很好的处理好这个结构体，就可以轻松的得到所有你想要的内容。</p>
+<h2 id="怎么使用"><a href="#怎么使用" class="headerlink" title="怎么使用"></a>怎么使用</h2><p>对于解析SOAP非常简单，只需调用ap_xml_parse_input()就可以将request的内容解析为apr_xml_doc格式，下面是一个实例程序：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;ctype.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"httpd.h"</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"http_config.h"</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"http_protocol.h"</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"ap_config.h"</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;apr_xml.h&gt;</span></span></div><div class="line">	</div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> apr_isspace(c)   (isspace(((unsigned char)(c))))</span></div><div class="line"><span class="comment">//if you using g++ to compile the module, extern should be critical.</span></div><div class="line"><span class="keyword">extern</span>  <span class="keyword">module</span> AP_MODULE_DECLARE_DATA soap_module;</div><div class="line"><span class="keyword">extern</span> <span class="string">"C"</span> <span class="function"><span class="keyword">int</span> <span class="title">ap_xml_parse_input</span>	<span class="params">(request_rec * r,apr_xml_doc ** pdoc)</span></span>;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">const</span> <span class="keyword">char</span> * <span class="title">soap_xml_get_cdata</span><span class="params">(<span class="keyword">const</span> apr_xml_elem *elem, <span class="keyword">apr_pool_t</span> *pool,</span></span></div><div class="line">								  <span class="keyword">int</span> strip_white);</div><div class="line"><span class="comment">/* The sample content handler */</span></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">dump_xml</span><span class="params">(request_rec *r, apr_xml_elem *root)</span></span>&#123;</div><div class="line"></div><div class="line">	<span class="keyword">if</span>(root==<span class="literal">NULL</span>)</div><div class="line">		<span class="keyword">return</span>;</div><div class="line">	<span class="keyword">if</span>(root-&gt;name!=<span class="literal">NULL</span>)</div><div class="line">		ap_rprintf(r,<span class="string">" Name:%s  \n"</span>, root-&gt;name);</div><div class="line">	<span class="keyword">if</span>(root-&gt;lang!=<span class="literal">NULL</span>)</div><div class="line">		ap_rprintf(r,<span class="string">" lang:%s  \n"</span>, root-&gt;lang );</div><div class="line">	<span class="keyword">if</span>(root-&gt;attr!=<span class="literal">NULL</span>)</div><div class="line">		ap_rprintf(r,<span class="string">" Attr: %s:%s \n"</span>, root-&gt;attr-&gt;name,root-&gt;attr-&gt;value );</div><div class="line">	<span class="keyword">if</span>(root-&gt;first_cdata.first!=<span class="literal">NULL</span>)&#123;</div><div class="line">		apr_text *itr=root-&gt;first_cdata.first;</div><div class="line">		<span class="keyword">for</span>(;itr!=<span class="literal">NULL</span>;itr=itr-&gt;next)</div><div class="line">			ap_rprintf(r,<span class="string">" cdata:%s  \n"</span>, itr-&gt;text);</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">if</span>(root-&gt;following_cdata.first!=<span class="literal">NULL</span>)&#123;</div><div class="line">		apr_text *itr=root-&gt;following_cdata.first;</div><div class="line">		<span class="keyword">for</span>(;itr!=<span class="literal">NULL</span>;itr=itr-&gt;next)</div><div class="line">			ap_rprintf(r,<span class="string">" following_cdata:%s  \n"</span>, itr-&gt;text);</div><div class="line">	&#125;</div><div class="line">	 <span class="comment">/*       </span></div><div class="line">	const char * buf=soap_xml_get_cdata(root, r-&gt;pool,1);</div><div class="line">	if(buf==NULL)</div><div class="line">		ap_rprintf(r,"Buf is NULL");</div><div class="line">	else</div><div class="line">		ap_rprintf(r," Value: %s \n", buf );</div><div class="line">	 */</div><div class="line">	dump_xml(r,root-&gt;first_child);</div><div class="line">	dump_xml(r,root-&gt;next);</div><div class="line">			</div><div class="line">	<span class="comment">//dump_xml(r,root-&gt;parent);       </span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">mod_soap_handler</span><span class="params">(request_rec *r)</span></span></div><div class="line">&#123;</div><div class="line">	<span class="keyword">int</span> result;</div><div class="line">	<span class="keyword">if</span> (<span class="built_in">strcmp</span>(r-&gt;handler, <span class="string">"mod_soap"</span>)) &#123;</div><div class="line">		<span class="keyword">return</span> DECLINED;</div><div class="line">	&#125;</div><div class="line">	r-&gt;content_type = <span class="string">"text/html"</span>;      </div><div class="line"></div><div class="line">	apr_xml_doc *doc = <span class="literal">NULL</span>;</div><div class="line">	<span class="keyword">if</span> ((result = ap_xml_parse_input(r, &amp;doc)) != <span class="number">0</span>)</div><div class="line">	&#123;   </div><div class="line">                ap_rputs(<span class="string">"parse the xml fail\n"</span>, r);  </div><div class="line">        &#125;</div><div class="line"></div><div class="line">	<span class="keyword">if</span>(doc==<span class="literal">NULL</span>)</div><div class="line">	&#123;  </div><div class="line">                ap_rprintf(r,<span class="string">" Doc is NULL"</span>);</div><div class="line">		<span class="keyword">return</span> OK;</div><div class="line">	&#125; </div><div class="line">	<span class="keyword">if</span>(doc-&gt;root==<span class="literal">NULL</span>)</div><div class="line">	&#123;</div><div class="line">		ap_rprintf(r,<span class="string">"  root is NULL"</span>);</div><div class="line">		<span class="keyword">return</span> OK;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	dump_xml(r,doc-&gt;root);</div><div class="line">	<span class="keyword">return</span> OK;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">mod_soap_register_hooks</span><span class="params">(<span class="keyword">apr_pool_t</span> *p)</span></span></div><div class="line">&#123;</div><div class="line">	ap_hook_handler(mod_soap_handler, <span class="literal">NULL</span>, <span class="literal">NULL</span>, APR_HOOK_MIDDLE);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">/* Dispatch list for API hooks */</span></div><div class="line"></div><div class="line"><span class="keyword">module</span> AP_MODULE_DECLARE_DATA soap_module = &#123;</div><div class="line">	STANDARD20_MODULE_STUFF, </div><div class="line">	<span class="literal">NULL</span>,                  <span class="comment">/* create per-dir    config structures */</span></div><div class="line">	<span class="literal">NULL</span>,                  <span class="comment">/* merge  per-dir    config structures */</span></div><div class="line">	<span class="literal">NULL</span>,                  <span class="comment">/* create per-server config structures */</span></div><div class="line">	<span class="literal">NULL</span>,                  <span class="comment">/* merge  per-server config structures */</span></div><div class="line">	<span class="literal">NULL</span>,                  <span class="comment">/* table of config file commands       */</span></div><div class="line">	mod_soap_register_hooks  <span class="comment">/* register hooks                      */</span></div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>Install这个module，之后向apache发送一个SOAP request，例如：</p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">&lt;soapen<span class="variable">v:Envelope</span> xmln<span class="variable">s:xsi</span>=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span> xmln<span class="variable">s:xsd</span>=<span class="string">"http://www.w3.org/2001/XMLSchema"</span> xmln<span class="variable">s:soapenv</span>=<span class="string">"http://schemas.xmlsoap.org/soap/envelope/"</span> xmln<span class="variable">s:urn</span>=<span class="string">"urn:AventailLogonV2"</span>&gt;</div><div class="line">   &lt;soapen<span class="variable">v:Header</span>/&gt;</div><div class="line">   &lt;soapen<span class="variable">v:Body</span>&gt;</div><div class="line">	  &lt;urn:getMicroInterrogationList soapen<span class="variable">v:encodingStyle</span>=<span class="string">"http://schemas.xmlsoap.org/soap/encoding/"</span>&gt;</div><div class="line">		 &lt;<span class="keyword">version</span> xsi:<span class="built_in">type</span>=<span class="string">"xsd:int"</span>&gt;<span class="number">2</span>&lt;/<span class="keyword">version</span>&gt;</div><div class="line">		 &lt;logonId xsi:<span class="built_in">type</span>=<span class="string">"xsd:string"</span>&gt;QAABAFrlfQsUJvsQVh5kRozpavo=&lt;/logonId&gt;</div><div class="line">	  &lt;/urn:getMicroInterrogationList&gt;</div><div class="line">   &lt;/soapen<span class="variable">v:Body</span>&gt;</div><div class="line">&lt;/soapen<span class="variable">v:Envelope</span>&gt;</div></pre></td></tr></table></figure>
+<p>Apache server会回复如下内容：</p>
+<figure class="highlight delphi"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">Name</span>：Envelope</div><div class="line">cdata：</div><div class="line"><span class="keyword">Name</span>：Header</div><div class="line">cdata：</div><div class="line"><span class="keyword">Name</span>：Body</div><div class="line">cdata：</div><div class="line"><span class="keyword">Name</span>：getMicroInterrogationList</div><div class="line">cdata：	</div><div class="line"><span class="keyword">Name</span>：version</div><div class="line">cdata：<span class="number">2</span></div><div class="line"><span class="keyword">Name</span>：logonId</div><div class="line">cdata：QAABAFrlfQsUJvsQVh5kRozpavo=</div></pre></td></tr></table></figure>
+<h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p>进一步的开发就很容易了，只要按照自己的需要去处理数据就可以了。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/apache/" rel="tag"># apache</a>
+          
+            <a href="/tags/xml/" rel="tag"># xml</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2013-5-15-info-hiding/" rel="next" title="主流数字图像信息隐藏软件的使用方法">
+                <i class="fa fa-chevron-left"></i> 主流数字图像信息隐藏软件的使用方法
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2013-5-20-aboutfree/" rel="prev" title="free/delete 怎么知道有多少内存要释放">
+                free/delete 怎么知道有多少内存要释放 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+  <a class="jiathis_button_tsina"></a>
+  <a class="jiathis_button_tqq"></a>
+  <a class="jiathis_button_weixin"></a>
+  <a class="jiathis_button_cqq"></a>
+  <a class="jiathis_button_douban"></a>
+  <a class="jiathis_button_renren"></a>
+  <a class="jiathis_button_qzone"></a>
+  <a class="jiathis_button_kaixin001"></a>
+  <a class="jiathis_button_copy"></a>
+  <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>
+  <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" >
+  var jiathis_config={
+    hideMore:false
+  }
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2013-5-15-Use-APR-parse-XML/"
+           data-title="用APR解析XML文件" data-url="http://matthewgao.github.io/2013-5-15-Use-APR-parse-XML/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="Matthew Gao" />
+          <p class="site-author-name" itemprop="name">Matthew Gao</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">40</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">23</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">48</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/matthewgao" target="_blank" title="Github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  Github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/xxiaogao" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  Twitter
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/334332999" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/gaoshen" target="_blank" title="Zhihu">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  Zhihu
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Apache-portable-runtime（APR）"><span class="nav-number">1.</span> <span class="nav-text">Apache portable runtime（APR）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#定义"><span class="nav-number">2.</span> <span class="nav-text">定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#怎么使用"><span class="nav-number">3.</span> <span class="nav-text">怎么使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结语"><span class="nav-number">4.</span> <span class="nav-text">结语</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2012 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Matthew Gao</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="http://cdn.bootcss.com/jquery/2.1.3/jquery.min.js"></script>
+
+  
+  <script type="text/javascript" src="http://cdn.bootcss.com/fastclick/1.0.5/fastclick.min.js"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="http://cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"matthewgao"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+
+</body>
+</html>

@@ -1,0 +1,1055 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="linux,command,shell," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Matthew Note" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="学习笔记：记录下Linux使用中不断遇到的命令">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux Command Notes">
+<meta property="og:url" content="http://matthewgao.github.io/2014-9-2-linux-command-note/index.html">
+<meta property="og:site_name" content="Matthew Note">
+<meta property="og:description" content="学习笔记：记录下Linux使用中不断遇到的命令">
+<meta property="og:updated_time" content="2017-05-09T01:57:08.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Linux Command Notes">
+<meta name="twitter:description" content="学习笔记：记录下Linux使用中不断遇到的命令">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://matthewgao.github.io/2014-9-2-linux-command-note/"/>
+
+
+
+
+
+  <title> Linux Command Notes | Matthew Note </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?0d7319169ed36fc7c6c76a85b1353472";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Matthew Note</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://matthewgao.github.io/2014-9-2-linux-command-note/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Matthew Gao">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/avatar.gif">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Matthew Note">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="Matthew Note" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Linux Command Notes
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <a href="/2014-9-2-linux-command-note/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2014-9-2-linux-command-note/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+              <div class="post-description">
+                  学习笔记：记录下Linux使用中不断遇到的命令
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="stat"><a href="#stat" class="headerlink" title="stat"></a>stat</h2><p>可以用stat命令，查看某个文件的inode信息</p>
+<h2 id="mount"><a href="#mount" class="headerlink" title="mount"></a>mount</h2><h3 id="mount-a-dir"><a href="#mount-a-dir" class="headerlink" title="mount a dir"></a>mount a dir</h3><ul>
+<li>-t 指定文件系统类型，通常可以不指定，除了一些特殊的比如, smbfs, tmpfs, proc, sysfs等等</li>
+<li>-bind 通常来讲mount是mount一个设备到文件目录，但是同样可以使用bind来mount一个目录到另一个目录</li>
+<li>-o 代表 option，<figure class="highlight fortran"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mount -o <span class="keyword">bind</span></div><div class="line">mount -<span class="keyword">bind</span></div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="mount一个网络共享文件夹"><a href="#mount一个网络共享文件夹" class="headerlink" title="mount一个网络共享文件夹"></a>mount一个网络共享文件夹</h3><figure class="highlight awk"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mount <span class="regexp">//</span><span class="number">10.103</span>.<span class="number">226.143</span><span class="regexp">/abc /m</span>nt<span class="regexp">/net</span></div></pre></td></tr></table></figure>
+<p>这个对Ubuntu和Mint有效，有些情况下可能需要指定文件系统格式</p>
+<blockquote>
+<p><code>-t smbfs -o username=root, password=pass</code></p>
+</blockquote>
+<h3 id="umount-a-busy-device"><a href="#umount-a-busy-device" class="headerlink" title="umount a busy device"></a>umount a busy device</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">umount <span class="_">-l</span> unpacked/rbe</div></pre></td></tr></table></figure>
+<blockquote>
+<p>-l 代表lazy，可以强制umount一个device，如果依旧不行，可以尝试用 </p>
+</blockquote>
+<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">lsof | grep unpacked/rbe<span class="comment"></span></div><div class="line">//或者</div><div class="line">fuser <span class="keyword">a</span> <span class="built_in">file</span></div></pre></td></tr></table></figure>
+<blockquote>
+<p>来查找具体是谁占用了，Kill他</p>
+</blockquote>
+<h2 id="skip-an-existed-dir"><a href="#skip-an-existed-dir" class="headerlink" title="skip an existed dir"></a>skip an existed dir</h2><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mkdir -<span class="selector-tag">p</span> dir1</div></pre></td></tr></table></figure>
+<h2 id="Create-a-link"><a href="#Create-a-link" class="headerlink" title="Create a link"></a>Create a link</h2><figure class="highlight excel"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">ln</span> file1 file2</div><div class="line"><span class="built_in">ln</span> -s file1 file2</div></pre></td></tr></table></figure>
+<blockquote>
+<p>hard link and soft link</p>
+</blockquote>
+<h2 id="X-windows"><a href="#X-windows" class="headerlink" title="X windows"></a>X windows</h2><p>X Windows包含几个部分:</p>
+<ul>
+<li>X server, 主要用于和硬件打交道，把绘图展示到显示器上</li>
+<li>X client，关注与如何绘图，和绘制什么样的图形，一个完全抽象出来的脱离硬件的层面</li>
+<li>Display manager, 用来管理多个Xclient绘制的窗口，最常见的有gdm，lightdm，sddm(kde), twm，i3block等</li>
+</ul>
+<h3 id="调整分辨率"><a href="#调整分辨率" class="headerlink" title="调整分辨率"></a>调整分辨率</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">xrandr <span class="_">-l</span></div><div class="line">xrandr <span class="_">-s</span> 1280x960</div></pre></td></tr></table></figure>
+<blockquote>
+<p>分辨率需要驱动支持，如果不支持会报错。 对于VBOX和VM，需要先安装VBOX tools和vmware-tools<br>有些时候需要更改显示驱动，在Xorg.conf中，虚拟机和服务器大多默认vesa</p>
+</blockquote>
+<h2 id="Console-Terminal"><a href="#Console-Terminal" class="headerlink" title="Console/Terminal"></a>Console/Terminal</h2><p>这是两个很容易混淆的概念，Console通常指的是一个串行借口，Terminal通常指的是一个Bash, Console通常会启动一个Bash</p>
+<ul>
+<li>Console分为两种，ttyX和ttySX, 前者是一个逻辑上的Console，后者是物理上的Serial Console，Console的相关设置，可以在Grub这类工具中设置，Linux中通常是使用tty了，如果你有个COM口，那么可以用ttyS</li>
+<li>系统在启动的时候inittab中会设置，通过getty来获得一个console</li>
+<li>Text Console的分辨率就不能用xrandr了，可以在grub中通过vga=ask/ID来设置，具体ID取决于硬件支持</li>
+<li>stty可以设置tty相关属性，比如对应快捷键</li>
+</ul>
+<h2 id="权限操作"><a href="#权限操作" class="headerlink" title="权限操作"></a>权限操作</h2><ul>
+<li>adduser</li>
+<li>addgroup 加user到group</li>
+<li>groupadd 新建一个group</li>
+<li>usermod 可以改变user的属性，比如属于哪个Group，注意group改完要重新gdm进去才能生效</li>
+</ul>
+<h3 id="SElinux"><a href="#SElinux" class="headerlink" title="SElinux"></a>SElinux</h3><p>是一个更高级的权限管理，可以避免一个有很高权限的程序随意访问文件系统，比如httpd，一个普通用户可以操作httpd来访问root权限的目录</p>
+<h2 id="DNS-lookup"><a href="#DNS-lookup" class="headerlink" title="DNS lookup"></a>DNS lookup</h2><figure class="highlight dns"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line">sslvpn:~# host -a baidu.com</div><div class="line"></div><div class="line">Trying "baidu.com"</div><div class="line"><span class="comment">;; -&gt;&gt;HEADER&lt;&lt;- opcode: QUERY, status: NOERROR, id: 53987</span></div><div class="line"><span class="comment">;; flags: qr rd ra; QUERY: 1, ANSWER: 14, AUTHORITY: 0, ADDITIONAL: 7</span></div><div class="line"></div><div class="line"><span class="comment">;; QUESTION SECTION:</span></div><div class="line"><span class="comment">;baidu.com.                     IN      ANY</span></div><div class="line"></div><div class="line"><span class="comment">;; ANSWER SECTION:</span></div><div class="line">baidu.com.              <span class="number">462</span>     <span class="keyword">IN</span>      <span class="keyword">A</span>       <span class="number">123.125.114.144</span></div><div class="line">baidu.com.              <span class="number">462</span>     <span class="keyword">IN</span>      <span class="keyword">A</span>       <span class="number">220.181.111.85</span></div><div class="line">baidu.com.              <span class="number">462</span>     <span class="keyword">IN</span>      <span class="keyword">A</span>       <span class="number">220.181.111.86</span></div><div class="line">baidu.com.              <span class="number">86262</span>   <span class="keyword">IN</span>      <span class="keyword">NS</span>      ns4.baidu.com.</div><div class="line">baidu.com.              <span class="number">86262</span>   <span class="keyword">IN</span>      <span class="keyword">NS</span>      dns.baidu.com.</div><div class="line">baidu.com.              <span class="number">86262</span>   <span class="keyword">IN</span>      <span class="keyword">NS</span>      ns3.baidu.com.</div><div class="line">baidu.com.              <span class="number">86262</span>   <span class="keyword">IN</span>      <span class="keyword">NS</span>      ns2.baidu.com.</div><div class="line">baidu.com.              <span class="number">86262</span>   <span class="keyword">IN</span>      <span class="keyword">NS</span>      ns7.baidu.com.</div><div class="line">baidu.com.              <span class="number">7062</span>    <span class="keyword">IN</span>      <span class="keyword">SOA</span>     dns.baidu.com. sa.baidu.com. <span class="number">2012120775</span> <span class="number">300 300</span> <span class="number">2592000</span> <span class="number">7200</span></div><div class="line">baidu.com.              <span class="number">7062</span>    <span class="keyword">IN</span>      <span class="keyword">MX</span>      <span class="number">20</span> mx1.baidu.com.</div><div class="line">baidu.com.              <span class="number">7062</span>    <span class="keyword">IN</span>      <span class="keyword">MX</span>      <span class="number">20</span> jpmx.baidu.com.</div><div class="line">baidu.com.              <span class="number">7062</span>    <span class="keyword">IN</span>      <span class="keyword">MX</span>      <span class="number">20</span> mx50.baidu.com.</div><div class="line">baidu.com.              <span class="number">7062</span>    <span class="keyword">IN</span>      <span class="keyword">MX</span>      <span class="number">10</span> mx.n.shifen.com.</div><div class="line">baidu.com.              <span class="number">7062</span>    <span class="keyword">IN</span>      <span class="keyword">TXT</span>     "v=spf1 include:spf1.baidu.com include:spf2.baidu.com include:spf3.baidu.com a mx ptr ~all"</div><div class="line"></div><div class="line"><span class="comment">;; ADDITIONAL SECTION:</span></div><div class="line">ns4.baidu.com.          <span class="number">86262</span>   <span class="keyword">IN</span>      <span class="keyword">A</span>       <span class="number">220.181.38.10</span></div><div class="line">dns.baidu.com.          <span class="number">86262</span>   <span class="keyword">IN</span>      <span class="keyword">A</span>       <span class="number">202.108.22.220</span></div><div class="line">ns3.baidu.com.          <span class="number">86262</span>   <span class="keyword">IN</span>      <span class="keyword">A</span>       <span class="number">220.181.37.10</span></div><div class="line">ns2.baidu.com.          <span class="number">86262</span>   <span class="keyword">IN</span>      <span class="keyword">A</span>       <span class="number">61.135.165.235</span></div><div class="line">ns7.baidu.com.          <span class="number">86085</span>   <span class="keyword">IN</span>      <span class="keyword">A</span>       <span class="number">119.75.219.82</span></div><div class="line">mx1.baidu.com.          <span class="number">162</span>     <span class="keyword">IN</span>      <span class="keyword">A</span>       <span class="number">61.135.163.61</span></div><div class="line">jpmx.baidu.com.         <span class="number">7062</span>    <span class="keyword">IN</span>      <span class="keyword">A</span>       <span class="number">61.208.132.13</span></div><div class="line"></div><div class="line">Received <span class="number">508</span> bytes from <span class="number">10.8.85.239</span>#<span class="number">53</span> in <span class="number">218</span> ms</div></pre></td></tr></table></figure>
+<h2 id="man"><a href="#man" class="headerlink" title="man"></a>man</h2><figure class="highlight vim"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">man --regex ‘convert’</div><div class="line">--Man-- nex<span class="variable">t:</span> gsettings-schema-convert(<span class="number">1</span>) [ <span class="keyword">view</span> (<span class="keyword">return</span>) | skip (Ctrl-D) | <span class="keyword">quit</span> (Ctrl-C) ]</div><div class="line">--Man-- nex<span class="variable">t:</span> tapconvert(<span class="number">1</span>) [ <span class="keyword">view</span> (<span class="keyword">return</span>) | skip (Ctrl-D) | <span class="keyword">quit</span> (Ctrl-C) ]</div><div class="line">--Man-- nex<span class="variable">t:</span> <span class="number">2</span>to3(<span class="number">1</span>) [ <span class="keyword">view</span> (<span class="keyword">return</span>) | skip (Ctrl-D) | <span class="keyword">quit</span> (Ctrl-C) ]</div><div class="line">--Man-- nex<span class="variable">t:</span> <span class="number">2</span>to3-<span class="number">3.2</span>(<span class="number">1</span>) [ <span class="keyword">view</span> (<span class="keyword">return</span>) | skip (Ctrl-D) | <span class="keyword">quit</span> (Ctrl-C) ]</div><div class="line">--Man-- nex<span class="variable">t:</span> addr2line(<span class="number">1</span>) [ <span class="keyword">view</span> (<span class="keyword">return</span>) | skip (Ctrl-D) | <span class="keyword">quit</span> (Ctrl-C) ]</div><div class="line">--Man-- nex<span class="variable">t:</span> atobm(<span class="number">1</span>) [ <span class="keyword">view</span> (<span class="keyword">return</span>) | skip (Ctrl-D) | <span class="keyword">quit</span> (Ctrl-C) ]</div><div class="line">--Man-- nex<span class="variable">t:</span> b2m(<span class="number">1</span>) [ <span class="keyword">view</span> (<span class="keyword">return</span>) | skip (Ctrl-D) | <span class="keyword">quit</span> (Ctrl-C) ]</div><div class="line">--Man-- nex<span class="variable">t:</span> bdftopcf(<span class="number">1</span>) [ <span class="keyword">view</span> (<span class="keyword">return</span>) | skip (Ctrl-D) | <span class="keyword">quit</span> (Ctrl-C) ]</div></pre></td></tr></table></figure>
+<p>查看所有convert相关的手册</p>
+<h2 id="Source"><a href="#Source" class="headerlink" title="Source"></a>Source</h2><figure class="highlight gradle"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">source</span> <span class="regexp">/root/</span>.bashrc</div></pre></td></tr></table></figure>
+<h2 id="查看程序依赖关系"><a href="#查看程序依赖关系" class="headerlink" title="查看程序依赖关系"></a>查看程序依赖关系</h2><figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">ldd /usr/bin/openssl</div><div class="line">	linux-vdso.so<span class="number">.1</span> =&gt;  (<span class="number">0x00007fffcd05c000</span>)</div><div class="line">	libssl.so<span class="number">.1</span><span class="number">.0</span><span class="number">.0</span> =&gt; /tip/bldfs/usr/lib/libssl.so<span class="number">.1</span><span class="number">.0</span><span class="number">.0</span> (<span class="number">0x00007fe45fb99000</span>)</div><div class="line">	libcrypto.so<span class="number">.1</span><span class="number">.0</span><span class="number">.0</span> =&gt; /tip/bldfs/usr/lib/libcrypto.so<span class="number">.1</span><span class="number">.0</span><span class="number">.0</span> (<span class="number">0x00007fe45f7b1000</span>)</div><div class="line">	libdl.so<span class="number">.2</span> =&gt; /lib/x86_64-linux-gnu/libdl.so<span class="number">.2</span> (<span class="number">0x00007fe45f5aa000</span>)</div><div class="line">	libz.so<span class="number">.1</span> =&gt; /tip/bldfs/usr/lib/libz.so<span class="number">.1</span> (<span class="number">0x00007fe45f394000</span>)</div><div class="line">	libc.so<span class="number">.6</span> =&gt; /lib/x86_64-linux-gnu/libc.so<span class="number">.6</span> (<span class="number">0x00007fe45f009000</span>)</div><div class="line">	/lib64/ld-linux-x86<span class="number">-64.</span>so<span class="number">.2</span> (<span class="number">0x00007fe45fe07000</span>)</div></pre></td></tr></table></figure>
+<blockquote>
+<p>nm</p>
+</blockquote>
+<h2 id="查看库文件导出symbol"><a href="#查看库文件导出symbol" class="headerlink" title="查看库文件导出symbol"></a>查看库文件导出symbol</h2><figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">objdump -T /usr/lib/libcrypto.so<span class="number">.1</span><span class="number">.0</span><span class="number">.0</span>| grep EVP_rc4</div><div class="line"><span class="number">00000000000</span>fbe20 g    DF .text	<span class="number">0000000000000008</span>  OPENSSL_1<span class="number">.0</span><span class="number">.0</span> EVP_rc4</div><div class="line"><span class="number">00000000001086e0</span> g    DF .text	<span class="number">0000000000000008</span>  OPENSSL_1<span class="number">.0</span><span class="number">.1</span> EVP_rc4_hmac_md5</div><div class="line"><span class="number">00000000000</span>fbe30 g    DF .text	<span class="number">0000000000000008</span>  OPENSSL_1<span class="number">.0</span><span class="number">.0</span> EVP_rc4_40</div></pre></td></tr></table></figure>
+<h2 id="RBE编译问题"><a href="#RBE编译问题" class="headerlink" title="RBE编译问题"></a>RBE编译问题</h2><figure class="highlight ini"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="attr">LD_LIBRARY_PATH</span>=/usr/lib/x<span class="number">86_64</span>-linux-gnu/:<span class="variable">$LD_LIBRARY_PATH</span></div></pre></td></tr></table></figure>
+<p>由于有两个<code>libcrypto.so.1.0.0</code>，分别在<code>/tip/bldfs/usr/lib/</code>里和<code>/usr/lib/x86_64-linux-gnu</code>, 两个版本不同 一个为1.0.0 一个为1.0.1 所以在使用ssl相关工具， 比如ssh，rsync时候会显示找不到symbol，这时需要手动设置<code>LD_LIBRARY_PATH</code></p>
+<ul>
+<li>LIBRARY_PATH is used by gcc before compilation to search for directories containing libraries that need to be linked to your program.</li>
+<li>LD_LIBRARY_PATH is used by your program to search for directories containing the libraries after it has been successfully compiled and linked.</li>
+</ul>
+<h2 id="程序栈最大大小"><a href="#程序栈最大大小" class="headerlink" title="程序栈最大大小"></a>程序栈最大大小</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">ulimit</span> <span class="_">-s</span></div></pre></td></tr></table></figure>
+<h2 id="查看每个目录硬盘占的空间"><a href="#查看每个目录硬盘占的空间" class="headerlink" title="查看每个目录硬盘占的空间"></a>查看每个目录硬盘占的空间</h2><figure class="highlight 1c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">du -sm</div><div class="line">df -ah <span class="comment">//查看各个盘空间</span></div><div class="line">fdiks -l</div></pre></td></tr></table></figure>
+<h2 id="作业控制"><a href="#作业控制" class="headerlink" title="作业控制"></a>作业控制</h2><figure class="highlight dts"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="meta-keyword">/usr/</span>bin/policyserver&amp;</div><div class="line"></div><div class="line">(kili64-rbe)shgao-virtual-machine:<span class="meta-keyword">/tip/</span>src<span class="meta-keyword">/avt/</span>gentoo<span class="meta"># jobs</span></div><div class="line">[<span class="number">1</span>]+  Stopped                 <span class="meta-keyword">/usr/</span>local<span class="meta-keyword">/extranet/</span>bin/policyserver -f --logserverport <span class="number">0</span></div><div class="line">(kili64-rbe)shgao-virtual-machine:<span class="meta-keyword">/tip/</span>src<span class="meta-keyword">/avt/</span>gentoo<span class="meta"># bg 1</span></div><div class="line">[<span class="number">1</span>]+ <span class="meta-keyword">/usr/</span>local<span class="meta-keyword">/extranet/</span>bin/policyserver -f --logserverport <span class="number">0</span> &amp;</div><div class="line">(kili64-rbe)shgao-virtual-machine:<span class="meta-keyword">/tip/</span>src<span class="meta-keyword">/avt/</span>gentoo<span class="meta"># jobs</span></div><div class="line">[<span class="number">1</span>]+  Running                 <span class="meta-keyword">/usr/</span>local<span class="meta-keyword">/extranet/</span>bin/policyserver -f --logserverport <span class="number">0</span> &amp;</div><div class="line">(kili64-rbe)shgao-virtual-machine:<span class="meta-keyword">/tip/</span>src<span class="meta-keyword">/avt/</span>gentoo<span class="meta">#</span></div></pre></td></tr></table></figure>
+<ul>
+<li><code>ctrl+z</code> 暂停并放到后台</li>
+<li>程序后面加上&amp;，使之自动在后台运行</li>
+<li><code>bg</code> 将一个在后台暂停的命令，变成继续执行</li>
+<li><code>fg</code> 将后台中的命令调至前台继续运行</li>
+<li><code>kill %num</code> num不是PID</li>
+</ul>
+<h2 id="ldconfig"><a href="#ldconfig" class="headerlink" title="ldconfig"></a>ldconfig</h2><figure class="highlight ebnf"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="attribute">ldconfig -v</span></div></pre></td></tr></table></figure>
+<p><code>ldconfig</code>是一个动态链接库管理命令，为了让动态链接库为系统所共享,还需运行动态链接 库的管理命令<code>--ldconfig ldconfig</code> 命令的用途,主要是在默认搜寻目录(<code>/lib</code>和<code>/usr/lib</code>)以及动态库配置文件<code>/etc/ld.so.conf</code>内所列的目录下,搜索出可共享的动态 链接库(格式如前介绍,<code>lib*.so*</code>),进而创建出动态装入程序(<code>ld.so</code>)所需的连接和缓存文件.缓存文件默认为 <code>/etc/ld.so.cache</code>,此文件保存已排好序的动态链接库名字列表. 他的存在是为了程序可以更快的load相关的lib，相当于一个cache</p>
+<h2 id="chkconfig"><a href="#chkconfig" class="headerlink" title="chkconfig"></a>chkconfig</h2><figure class="highlight elixir"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">shgao<span class="variable">@shgao</span>-virtual-<span class="symbol">machine:</span>~<span class="regexp">/workplace/</span>Firmware/EXSeriesVPN<span class="variable">$ </span>chkconfig --list</div><div class="line">acpi-support              <span class="number">0</span><span class="symbol">:off</span>  <span class="number">1</span><span class="symbol">:off</span>  <span class="number">2</span><span class="symbol">:on</span>   <span class="number">3</span><span class="symbol">:on</span>   <span class="number">4</span><span class="symbol">:on</span>   <span class="number">5</span><span class="symbol">:on</span>   <span class="number">6</span><span class="symbol">:off</span></div><div class="line">acpid                     <span class="number">0</span><span class="symbol">:off</span>  <span class="number">1</span><span class="symbol">:off</span>  <span class="number">2</span><span class="symbol">:off</span>  <span class="number">3</span><span class="symbol">:off</span>  <span class="number">4</span><span class="symbol">:off</span>  <span class="number">5</span><span class="symbol">:off</span>  <span class="number">6</span><span class="symbol">:off</span></div><div class="line">alsa-restore              <span class="number">0</span><span class="symbol">:off</span>  <span class="number">1</span><span class="symbol">:off</span>  <span class="number">2</span><span class="symbol">:off</span>  <span class="number">3</span><span class="symbol">:off</span>  <span class="number">4</span><span class="symbol">:off</span>  <span class="number">5</span><span class="symbol">:off</span>  <span class="number">6</span><span class="symbol">:off</span></div><div class="line">alsa-store                <span class="number">0</span><span class="symbol">:off</span>  <span class="number">1</span><span class="symbol">:off</span>  <span class="number">2</span><span class="symbol">:off</span>  <span class="number">3</span><span class="symbol">:off</span>  <span class="number">4</span><span class="symbol">:off</span>  <span class="number">5</span><span class="symbol">:off</span>  <span class="number">6</span><span class="symbol">:off</span></div><div class="line">anacron                   <span class="number">0</span><span class="symbol">:off</span>  <span class="number">1</span><span class="symbol">:off</span>  <span class="number">2</span><span class="symbol">:off</span>  <span class="number">3</span><span class="symbol">:off</span>  <span class="number">4</span><span class="symbol">:off</span>  <span class="number">5</span><span class="symbol">:off</span>  <span class="number">6</span><span class="symbol">:off</span></div><div class="line">apparmor                  <span class="number">0</span><span class="symbol">:off</span>  <span class="number">1</span><span class="symbol">:off</span>  <span class="number">2</span><span class="symbol">:off</span>  <span class="number">3</span><span class="symbol">:off</span>  <span class="number">4</span><span class="symbol">:off</span>  <span class="number">5</span><span class="symbol">:off</span>  <span class="number">6</span><span class="symbol">:off</span>  <span class="symbol">S:</span>on</div></pre></td></tr></table></figure>
+<ul>
+<li>–add   新增所指定的系统服务</li>
+<li>–del 删除所指定的系统服务</li>
+<li>–level 指定该系统服务要在哪个执行等级中开启或关闭</li>
+<li>–list   列出当前可从<code>chkconfig</code>指令管理的所有系统服务和等级代号</li>
+<li>on/off/reset   在指定的执行登记,开启/关闭/重置该系统服务</li>
+</ul>
+<h2 id="正则表达式"><a href="#正则表达式" class="headerlink" title="正则表达式"></a>正则表达式</h2><ul>
+<li><code>+</code>表示重复一次或多次</li>
+<li><code>[]</code> 中的字符不需要转义，就表示本义</li>
+<li><code>?:</code> 告诉引擎匹配前导字符0次或一次。事实上是表示前导字符是可选的。 </li>
+<li><code>+:</code> 告诉引擎匹配前导字符1次或多次 </li>
+<li><code>*:</code> 告诉引擎匹配前导字符0次或多次</li>
+<li><code>{}:</code> 表示前导字符重复的次数</li>
+<li><code>():</code> 组（向后引用）</li>
+<li><code>.</code> 匹配任意字符（除了\n）</li>
+<li><code>\b</code> 匹配单词边界</li>
+<li><code>\B</code> 匹配非单词边界</li>
+<li><code>|</code> 与 <code>cat|dog</code>，与<code>[]</code>相似，但是<code>[]</code>只能匹配一个字符</li>
+<li><code>\w</code> 匹配一个单词</li>
+<li><code>\W</code> 匹配任何非单词的字符</li>
+<li><code>(?&gt;正则表达式)</code> ：阻止海量回溯</li>
+<li>正则表达式具有贪婪性，可以用在<code>?,+,*,{}</code>之后加一个?来实现这一点，或者靠取反：<code>&lt;[^&gt;]+&gt;</code></li>
+<li>在字符集<code>[]</code>中， 除了<code>]\^-</code>需要转义，其他都不用转义，当然转义也不会错</li>
+</ul>
+<p>向后引用：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">grep -E  <span class="string">'(\w)\1'</span> /var/<span class="built_in">log</span>/<span class="built_in">test</span> </div><div class="line">3 rrrr</div><div class="line">135 nnn</div></pre></td></tr></table></figure>
+<h3 id="Grep"><a href="#Grep" class="headerlink" title="Grep"></a>Grep</h3><figure class="highlight vim"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">grep</span> -En <span class="string">"\-j"</span> Makefile</div><div class="line"><span class="keyword">grep</span> -En <span class="string">'\-j'</span> Makefile</div><div class="line"></div><div class="line"><span class="keyword">grep</span> -Ev <span class="string">' ps [0-9a-z]* Debug 3 '</span> ap_ps.<span class="built_in">log</span> &gt; ap_ps_rip_debug3.<span class="built_in">log</span></div></pre></td></tr></table></figure>
+<ul>
+<li>双引号会先解析其中的变量和命令</li>
+<li>单引号是原样匹配</li>
+<li>\ 转义，不要记错…</li>
+<li>-A 5 向后5行</li>
+<li>-B 5 向前5行</li>
+<li>-C 5 前后各5行</li>
+<li>-H 显示文件名</li>
+<li><code>-v</code> 取反</li>
+</ul>
+<h3 id="awk"><a href="#awk" class="headerlink" title="awk"></a>awk</h3><figure class="highlight stata"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">awk -F' ' '<span class="variable">$5</span>=<span class="string">"ap"</span> &#123;<span class="keyword">print</span> NR <span class="string">":"</span> $(NF) &#125;' /<span class="keyword">var</span>/<span class="keyword">log</span>/aventail/access_servers.<span class="built_in">log</span></div><div class="line">awk '&#123;<span class="keyword">if</span>(NF&gt;=6)&#123;<span class="keyword">for</span> (i=5;i&lt;=NF;i++)printf(<span class="string">"%s "</span>, <span class="variable">$i</span>);printf <span class="string">"\n"</span>&#125;&#125;' tmp.<span class="keyword">log</span> <span class="comment">//输出第六列之后所有列</span></div></pre></td></tr></table></figure>
+<ul>
+<li>-F 表示分隔符</li>
+<li>$5 表示第五个</li>
+<li>NR 表示行号，内嵌</li>
+<li>NF 表示每行有几个分割域</li>
+</ul>
+<h3 id="sed"><a href="#sed" class="headerlink" title="sed"></a>sed</h3><figure class="highlight accesslog"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sed ‘s/^<span class="string">[A-Z]</span>*/replace/g’</div></pre></td></tr></table></figure>
+<ul>
+<li>g 表示global</li>
+</ul>
+<h2 id="strace"><a href="#strace" class="headerlink" title="strace"></a>strace</h2><p>记录命令的系统调用，例如</p>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div></pre></td><td class="code"><pre><div class="line">#strace echo “abc”</div><div class="line">execve(<span class="string">"/bin/echo"</span>, [<span class="string">"echo"</span>, <span class="string">"aa"</span>], [<span class="comment">/* 36 vars */</span>]) = <span class="number">0</span></div><div class="line">brk(<span class="number">0</span>)                                  = <span class="number">0x882000</span></div><div class="line">access(<span class="string">"/etc/ld.so.nohwcap"</span>, F_OK)      = <span class="number">-1</span> ENOENT (No such file or directory)</div><div class="line">mmap(NULL, <span class="number">8192</span>, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, <span class="number">-1</span>, <span class="number">0</span>) = <span class="number">0x7f2ca3275000</span></div><div class="line">access(<span class="string">"/etc/ld.so.preload"</span>, R_OK)      = <span class="number">-1</span> ENOENT (No such file or directory)</div><div class="line">open(<span class="string">"/etc/ld.so.cache"</span>, O_RDONLY|O_CLOEXEC) = <span class="number">3</span></div><div class="line">fstat(<span class="number">3</span>, &#123;st_mode=S_IFREG|<span class="number">0644</span>, st_size=<span class="number">66284</span>, ...&#125;) = <span class="number">0</span></div><div class="line">mmap(NULL, <span class="number">66284</span>, PROT_READ, MAP_PRIVATE, <span class="number">3</span>, <span class="number">0</span>) = <span class="number">0x7f2ca3264000</span></div><div class="line">close(<span class="number">3</span>)                                = <span class="number">0</span></div><div class="line">access(<span class="string">"/etc/ld.so.nohwcap"</span>, F_OK)      = <span class="number">-1</span> ENOENT (No such file or directory)</div><div class="line">open(<span class="string">"/lib/x86_64-linux-gnu/libc.so.6"</span>, O_RDONLY|O_CLOEXEC) = <span class="number">3</span></div><div class="line">read(<span class="number">3</span>, <span class="string">"\177ELF\2\1\1\0\0\0\0\0\0\0\0\0\3\0&gt;\0\1\0\0\0\200\30\2\0\0\0\0\0"</span>..., <span class="number">832</span>) = <span class="number">832</span></div><div class="line">fstat(<span class="number">3</span>, &#123;st_mode=S_IFREG|<span class="number">0755</span>, st_size=<span class="number">1811128</span>, ...&#125;) = <span class="number">0</span></div><div class="line">mmap(NULL, <span class="number">3925208</span>, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, <span class="number">3</span>, <span class="number">0</span>) = <span class="number">0x7f2ca2c96000</span></div><div class="line">mprotect(<span class="number">0x7f2ca2e4b000</span>, <span class="number">2093056</span>, PROT_NONE) = <span class="number">0</span></div><div class="line">mmap(<span class="number">0x7f2ca304a000</span>, <span class="number">24576</span>, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, <span class="number">3</span>, <span class="number">0x1b4000</span>) = <span class="number">0x7f2ca304a000</span></div><div class="line">mmap(<span class="number">0x7f2ca3050000</span>, <span class="number">17624</span>, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS, <span class="number">-1</span>, <span class="number">0</span>) = <span class="number">0x7f2ca3050000</span></div><div class="line">close(<span class="number">3</span>)                                = <span class="number">0</span></div><div class="line">mmap(NULL, <span class="number">4096</span>, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, <span class="number">-1</span>, <span class="number">0</span>) = <span class="number">0x7f2ca3263000</span></div><div class="line">mmap(NULL, <span class="number">4096</span>, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, <span class="number">-1</span>, <span class="number">0</span>) = <span class="number">0x7f2ca3262000</span></div><div class="line">mmap(NULL, <span class="number">4096</span>, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, <span class="number">-1</span>, <span class="number">0</span>) = <span class="number">0x7f2ca3261000</span></div><div class="line">arch_prctl(ARCH_SET_FS, <span class="number">0x7f2ca3262700</span>) = <span class="number">0</span></div><div class="line">mprotect(<span class="number">0x7f2ca304a000</span>, <span class="number">16384</span>, PROT_READ) = <span class="number">0</span></div><div class="line">mprotect(<span class="number">0x605000</span>, <span class="number">4096</span>, PROT_READ)     = <span class="number">0</span></div><div class="line">mprotect(<span class="number">0x7f2ca3277000</span>, <span class="number">4096</span>, PROT_READ) = <span class="number">0</span></div><div class="line">munmap(<span class="number">0x7f2ca3264000</span>, <span class="number">66284</span>)           = <span class="number">0</span></div><div class="line">brk(<span class="number">0</span>)                                  = <span class="number">0x882000</span></div><div class="line">brk(<span class="number">0x8a3000</span>)                           = <span class="number">0x8a3000</span></div><div class="line">open(<span class="string">"/usr/lib/locale/locale-archive"</span>, O_RDONLY|O_CLOEXEC) = <span class="number">3</span></div><div class="line">fstat(<span class="number">3</span>, &#123;st_mode=S_IFREG|<span class="number">0644</span>, st_size=<span class="number">7220736</span>, ...&#125;) = <span class="number">0</span></div><div class="line">mmap(NULL, <span class="number">7220736</span>, PROT_READ, MAP_PRIVATE, <span class="number">3</span>, <span class="number">0</span>) = <span class="number">0x7f2ca25b3000</span></div><div class="line">close(<span class="number">3</span>)                                = <span class="number">0</span></div><div class="line">fstat(<span class="number">1</span>, &#123;st_mode=S_IFCHR|<span class="number">0620</span>, st_rdev=makedev(<span class="number">136</span>, <span class="number">6</span>), ...&#125;) = <span class="number">0</span></div><div class="line">mmap(NULL, <span class="number">4096</span>, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, <span class="number">-1</span>, <span class="number">0</span>) = <span class="number">0x7f2ca3274000</span></div><div class="line">write(<span class="number">1</span>, <span class="string">"aa<span class="subst">\n</span>"</span>, <span class="number">3</span>aa</div><div class="line">)                     = <span class="number">3</span></div><div class="line">close(<span class="number">1</span>)                                = <span class="number">0</span></div><div class="line">munmap(<span class="number">0x7f2ca3274000</span>, <span class="number">4096</span>)            = <span class="number">0</span></div><div class="line">close(<span class="number">2</span>)                                = <span class="number">0</span></div><div class="line">exit_group(<span class="number">0</span>)                           = ?</div></pre></td></tr></table></figure>
+<h2 id="各种重定向"><a href="#各种重定向" class="headerlink" title="各种重定向"></a>各种重定向</h2><figure class="highlight gradle"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">xmlread <span class="regexp">/home/</span>xxx<span class="regexp">/abc/</span>xml <span class="number">2</span>&gt;&amp;<span class="number">1</span></div><div class="line"></div><div class="line"><span class="keyword">find</span> . -type d -depth <span class="number">1</span> | xargs -I % tar cvzf %.tar.gz %</div><div class="line"></div><div class="line">tar cvf - <span class="regexp">/dir | tar xvf - -C /</span>somewhere</div><div class="line"></div><div class="line">cat &gt; new_file &lt;&lt; fuckend</div><div class="line"><span class="keyword">write</span> something</div><div class="line">blabla</div><div class="line">fuckend</div></pre></td></tr></table></figure>
+<h2 id="update-alternatives"><a href="#update-alternatives" class="headerlink" title="update-alternatives"></a>update-alternatives</h2><figure class="highlight vim"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">root@shgao-virtual-machine:~# <span class="keyword">update</span>-alternatives  --config nc</div><div class="line">There are <span class="number">2</span> choices <span class="keyword">for</span> the alternative nc (providing /bin/nc).</div><div class="line"></div><div class="line">  Selection    Path                 Priority   Status</div><div class="line">------------------------------------------------------------</div><div class="line">* <span class="number">0</span>            /bin/nc.openbsd       <span class="number">50</span>        auto <span class="keyword">mode</span></div><div class="line">  <span class="number">1</span>            /bin/nc.openbsd       <span class="number">50</span>        manual <span class="keyword">mode</span></div><div class="line">  <span class="number">2</span>            /bin/nc.traditional   <span class="number">10</span>        manual <span class="keyword">mode</span></div><div class="line"></div><div class="line">Press enter <span class="keyword">to</span> keep the current choice[*], <span class="built_in">or</span> <span class="built_in">type</span> selection <span class="keyword">number</span>: <span class="number">2</span></div><div class="line"><span class="keyword">update</span>-alternative<span class="variable">s:</span> using /bin/nc.traditional <span class="keyword">to</span> provide /bin/nc (nc) in manual <span class="keyword">mode</span>.</div></pre></td></tr></table></figure>
+<h2 id="Network-Tools"><a href="#Network-Tools" class="headerlink" title="Network Tools"></a>Network Tools</h2><ul>
+<li>netcat</li>
+<li>curl</li>
+<li>wget</li>
+<li>ngrep</li>
+</ul>
+<h2 id="解决windows下编辑文件结尾有-M问题"><a href="#解决windows下编辑文件结尾有-M问题" class="headerlink" title="解决windows下编辑文件结尾有^M问题"></a>解决windows下编辑文件结尾有^M问题</h2><p><code>^M</code> 实际上就是<code>\r</code>, 如果键盘输入要用<code>C-v</code>，<code>C-m</code>来输入</p>
+<ul>
+<li>解决方法一：安装一个dos2unix，可以转换文本</li>
+<li>解决方法二：source insight 中Preference-&gt;Files设置文件结尾    </li>
+</ul>
+<h2 id="Grub-rescue"><a href="#Grub-rescue" class="headerlink" title="Grub rescue"></a>Grub rescue</h2><figure class="highlight gams"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">grub rescue&gt;<span class="keyword">set</span> root=(hd1,msdos1)</div><div class="line">grub <span class="comment">rescue&gt;set prefix=(hd1,msdos1)</span>/boot/<span class="comment">grub</span></div><div class="line">grub <span class="comment">rescue&gt;insmod</span> /boot/<span class="comment">grub</span>/i386-pc/<span class="comment">normal.mod</span></div><div class="line">grub <span class="comment">rescue&gt;normal</span></div><div class="line"><span class="comment">//之后进入了grub&gt;</span></div><div class="line">grub&gt;linux /boot/<span class="comment">bzImage</span> //加载<span class="comment">linux kernel</span></div><div class="line">grub&gt;initrd /boot/<span class="comment">initrd.gz</span> //加载启动</div><div class="line">grub&gt;boot</div></pre></td></tr></table></figure>
+<ul>
+<li>grub vga=ask/ID 可以设置text terminal分辨率</li>
+</ul>
+<h2 id="重新创建xorg-conf"><a href="#重新创建xorg-conf" class="headerlink" title="重新创建xorg.conf"></a>重新创建xorg.conf</h2><p>有些时候xorg.conf的配置会别改坏，用如下方法可以生成一个新的xorg.conf</p>
+<p>1.switch to console mode: Alt+Ctrl+F1</p>
+<p>2.kill x server: sudo service lightdm stop</p>
+<p>3.generate new xorg.conf file: sudo X -configure – this will create xorg.conf.new file in your current dir</p>
+<p>4.rename and move: sudo mv xorg.conf.new /etc/X11/xorg.conf</p>
+<p>5.return to GUI: sudo start lightdm</p>
+<h2 id="vnc4server"><a href="#vnc4server" class="headerlink" title="vnc4server"></a>vnc4server</h2><figure class="highlight vala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta"># vnc4server :1 //启动一个vnc display</span></div><div class="line"><span class="meta"># vnc4server -kill :1</span></div></pre></td></tr></table></figure>
+<h2 id="查看硬件状态"><a href="#查看硬件状态" class="headerlink" title="查看硬件状态"></a>查看硬件状态</h2><figure class="highlight arduino"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">lscpu</div><div class="line">lshw -C <span class="built_in">display</span> <span class="comment">//查看显卡</span></div></pre></td></tr></table></figure>
+<h2 id="网络配置"><a href="#网络配置" class="headerlink" title="网络配置"></a>网络配置</h2><figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">ifconfig eth0 <span class="number">10.103</span><span class="number">.250</span><span class="number">.11</span> netmask <span class="number">255.255</span><span class="number">.255</span><span class="number">.0</span></div><div class="line">route add <span class="section">default</span> gw <span class="number">10.103</span><span class="number">.250</span><span class="number">.1</span></div></pre></td></tr></table></figure>
+<ul>
+<li>DNS 配置在 <code>/etc/resolv.conf</code></li>
+<li><code>/etc/hosts</code></li>
+<li><code>/etc/hostname</code></li>
+</ul>
+<h2 id="echo"><a href="#echo" class="headerlink" title="echo"></a>echo</h2><p>echo -e 可以输出转义字符例如 <code>echo -e &quot;abc\ndef&quot;&gt; file</code>, 注意有些shell支持的不好，比如sh（会把-e 一同输出出去），bash支持良好，最好的办法还是用printf命令替代echo -e， 注意printf命令不支持浮点类型</p>
+<h2 id="pipe"><a href="#pipe" class="headerlink" title="pipe"></a>pipe</h2><p>popen, pclose - pipe stream to or from a process</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="function">FILE *<span class="title">popen</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *command, <span class="keyword">const</span> <span class="keyword">char</span> *type)</span></span>;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">pclose</span><span class="params">(FILE *stream)</span></span>;</div></pre></td></tr></table></figure>
+<p>pipe 实际上是fork了一个子进程来运行，所以调用popen运行的命令和主程序share同一套文件描述符</p>
+<p>popen 打开的fp不能rewind(), 只有文件可以rewind 而pipe是一个流Stream</p>
+<h2 id="xmllint"><a href="#xmllint" class="headerlink" title="xmllint"></a>xmllint</h2><p>xmllint是一个很方便的处理及验证xml的工具，linux下只要安装libxml2就可以使用这个命令，下面整理一些常用功能</p>
+<ul>
+<li>–format 此参数用于格式化xml，使其具有良好的可读性。</li>
+<li>–noblanks 与–format相反，有时为了节省传输量，我们希望去掉xml中的空白，这时我们可以使用–noblanks命令</li>
+<li>–schema 使用scheam验证xml文件的正确性 <code>xmllint --schema person.xsd person.xml</code></li>
+</ul>
+<h2 id="共享库的兼容问题"><a href="#共享库的兼容问题" class="headerlink" title="共享库的兼容问题"></a>共享库的兼容问题</h2><p>动态链接库一般以lib开头，形如libmymodule.so.1.0.0. 后面跟的三个版本号，从左到右的含义为：</p>
+<p>1) 大版本号，当接口变得和之前不兼容，则新增一个大版本号。<br>2) 一般增加了接口，不过旧的接口不变，则新增此版本号。<br>3) 接口不做任何变化，只是实现做了修改，则新增此版本号。</p>
+<p>可以用ldconfig来设置程序对应的lib版本</p>
+<figure class="highlight 1c"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">nm policyserver <span class="comment">//查看导出符号</span></div></pre></td></tr></table></figure>
+<h2 id="PATH"><a href="#PATH" class="headerlink" title="PATH"></a>PATH</h2><p>每个shell都有自己的PATH，从这个shell运行的程序共享这个shell的PATH, 如果需要永久性保存一个PATH，则需要在/etc/profile或者~/.bashrc_profile中加入<code>export PATH=/xxx/yyy:$PATH</code></p>
+<h2 id="openssl生成证书"><a href="#openssl生成证书" class="headerlink" title="openssl生成证书"></a>openssl生成证书</h2><ol>
+<li>用户浏览器将其SSL版本号、加密设置参数、与session有关的数据以及其它一些必要信息发送到服务器。</li>
+<li>服务器将其SSL版本号、加密设置参数、与session有关的数据以及其它一些必要信息发送给浏览器，同时发给浏览器的还有服务器的证书。如果配置服务器的SSL需要验证用户身份，还要发出请求要求浏览器提供用户证书。</li>
+<li>客户端检查服务器证书，如果检查失败，提示不能建立SSL连接。如果成功，那么继续。</li>
+<li>客户端浏览器为本次会话生成div-master secret，并将其用服务器公钥加密后发送给服务器。</li>
+<li>如果服务器要求鉴别客户身份，客户端还要再对另外一些数据签名后并将其与客户端证书一起发送给服务器。</li>
+<li>如果服务器要求鉴别客户身份，则检查签署客户证书的CA是否可信。如果不在信任列表中，结束本次会话。如果检查通过，服务器用自己的私钥解密收到的div-master secret，并用它通过某些算法生成本次会话的master secret。</li>
+<li>客户端与服务器均使用此master secret生成本次会话的会话密钥(对称密钥)。在双方SSL握手结束后传递任何消息均使用此会话密钥。这样做的主要原因是对称加密比非对称加密的运算量低一个数量级以上，能够显著提高双方会话时的运算速度。</li>
+<li>客户端通知服务器此后发送的消息都使用这个会话密钥进行加密。并通知服务器客户端已经完成本次SSL握手。</li>
+<li>服务器通知客户端此后发送的消息都使用这个会话密钥进行加密。并通知客户端服务器已经完成本次SSL握手。</li>
+<li>本次握手过程结束，会话已经建立。双方使用同一个会话密钥分别对发送以及接受的信息进行加、解密。</li>
+</ol>
+<figure class="highlight axapta"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//生成CA根证书及私钥</span></div><div class="line">mkdir demoCA &amp;&amp; cd demoCA &amp;&amp; mkdir <span class="keyword">private</span> crl certs newcerts <span class="meta">#新建证书存放目录</span></div><div class="line">echo <span class="string">'00'</span> &gt; serial <span class="meta">#新建serial文件并写入初始序列号00</span></div><div class="line">touch <span class="keyword">index</span>.txt <span class="meta">#新建index.txt空文件</span></div><div class="line">openssl genrsa -out <span class="keyword">private</span>/cakey.pem <span class="number">1024</span> <span class="meta">#生成CA根证书私钥</span></div><div class="line">openssl req -<span class="keyword">new</span> -x509 -key <span class="keyword">private</span>/cakey.pem  -out cacert.pem <span class="meta">#生成CA根证书，注意如果不是-x509生成的是一个证书的request，还要自签名CA： openssl ca -selfsign xxxxxxxxxxx</span></div><div class="line"><span class="comment">//生成服务器证书私钥、证书，可用于https服务器</span></div><div class="line">openssl genrsa -out <span class="keyword">private</span>/<span class="keyword">server</span>.key <span class="number">1024</span></div><div class="line">openssl req -<span class="keyword">new</span> -key <span class="keyword">private</span>/<span class="keyword">server</span>.key -out crl/<span class="keyword">server</span>.csr <span class="meta">#生成证书请求文件，可提供认证CA签核，或自签名。</span></div><div class="line"><span class="comment">//在这之前，你可能需要修改配置`/usr/lib/ssl/openssl.cnf`指定CA的位置, 否则退回上一级执行这个</span></div><div class="line">cd .. &amp;&amp; openssl ca -in ./demoCA/crl/<span class="keyword">server</span>.csr -out ./demoCA/certs/<span class="keyword">server</span>.crt <span class="meta">#自签名证书</span></div><div class="line"></div><div class="line">openssl pkcs12 -export -clcerts -in  certs/<span class="keyword">server</span>.crt -inkey <span class="keyword">private</span>/<span class="keyword">server</span>.key -out <span class="keyword">server</span>.p12</div></pre></td></tr></table></figure>
+<p>PKCS#12包含私钥，所以在需要客户端验证的时候要用PKCS证书，而crt不包含私钥</p>
+<ul>
+<li>证书通常包含三种，CA证书，server证书，client证书</li>
+<li>server和client证书（两者实际上可以互换）都是有CA签发的（应包含私钥），如果是crt格式其中是只有他的一个公共证书和公钥，PKCS#12可以包含私钥和公共证书</li>
+<li>也可以没有CA证书，server和client自签名自己的证书</li>
+<li>x509是一个证书格式，不是一个算法</li>
+<li>证书是一个链，包含从根CA到用户cert所有证书，验证的时候要逐一验证。</li>
+</ul>
+<p>CA的类别</p>
+<ul>
+<li>自签名 CA: 在自签名 CA 中，证书中的公钥和用于验证证书的密钥是相同的。一些自签名 CA 是根 CA（参见第三项）。</li>
+<li>从属 CA: 在从属 CA 中，证书中的公钥和用于核实证书的密钥是不同的。一个 CA 向另一个 CA 颁发证书的过程叫做 交叉认证 。</li>
+<li>根 CA: 根 CA 是一种特殊的 CA，它受到客户无条件地信任，位于证书层次结构的最高层。所有证书链均终止于根 CA。根颁发机构必须对它自己的证书签名，因为在证书层次结构中再也没有更高的认证机构了。</li>
+<li>所有自签名 CA 都是根 CA，因为到自签名 CA 时证书链就终止了。</li>
+</ul>
+<h2 id="vino"><a href="#vino" class="headerlink" title="vino"></a>vino</h2><p>No security type 问题解决方法<br><figure class="highlight lasso"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">gsettings <span class="built_in">set</span> org.gnome.Vino <span class="keyword">require</span><span class="params">-encryption</span> <span class="literal">false</span></div></pre></td></tr></table></figure></p>
+<h2 id="UNIX-socket上限"><a href="#UNIX-socket上限" class="headerlink" title="UNIX socket上限"></a>UNIX socket上限</h2><p>在使用Nginx+gunicorn+web.py unix socket方式时候，发现nginx会报<code>“connect() to unix:/dev/shm/fcgi.sock failed (11: Resource temporarily unavailable) while connecting to upstream”</code> 原因是需要修改如下：</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cat <span class="regexp">/proc/</span>sys<span class="regexp">/net/</span>core<span class="regexp">/somaxconn /</span>/默认是<span class="number">128</span>，定义了系统中每一个端口最大的监听队列的长度，这是个全局的参数</div><div class="line">echo <span class="number">8192</span> &gt; <span class="regexp">/proc/</span>sys<span class="regexp">/net/</span>core<span class="regexp">/somaxconn /</span><span class="regexp">/放到/</span>etc/rc.local中</div></pre></td></tr></table></figure>
+<p><a href="http://www.philsallee.com/mbsteg/index.html" target="_blank" rel="external">Reference of /proc/sys/net/core</a></p>
+<h2 id="mv-tip"><a href="#mv-tip" class="headerlink" title="mv tip"></a>mv tip</h2><figure class="highlight arduino"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">mkdir</span> folder1</div><div class="line"><span class="built_in">mkdir</span> folder2</div><div class="line">touch folder1/file1</div><div class="line">touch folder2/file2</div><div class="line">mv -f folder1 folder2</div></pre></td></tr></table></figure>
+<p>这个时候folder1会成为folder2的一个子文件夹，而如果两个都是空文件夹的时候，才会是重命名到folder2</p>
+<h2 id="僵尸进程"><a href="#僵尸进程" class="headerlink" title="僵尸进程"></a>僵尸进程</h2><p>It’s a process that is dead, but its parent was busy doing some other work, hence it could not collect the child’s exit status. </p>
+<h2 id="environment"><a href="#environment" class="headerlink" title="environment"></a>environment</h2><p>系统启动时候加载/etc/environment, 登陆时加载/etc/profile，针对每个用户的加载~/.profile, 对于non-login-shell, 读取~/.bashrc</p>
+<h2 id="exec"><a href="#exec" class="headerlink" title="exec"></a>exec</h2><p>使用现有shell运行程序, 而不是作为子进程</p>
+<h2 id="sys-proc-tmpfs"><a href="#sys-proc-tmpfs" class="headerlink" title="sys, proc, tmpfs"></a>sys, proc, tmpfs</h2><p>The sysfs filesystem was mentioned briefly above. One may wonder how sysfs knows about the devices present on a system and what device numbers should be used for them. Drivers that have been compiled into the kernel directly register their objects with a sysfs (devtmpfs internally) as they are detected by the kernel. For drivers compiled as modules, this registration will happen when the module is loaded. Once the sysfs filesystem is mounted (on /sys), data which the drivers register with sysfs are available to userspace processes and to udevd for processing (including modifications to device nodes).</p>
+<ul>
+<li>With the development of the unstable 2.5 kernel tree, later released as the 2.6 series of stable kernels, a new virtual filesystem called sysfs came to be. The job of sysfs is to export a view of the system’s hardware configuration to userspace processes. With this userspace-visible representation, the possibility of developing a userspace replacement for devfs became much more realistic.</li>
+</ul>
+<h2 id="Driver"><a href="#Driver" class="headerlink" title="Driver"></a>Driver</h2><p>Linux的driver是根据一个设备ID来匹配kernel module的</p>
+<h2 id="udev"><a href="#udev" class="headerlink" title="udev"></a>udev</h2><p>通常来说linux不能保证多个同样的设备每次在被创建文件的时候对应同一个文件名，所以我们可以在<code>/etc/udev/rules.d/</code>中创建相关配置</p>
+<ul>
+<li>Using the Udev method, only those devices which are detected by the kernel get device nodes created for them. Because these device nodes will be created each time the system boots, they will be stored on a devtmpfs file system (a virtual file system that resides entirely in system memory). Device nodes do not require much space, so the memory that is used is negligible</li>
+</ul>
+<h2 id="交叉编译"><a href="#交叉编译" class="headerlink" title="交叉编译"></a>交叉编译</h2><ul>
+<li>–with-sysroot=$LFS  For cross compilation, this tells the build system to look in $LFS for the target system libraries as needed.</li>
+<li>–target=$LFS_TGT Because the machine description in the LFS_TGT variable is slightly different than the value returned by the config.guess script, this switch will tell the configure script to adjust Binutil’s build system for building a cross linker</li>
+<li>binutil, gcc, glibc 是比较关键的交叉编译部件，需要制定LFS_TGT, 可以用现有平台的编译器编译出对方平台的编译器</li>
+</ul>
+<p><a href="http://www.cppblog.com/iuranus/archive/2011/07/22/151615.html" target="_blank" rel="external">Reference of target, build, host</a></p>
+<h2 id="chroot"><a href="#chroot" class="headerlink" title="chroot"></a>chroot</h2><p>chroot之前要mount tmpfs proc 和 dev到新的root</p>
+<h2 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h2><ul>
+<li>strip 可以去掉程序中的调试用的符号等</li>
+<li>fuser 用来查谁用了哪个文件</li>
+<li>vmstat 查看磁盘内存吞吐</li>
+<li>free</li>
+<li>ifstat</li>
+<li>proc可以看到进程运行时的cmd和env</li>
+<li>管道中常用 ‘-’ 表示stdout或者stdin</li>
+<li><code>cut -d “:” -f 2</code> :分割的第二个</li>
+<li><code>cut -c 1-12</code> 1-12个字符</li>
+<li><code>strings</code> 文件中打印字符串</li>
+<li><code>tar</code> 通常不会使用-P, 这样会把/目录包含进来，在extract的时候-C会不起作用</li>
+<li><code>cpio</code> 可以用来备份设备文件，不过要你指定每个文件，他不接受一个文件或者目录参数</li>
+<li><code>dd if=xxx of=yyy bs=xbytes count=xxxx</code></li>
+<li><code>time</code> 统计运行时间: <code>time [command] [args...]</code></li>
+<li><code>tee</code> stdin -&gt; stdout, 也可以同时写入文件，叫双重重定向</li>
+<li><code>tr</code> 可以替换或者删除字段</li>
+<li><code>^foo^bar</code> 替换上一条命令中的foo为bar然后执行</li>
+<li><code>sudo !!</code> 以sudo运行上一条</li>
+<li>dpkg-reconfigure 重新配置一个已经安装过的安装包</li>
+<li>oh-my-zsh 是个好东西，加上powerline味道更好哦</li>
+<li>journalctl 查看systemd log</li>
+</ul>
+<h2 id="Process-PID-PPID-SID-PGID"><a href="#Process-PID-PPID-SID-PGID" class="headerlink" title="Process PID PPID SID PGID"></a>Process PID PPID SID PGID</h2><p>查看这些可以用<code>ps -ao pid,ppid,sid,pgid,comm</code>, PGID是父进程的PID号，但是父进程的结束并不影响PGID, 组中的所有进程还是沿用同一个PGID，程序中可以对一个进程组来群发信号，SID会有些不同，同一个shell下运行的程序都同属于一个Session，这个Session Leader挂了会导致所有session中的程序退出，所以根据这个我们可以再程序中使用setsid来新建一个新的session，这样程序就不会因为session leader的退出而退出，这也是daemon的基本原理</p>
+<h2 id="gsettings"><a href="#gsettings" class="headerlink" title="gsettings"></a>gsettings</h2><p>GSettings configuration tool</p>
+<figure class="highlight dsconfig"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="string">gsettings </span><span class="built_in">list-schema</span></div><div class="line"><span class="string">gsettings </span><span class="string">set </span><span class="string">org.</span><span class="string">mate.</span><span class="string">session.</span><span class="string">required-components </span><span class="string">windowmanager </span><span class="string">marco</span></div></pre></td></tr></table></figure>
+<h2 id="readlink"><a href="#readlink" class="headerlink" title="readlink"></a>readlink</h2><p>获取符号链接</p>
+<figure class="highlight tcl"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">readlink /<span class="keyword">proc</span>/$&#123;<span class="keyword">pid</span>&#125;/exe</div></pre></td></tr></table></figure>
+<h2 id="su-and-su"><a href="#su-and-su" class="headerlink" title="su and su -"></a><code>su</code> and <code>su -</code></h2><p>进入超级用户模式。也就是输入<code>su -</code>,系统会让你输入超级用户密码，输入密码后就进入了超级用户模式。（当然，你也可以直接用root用）<br>(注意有- ，这和<code>su</code>是不同的，在用命令<code>su</code>的时候只是切换到root，但没有把root的环境变量传过去，还是当前用户的环境变量，用<code>su -</code>命令将环境变量也一起带过去，就象和root登录一样)</p>
+<h2 id="for"><a href="#for" class="headerlink" title="for"></a>for</h2><ul>
+<li><code>for i in {1..10}; do ./elk_tester.py done</code></li>
+</ul>
+<h2 id="给重要文件加锁"><a href="#给重要文件加锁" class="headerlink" title="给重要文件加锁"></a>给重要文件加锁</h2><p>只读权限示例：给重要文件加锁（添加不可修改位 <code>immutable</code>)，以避免各种误操作带来的灾难性后果（例如 : <code>rm -rf</code>）</p>
+<figure class="highlight elixir"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="variable">$ </span>chattr +i regular_file</div><div class="line"><span class="variable">$ </span>lsattr regular_file</div><div class="line">----i-------- regular_file</div><div class="line"><span class="variable">$ </span>rm regular_file    <span class="comment">#加immutable位后就无法对文件进行任何“破坏性”的活动啦</span></div><div class="line"><span class="symbol">rm:</span> remove write-protected regular file `regular_file<span class="string">'? y</span></div><div class="line">rm: cannot remove `regular_file': Operation <span class="keyword">not</span> permitted</div><div class="line"><span class="variable">$ </span>chattr -i regular_file <span class="comment">#如果想对它进行常规操作，那么可以把这个位去掉</span></div><div class="line"><span class="variable">$ </span>rm regular_file</div></pre></td></tr></table></figure>
+<h2 id="主次设备号"><a href="#主次设备号" class="headerlink" title="主次设备号"></a>主次设备号</h2><p>主 (major)、次(minor)设备号的作用有不同。当一个设备文件被打开时，内核会根据主设备号（major number）去查找在内核中已经以主设备号注册的驱动（可以 <code>cat /proc/devices</code> 查看已经注册的驱动号和主设备号的对应情况），而次设备号（minor number）则是通过内核传递给了驱动本身（参考《The Linux Primer》第十章）。因此，对于内核而言，通过主设备号就可以找到对应的驱动去识别某个设备，而对于驱动而言，为了能够更复杂地访问设备，比如访问设备的不同部分（如硬件通过分区分成不同部分，而出现 hda1，hda2，hda3 等），比如产生不同要求的随机数（如 <code>/dev/random</code> 和 <code>/dev/urandom</code> 等）。</p>
+<h2 id="locate省去打绝对路径"><a href="#locate省去打绝对路径" class="headerlink" title="locate省去打绝对路径"></a>locate省去打绝对路径</h2><figure class="highlight clean"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">insmod `locate usbhid.ko`</div></pre></td></tr></table></figure>
+<h2 id="GNU-parallel"><a href="#GNU-parallel" class="headerlink" title="GNU parallel"></a>GNU parallel</h2><p>可以并行的处理Pipe</p>
+<h2 id="X-windows-Xsession-配置"><a href="#X-windows-Xsession-配置" class="headerlink" title="X windows Xsession 配置"></a>X windows Xsession 配置</h2><p><code>/var/lib/AccountService/users/[username]</code> 里面的xsession指定的，具体支持哪些xsession，查看这个目录<code>/usr/share/xsessions/</code></p>
+<h2 id="systemd-and-upstart"><a href="#systemd-and-upstart" class="headerlink" title="systemd and upstart"></a>systemd and upstart</h2><ul>
+<li><code>&quot;systemctl status networking.service&quot; and &quot;journalctl -xe&quot;</code> 可以查看服务启动的错误原因</li>
+</ul>
+<h3 id="upstart"><a href="#upstart" class="headerlink" title="upstart"></a>upstart</h3><p>upstart 没有 inittab， 所有的配置文件都在/etc/init/目录下，这些脚本是不可执行的，包含两种类型conf和override, rc-sysinit.conf是系统初始化的配置</p>
+<ul>
+<li><code>man 8 init</code></li>
+</ul>
+<h2 id="find"><a href="#find" class="headerlink" title="find"></a>find</h2><ul>
+<li><code>find -maxdepth 1 -type f -exec ls -al {} \;</code> 一个转译的;表示命令的结束，这个命令是针对每一个文件执行一次ls</li>
+<li><code>find -maxdepth 1 -type f -exec ls -al {} +</code> 这种情况文件只能加在命令尾部，被查到的文件被append到ls尾部，这个命令只执行一次ls</li>
+</ul>
+<h2 id="available-memroy"><a href="#available-memroy" class="headerlink" title="available memroy"></a>available memroy</h2><p>Warning signs of a genuine low memory situation that you may want to look into:</p>
+<ul>
+<li>available memory (or “free + buffers/cache”) is close to zero</li>
+<li>swap used increases or fluctuates</li>
+<li>dmesg | grep oom-killer shows the OutOfMemory-killer at work</li>
+</ul>
+<p><a href="https://linux-mm.org/Drop_Caches" target="_blank" rel="external">How to force to release the cache</a></p>
+<h2 id="nice"><a href="#nice" class="headerlink" title="nice"></a>nice</h2><p>top命令里有%ni,与此相关，nice命令可以修改进程的优先级，这样就可以让进程运行得不那么频繁。 这个功能在运行cpu密集型的后台进程或批处理作业时尤为有用。 nice值的取值范围是[-20,19],-20表示最高优先级，而19表示最低优先级。 Linux进程的默认nice值为0。使用nice命令（不带任何参数时）可以将进程的nice值设置为10。这样调度器就会将此进程视为较低优先级的进程，从而减少cpu资源的分配。</p>
+<h2 id="apropos"><a href="#apropos" class="headerlink" title="apropos"></a>apropos</h2><p>根据关键字找相关的指令</p>
+<h2 id="setuid-setgid"><a href="#setuid-setgid" class="headerlink" title="setuid, setgid"></a>setuid, setgid</h2><p>如果一个可执行文件setuid/gid那么他拥有可执行文件owner、group相同的权限, 如果文件是root，那么他具有和root一样的权限很危险</p>
+<figure class="highlight gams"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">chmod u+s <span class="keyword">files</span></div><div class="line">chmod g+s <span class="keyword">files</span></div></pre></td></tr></table></figure>
+<h2 id="文件空洞"><a href="#文件空洞" class="headerlink" title="文件空洞"></a>文件空洞</h2><p>在UNIX文件操作中，文件位移量可以大于文件的当前长度，在这种情况下，对该文件的下一次写将延长该文件，并在文件中构成一个空洞，这一点是允许的。位于文件中但没有写过的字节都被设为 0。<br>如果 offset 比文件的当前长度更大，下一个写操作就会把文件“撑大（extend）”。这就是所谓的在文件里创造“空洞（hole）”。没有被实际写入文件的所有字节由重复的 0 表示。空洞是否占用硬盘空间是由文件系统（file system）决定的。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/linux/" rel="tag"># linux</a>
+          
+            <a href="/tags/command/" rel="tag"># command</a>
+          
+            <a href="/tags/shell/" rel="tag"># shell</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/html+css/" rel="next" title="HTML CSS Notes">
+                <i class="fa fa-chevron-left"></i> HTML CSS Notes
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2014-9-12-cpp-note/" rel="prev" title="C\C++ Notes">
+                C\C++ Notes <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+  <a class="jiathis_button_tsina"></a>
+  <a class="jiathis_button_tqq"></a>
+  <a class="jiathis_button_weixin"></a>
+  <a class="jiathis_button_cqq"></a>
+  <a class="jiathis_button_douban"></a>
+  <a class="jiathis_button_renren"></a>
+  <a class="jiathis_button_qzone"></a>
+  <a class="jiathis_button_kaixin001"></a>
+  <a class="jiathis_button_copy"></a>
+  <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>
+  <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" >
+  var jiathis_config={
+    hideMore:false
+  }
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2014-9-2-linux-command-note/"
+           data-title="Linux Command Notes" data-url="http://matthewgao.github.io/2014-9-2-linux-command-note/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="Matthew Gao" />
+          <p class="site-author-name" itemprop="name">Matthew Gao</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">40</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">23</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">48</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/matthewgao" target="_blank" title="Github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  Github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/xxiaogao" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  Twitter
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/334332999" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/gaoshen" target="_blank" title="Zhihu">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  Zhihu
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#stat"><span class="nav-number">1.</span> <span class="nav-text">stat</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mount"><span class="nav-number">2.</span> <span class="nav-text">mount</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#mount-a-dir"><span class="nav-number">2.1.</span> <span class="nav-text">mount a dir</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mount一个网络共享文件夹"><span class="nav-number">2.2.</span> <span class="nav-text">mount一个网络共享文件夹</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#umount-a-busy-device"><span class="nav-number">2.3.</span> <span class="nav-text">umount a busy device</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#skip-an-existed-dir"><span class="nav-number">3.</span> <span class="nav-text">skip an existed dir</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Create-a-link"><span class="nav-number">4.</span> <span class="nav-text">Create a link</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#X-windows"><span class="nav-number">5.</span> <span class="nav-text">X windows</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#调整分辨率"><span class="nav-number">5.1.</span> <span class="nav-text">调整分辨率</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Console-Terminal"><span class="nav-number">6.</span> <span class="nav-text">Console/Terminal</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#权限操作"><span class="nav-number">7.</span> <span class="nav-text">权限操作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#SElinux"><span class="nav-number">7.1.</span> <span class="nav-text">SElinux</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DNS-lookup"><span class="nav-number">8.</span> <span class="nav-text">DNS lookup</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#man"><span class="nav-number">9.</span> <span class="nav-text">man</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Source"><span class="nav-number">10.</span> <span class="nav-text">Source</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查看程序依赖关系"><span class="nav-number">11.</span> <span class="nav-text">查看程序依赖关系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查看库文件导出symbol"><span class="nav-number">12.</span> <span class="nav-text">查看库文件导出symbol</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RBE编译问题"><span class="nav-number">13.</span> <span class="nav-text">RBE编译问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#程序栈最大大小"><span class="nav-number">14.</span> <span class="nav-text">程序栈最大大小</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查看每个目录硬盘占的空间"><span class="nav-number">15.</span> <span class="nav-text">查看每个目录硬盘占的空间</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#作业控制"><span class="nav-number">16.</span> <span class="nav-text">作业控制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ldconfig"><span class="nav-number">17.</span> <span class="nav-text">ldconfig</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#chkconfig"><span class="nav-number">18.</span> <span class="nav-text">chkconfig</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#正则表达式"><span class="nav-number">19.</span> <span class="nav-text">正则表达式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Grep"><span class="nav-number">19.1.</span> <span class="nav-text">Grep</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#awk"><span class="nav-number">19.2.</span> <span class="nav-text">awk</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sed"><span class="nav-number">19.3.</span> <span class="nav-text">sed</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#strace"><span class="nav-number">20.</span> <span class="nav-text">strace</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#各种重定向"><span class="nav-number">21.</span> <span class="nav-text">各种重定向</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#update-alternatives"><span class="nav-number">22.</span> <span class="nav-text">update-alternatives</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Network-Tools"><span class="nav-number">23.</span> <span class="nav-text">Network Tools</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#解决windows下编辑文件结尾有-M问题"><span class="nav-number">24.</span> <span class="nav-text">解决windows下编辑文件结尾有^M问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Grub-rescue"><span class="nav-number">25.</span> <span class="nav-text">Grub rescue</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#重新创建xorg-conf"><span class="nav-number">26.</span> <span class="nav-text">重新创建xorg.conf</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#vnc4server"><span class="nav-number">27.</span> <span class="nav-text">vnc4server</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查看硬件状态"><span class="nav-number">28.</span> <span class="nav-text">查看硬件状态</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#网络配置"><span class="nav-number">29.</span> <span class="nav-text">网络配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#echo"><span class="nav-number">30.</span> <span class="nav-text">echo</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pipe"><span class="nav-number">31.</span> <span class="nav-text">pipe</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#xmllint"><span class="nav-number">32.</span> <span class="nav-text">xmllint</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#共享库的兼容问题"><span class="nav-number">33.</span> <span class="nav-text">共享库的兼容问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PATH"><span class="nav-number">34.</span> <span class="nav-text">PATH</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#openssl生成证书"><span class="nav-number">35.</span> <span class="nav-text">openssl生成证书</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#vino"><span class="nav-number">36.</span> <span class="nav-text">vino</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UNIX-socket上限"><span class="nav-number">37.</span> <span class="nav-text">UNIX socket上限</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mv-tip"><span class="nav-number">38.</span> <span class="nav-text">mv tip</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#僵尸进程"><span class="nav-number">39.</span> <span class="nav-text">僵尸进程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#environment"><span class="nav-number">40.</span> <span class="nav-text">environment</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#exec"><span class="nav-number">41.</span> <span class="nav-text">exec</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sys-proc-tmpfs"><span class="nav-number">42.</span> <span class="nav-text">sys, proc, tmpfs</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Driver"><span class="nav-number">43.</span> <span class="nav-text">Driver</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#udev"><span class="nav-number">44.</span> <span class="nav-text">udev</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#交叉编译"><span class="nav-number">45.</span> <span class="nav-text">交叉编译</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#chroot"><span class="nav-number">46.</span> <span class="nav-text">chroot</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#常用命令"><span class="nav-number">47.</span> <span class="nav-text">常用命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Process-PID-PPID-SID-PGID"><span class="nav-number">48.</span> <span class="nav-text">Process PID PPID SID PGID</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#gsettings"><span class="nav-number">49.</span> <span class="nav-text">gsettings</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#readlink"><span class="nav-number">50.</span> <span class="nav-text">readlink</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#su-and-su"><span class="nav-number">51.</span> <span class="nav-text">su and su -</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#for"><span class="nav-number">52.</span> <span class="nav-text">for</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#给重要文件加锁"><span class="nav-number">53.</span> <span class="nav-text">给重要文件加锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#主次设备号"><span class="nav-number">54.</span> <span class="nav-text">主次设备号</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#locate省去打绝对路径"><span class="nav-number">55.</span> <span class="nav-text">locate省去打绝对路径</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GNU-parallel"><span class="nav-number">56.</span> <span class="nav-text">GNU parallel</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#X-windows-Xsession-配置"><span class="nav-number">57.</span> <span class="nav-text">X windows Xsession 配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#systemd-and-upstart"><span class="nav-number">58.</span> <span class="nav-text">systemd and upstart</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#upstart"><span class="nav-number">58.1.</span> <span class="nav-text">upstart</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#find"><span class="nav-number">59.</span> <span class="nav-text">find</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#available-memroy"><span class="nav-number">60.</span> <span class="nav-text">available memroy</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#nice"><span class="nav-number">61.</span> <span class="nav-text">nice</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#apropos"><span class="nav-number">62.</span> <span class="nav-text">apropos</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#setuid-setgid"><span class="nav-number">63.</span> <span class="nav-text">setuid, setgid</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文件空洞"><span class="nav-number">64.</span> <span class="nav-text">文件空洞</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2012 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Matthew Gao</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="http://cdn.bootcss.com/jquery/2.1.3/jquery.min.js"></script>
+
+  
+  <script type="text/javascript" src="http://cdn.bootcss.com/fastclick/1.0.5/fastclick.min.js"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="http://cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"matthewgao"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+
+</body>
+</html>

@@ -1,0 +1,925 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="go," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Matthew Note" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="我要所有语言通吃了 gogogo">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Golang Note">
+<meta property="og:url" content="http://matthewgao.github.io/go/index.html">
+<meta property="og:site_name" content="Matthew Note">
+<meta property="og:description" content="我要所有语言通吃了 gogogo">
+<meta property="og:updated_time" content="2017-03-10T07:30:54.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Golang Note">
+<meta name="twitter:description" content="我要所有语言通吃了 gogogo">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://matthewgao.github.io/go/"/>
+
+
+
+
+
+  <title> Golang Note | Matthew Note </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?0d7319169ed36fc7c6c76a85b1353472";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Matthew Note</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://matthewgao.github.io/go/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Matthew Gao">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/avatar.gif">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Matthew Note">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="Matthew Note" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Golang Note
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <a href="/go/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="go/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+              <div class="post-description">
+                  我要所有语言通吃了 gogogo
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="TIP"><a href="#TIP" class="headerlink" title="TIP"></a>TIP</h2><ul>
+<li>Go command executables are statically linked; the package objects need not be present to run Go programs.</li>
+<li>package name 最好和folder名字一致</li>
+<li>Executable commands must always use package main.</li>
+<li>You write a test by creating a file with a name ending in _test.go that contains functions named TestXXX with signature func (t *testing.T). The test framework runs each such function; if the function calls a failure function such as t.Error or t.Fail, the test is considered to have failed.</li>
+<li>在 Go 中，首字母大写的名称是被导出的。在导入包之后，你只能访问包所导出的名字，任何未导出的名字是不能被包外的代码访问的。Foo 和 FOO 都是被导出的名称。名称 foo 是不会被导出的。</li>
+<li>函数可以返回任意数量的返回值</li>
+<li>没有参数的 return 语句返回各个返回变量的当前值。这种用法被称作“裸”返回。</li>
+<li>变量定义可以包含初始值，每个变量对应一个。如果初始化是使用表达式，则可以省略类型；变量从初始值中获得类型。</li>
+<li>在函数中， := 简洁赋值语句在明确类型的地方，可以用于替代 var 定义。函数外的每个语句都必须以关键字开始（ var 、 func 、等等）， := 结构不能使用在函数外。</li>
+<li>变量在定义时没有明确的初始化时会赋值为 零值 。</li>
+<li>与 C 不同的是 Go 的在不同类型之间的项目赋值时需要显式转换。 试着移除例子中 float64 或 int 的转换看看会发生什么。</li>
+<li>如果函数参数是指针那么go可以自动转指针即便传入的是值</li>
+<li><code>struct{}</code>通常被用作占位符，就是一个空对象</li>
+<li><code>break labal</code>和<code>goto</code>不同，前者不会再进入循环/switch</li>
+<li>内嵌函数不能以<code>func func_name(){}</code>来声明，只能<code>func_name := func() {}</code></li>
+<li>duck type？</li>
+<li>shadow value: 实际上就是短声明时候的覆盖问题，你可以使用 vet 命令来发现一些这样的问题。 默认情况下，vet不会执行这样的检查，你需要设置-shadow参数：<code>go tool vet -shadow your_file.go</code></li>
+<li>你不能在一个单独的声明中重复声明一个变量，但在多变量声明中这是允许的，其中至少要有一个新的声明变量。</li>
+<li>字符串不会为nil</li>
+<li><code>x [3]int</code>是数组， <code>x []int</code>是slice，slice是按照传引用？如同python里面的list/dist</li>
+<li>以小写字母开头的结构体将不会被（json、xml、gob等）编码，因此当你编码这些未导出的结构体时，你将会得到零值。</li>
+<li>在一个nil的channel上发送和接收操作会被永久阻塞。这个行为有详细的文档解释，但它对于新的Go开发者而言是个惊喜。</li>
+<li>如果结构体中的各个元素都可以用你可以使用等号来比较的话，那就可以使用相号, ==，来比较结构体变量。</li>
+<li>DeepEqual()不会认为空的slice与“nil”的slice相等。这个行为与你使用bytes.Equal()函数的行为不同。bytes.Equal()认为“nil”和空的slice是相等的。</li>
+<li>在“range”语句中生成的数据的值是真实集合元素的拷贝。它们不是原有元素的引用。这意味着更新这些值将不会修改原来的数据。同时也意味着使用这些值的地址将不会得到原有数据的指针。</li>
+<li>当你重新划分一个slice时，新的slice将引用原有slice的数组。如果你忘了这个行为的话，在你的应用分配大量临时的slice用于创建新的slice来引用原有数据的一小部分时，会导致难以预期的内存使用（因为重新划分的slice占用大小还是原来的大小, 尽管只取了一小部分）。为了避免这个陷阱，你需要从临时的slice中拷贝数据（而不是重新划分slice）。</li>
+<li>for语句中的迭代变量在每次迭代时被重新使用。这就意味着你在for循环中创建的闭包（即函数字面量）将会引用同一个变量（而在那些goroutine开始执行时就会得到那个变量的值）。</li>
+<li>被defer的函数的参数会在defer声明时求值（而不是在函数实际执行时）</li>
+<li>然而并不是所有的变量是可取址的。Map的元素就不是。通过interface引用的变量也不是， 如果你有一个struct值的map，你无法更新单个的struct值，原因就是因为他不可取指，解决方法：第一个有效的方法是使用一个临时变量，另一个有效的方法是使用指针的map。</li>
+<li>如果你想知道变量分配的位置，在“go build”或“go run”上传入“-m“ gc标志（即，go run -gcflags -m app.go）</li>
+<li>可以显式的唤醒调度器<code>runtime.Gosched()</code></li>
+<li><code>iota</code></li>
+<li>bytes.Buffer =&gt; StringBuilder 用来拼接字符串</li>
+<li>返回值可以返回局部变量的指针，因为go的变量不是组织在栈中的，所以只要有引用他就不会再内存中被回收</li>
+<li><code>new(TYPE) === &amp;TYPE{}</code></li>
+<li>引用类型： map，slice，channel, func, 方法</li>
+<li><code>append(s, t...)</code> 把t切片中所有值拼放到s里</li>
+<li><code>switch x.(type)</code> 用于判断类型</li>
+<li>Memorize 函数 类似于python里的LRU</li>
+<li><code>[]Printable{&amp;b, d}</code> 声明一个接口slice，包含两个接口实现</li>
+<li>append一个slice会可能导致cap自动变长，变长之后slice的索引会改变，所以之前生成的subslice不会得到后续的更改</li>
+<li><code>type FakeString string</code> FakeString不会自动转string，但是string可以自动转FakeString</li>
+<li>type assert 只适用于inferface，其他的还是要用type cast</li>
+<li>nil可以赋值给任何指针或引用类型的变量</li>
+<li>new返回的是指针，不初始化属性，make是返回值</li>
+<li>context 如果不cancel 父context是不会捕获到done的</li>
+<li><p><code>go run file.go</code>可以运行go，但是如果目录下有unittest，那么多说情况下还是会出错，所以go通常不适合单独运行，<code>shebang</code>可以让你以近似解析式语言的方式来运行go</p>
+</li>
+<li><p>同一个目录不能有多个package，目录名字和pacakge可以不一样</p>
+</li>
+<li>When storage is allocated for a variable, either through a declaration or a call of new, or when a new value is created, either through a composite literal or a call of make, and no explicit initialization is provided, the variable or value is given a default value. Each element of such a variable or value is set to the zero value for its type: false for booleans, 0 for integers, 0.0 for floats, “” for strings, and nil for pointers, functions, interfaces, slices, channels, and maps. This initialization is done recursively, so for instance each element of an array of structs will have its fields zeroed if no value is specified.</li>
+<li>json.Marshal 可以用过设置tag <code>json:&quot;my_name, omitempty&quot;</code> 来跳过某个空字段</li>
+<li>使用<code>string(120)</code> 是把整型换成他对应的ascii码，应该用<code>strconv.Itoa(120)</code></li>
+<li>When you have a struct implementing an interface, a pointer to that struct implements automatically that interface too. That’s why you never have *SomeInterface in the prototype of functions, as this wouldn’t add anything to SomeInterface, and you don’t need such a type in variable declaration </li>
+</ul>
+<h2 id="TODO"><a href="#TODO" class="headerlink" title="TODO"></a>TODO</h2><ul>
+<li>slice复制，赋值等</li>
+</ul>
+<h2 id="struct"><a href="#struct" class="headerlink" title="struct"></a>struct</h2><p>struct的tag使用<code>\``和</code>“` 是一个意思</p>
+<p>A field declared with a type but no explicit field name is an anonymous field, also called an embedded field or an embedding of the type in the struct. An embedded type must be specified as a type name T or as a pointer to a non-interface type name *T, and T itself may not be a pointer type. The unqualified type name acts as the field name.</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// A struct with four anonymous fields of type T1, *T2, P.T3 and *P.T4</span></div><div class="line">struct &#123;</div><div class="line">	T1        <span class="comment">// field name is T1</span></div><div class="line">	*T2       <span class="comment">// field name is T2</span></div><div class="line">	P<span class="selector-class">.T3</span>      <span class="comment">// field name is T3</span></div><div class="line">	*P<span class="selector-class">.T4</span>     <span class="comment">// field name is T4</span></div><div class="line">	x, y int  <span class="comment">// field names are x and y</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>A field or method f of an anonymous field in a struct x is called promoted if x.f is a legal selector that denotes that field or method f.</p>
+<p>Promoted fields act like ordinary fields of a struct except that they cannot be used as field names in composite literals of the struct.</p>
+<p>Given a struct type S and a type named T, promoted methods are included in the method set of the struct as follows:</p>
+<ul>
+<li>If S contains an anonymous field T, the method sets of S and <em>S both include promoted methods with receiver T. The method set of </em>S also includes promoted methods with receiver *T.</li>
+<li>If S contains an anonymous field <em>T, the method sets of S and </em>S both include promoted methods with receiver T or *T.<br>A field declaration may be followed by an optional string literal tag, which becomes an attribute for all the fields in the corresponding field declaration. An empty tag string is equivalent to an absent tag. The tags are made visible through a reflection interface and take part in type identity for structs but are otherwise ignored.</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">struct</span> &#123;</div><div class="line">	x, y <span class="keyword">float64</span> <span class="string">""</span>  <span class="comment">// an empty tag string is like an absent tag</span></div><div class="line">	name <span class="keyword">string</span>  <span class="string">"any string is permitted as a tag"</span></div><div class="line">	_    [<span class="number">4</span>]<span class="keyword">byte</span> <span class="string">"ceci n'est pas un champ de structure"</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// A struct corresponding to a TimeStamp protocol buffer.</span></div><div class="line"><span class="comment">// The tag strings define the protocol buffer field numbers;</span></div><div class="line"><span class="comment">// they follow the convention outlined by the reflect package.</span></div><div class="line"><span class="keyword">struct</span> &#123;</div><div class="line">	microsec  <span class="keyword">uint64</span> <span class="string">`protobuf:"1"`</span></div><div class="line">	serverIP6 <span class="keyword">uint64</span> <span class="string">`protobuf:"2"`</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="Conclude"><a href="#Conclude" class="headerlink" title="Conclude"></a>Conclude</h2><p>interface是描述一个类型的关键因素，根据duck type，一个对象的方法决定了他的类型, 可以用接口的变量来描述结构（struct），这就好像是CPP里多态的基类指针</p>
+<h2 id="interface"><a href="#interface" class="headerlink" title="interface"></a>interface</h2><ul>
+<li><code>func (t T)Printer() {}</code> 表示T实现了Printer接口</li>
+<li><code>func (t *T)Printer() {}</code> 表示T指针实现了Printer接口</li>
+<li>The value of an uninitialized variable of interface type is nil.</li>
+</ul>
+<h2 id="select"><a href="#select" class="headerlink" title="select"></a>select</h2><ul>
+<li>如果不带default那么如果channal没有内容他会阻塞，然后等有内容后恢复，之后select整个语句执行完成，如果带default那么如果发现阻塞会直接到default执行default，然后结束select整个过程</li>
+<li>select 读取chan的时候，在一个case之间他会一直等待返回，chan才有机会读取下一个，也就是说，这个时候写会导致阻塞，小心死锁</li>
+</ul>
+<h2 id="constant"><a href="#constant" class="headerlink" title="constant"></a>constant</h2><p>常量的定义与变量类似，只不过使用 const 关键字。<br>常量可以是字符、字符串、布尔或数字类型的值。<br>常量不能使用 := 语法定义。</p>
+<h2 id="switch"><a href="#switch" class="headerlink" title="switch"></a>switch</h2><p>除非以 fallthrough 语句结束，否则分支会自动终止。<br>没有条件的 switch 同 switch true 一样。<br>这一构造使得可以用更清晰的形式来编写长的 if-then-else 链。</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">func</span> <span class="selector-tag">main</span>() &#123;</div><div class="line">    <span class="attribute">t </span>:= time.<span class="built_in">Now</span>()</div><div class="line">    switch &#123;</div><div class="line">    case t.<span class="built_in">Hour</span>() &lt; <span class="number">12</span>:</div><div class="line">        fmt.<span class="built_in">Println</span>(<span class="string">"Good morning!"</span>)</div><div class="line">    case t.<span class="built_in">Hour</span>() &lt; <span class="number">17</span>:</div><div class="line">        fmt.<span class="built_in">Println</span>(<span class="string">"Good afternoon."</span>)</div><div class="line">    default:</div><div class="line">        fmt.<span class="built_in">Println</span>(<span class="string">"Good evening."</span>)</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="array和slice"><a href="#array和slice" class="headerlink" title="array和slice"></a>array和slice</h2><p>slice 可以包含任意的类型，包括另一个 slice。<br>slice 可以重新切片，创建一个新的 slice 值指向相同的数组。<br>slice 的零值是 nil 。</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">a</span> := make([]int, <span class="number">5</span>)  <span class="comment">// len(a)=5 这会分配一个全是零值的数组并且返回一个 slice 指向这个数组：</span></div><div class="line"><span class="selector-tag">b</span> := make([]int, <span class="number">0</span>, <span class="number">5</span>) <span class="comment">// len(b)=0, cap(b)=5</span></div><div class="line"></div><div class="line"><span class="selector-tag">b</span> = <span class="selector-tag">b</span>[:cap(b)] <span class="comment">// len(b)=5, cap(b)=5</span></div><div class="line"><span class="selector-tag">b</span> = <span class="selector-tag">b</span>[<span class="number">1</span>:]      <span class="comment">// len(b)=4, cap(b)=4</span></div></pre></td></tr></table></figure>
+<h2 id="map"><a href="#map" class="headerlink" title="map"></a>map</h2><p>通过双赋值检测某个键存在：<code>elem, ok = m[key]</code> 如果 key 在 m 中， ok 为 true。否则， ok 为 false，并且 elem 是 map 的元素类型的零值。同样的，当从 map 中读取某个不存在的键时，结果是 map 的元素类型的零值。</p>
+<ul>
+<li>嵌套的map slice要一次初始化，不然会entry nil </li>
+</ul>
+<h2 id="闭包"><a href="#闭包" class="headerlink" title="闭包"></a>闭包</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">adder</span><span class="params">()</span> <span class="title">func</span><span class="params">(<span class="keyword">int</span>)</span> <span class="title">int</span></span> &#123;</div><div class="line">    sum := <span class="number">0</span></div><div class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">func</span><span class="params">(x <span class="keyword">int</span>)</span> <span class="title">int</span></span> &#123;</div><div class="line">        sum += x</div><div class="line">        <span class="keyword">return</span> sum</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</div><div class="line">    pos, neg := adder(), adder()</div><div class="line">    <span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">10</span>; i++ &#123;</div><div class="line">        fmt.Println(</div><div class="line">            pos(i),</div><div class="line">            neg(<span class="number">-2</span>*i),</div><div class="line">        )</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="interface-1"><a href="#interface-1" class="headerlink" title="interface"></a>interface</h2><p>类型通过实现那些方法来实现接口。 没有显式声明的必要；所以也就没有关键字“implements“。<br>隐式接口解藕了实现接口的包和定义接口的包：互不依赖。<br>因此，也就无需在每一个实现上增加新的接口名称，这样同时也鼓励了明确的接口定义。</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">package main</div><div class="line"></div><div class="line">import (</div><div class="line">    <span class="string">"fmt"</span></div><div class="line">    <span class="string">"math"</span></div><div class="line">)</div><div class="line"></div><div class="line">type Abser interface &#123;</div><div class="line">    Abs() float64</div><div class="line">&#125;</div><div class="line"></div><div class="line">func main() &#123;</div><div class="line">    <span class="selector-tag">var</span> <span class="selector-tag">a</span> Abser</div><div class="line">    f := MyFloat(-math.Sqrt2)</div><div class="line">    v := Vertex&#123;<span class="number">3</span>, <span class="number">4</span>&#125;</div><div class="line"></div><div class="line">    <span class="selector-tag">a</span> = f  <span class="comment">// a MyFloat 实现了 Abser</span></div><div class="line">    <span class="selector-tag">a</span> = &amp;v <span class="comment">// a *Vertex 实现了 Abser</span></div><div class="line"></div><div class="line">    <span class="comment">// 下面一行，v 是一个 Vertex（而不是 *Vertex）</span></div><div class="line">    <span class="comment">// 所以没有实现 Abser。</span></div><div class="line">    <span class="selector-tag">a</span> = v</div><div class="line"></div><div class="line">    fmt.Println(<span class="selector-tag">a</span>.Abs())</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="defer"><a href="#defer" class="headerlink" title="defer"></a>defer</h2><p>defer 语句会延迟函数的执行直到上层函数返回。<br>延迟调用的参数会立刻生成，但是在上层函数返回前函数都不会被调用。<br>延迟的函数调用被压入一个栈中。当函数返回时， 会按照后进先出的顺序调用被延迟的函数调用。<br><figure class="highlight go"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</div><div class="line">    <span class="keyword">defer</span> fmt.Println(<span class="string">"world"</span>)</div><div class="line"></div><div class="line">    fmt.Println(<span class="string">"hello"</span>)</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="if"><a href="#if" class="headerlink" title="if"></a>if</h2><p>在 if 的便捷语句定义的变量同样可以在任何对应的 else 块中使用。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> main</div><div class="line"></div><div class="line"><span class="keyword">import</span> (</div><div class="line">    <span class="string">"fmt"</span></div><div class="line">    <span class="string">"math"</span></div><div class="line">)</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">pow</span><span class="params">(x, n, lim <span class="keyword">float64</span>)</span> <span class="title">float64</span></span> &#123;</div><div class="line">    <span class="keyword">if</span> v := math.Pow(x, n); v &lt; lim &#123;</div><div class="line">        <span class="keyword">return</span> v</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        fmt.Printf(<span class="string">"%g &gt;= %g\n"</span>, v, lim)</div><div class="line">    &#125;</div><div class="line">    <span class="comment">// 这里开始就不能使用 v 了</span></div><div class="line">    <span class="keyword">return</span> lim</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</div><div class="line">    fmt.Println(</div><div class="line">        pow(<span class="number">3</span>, <span class="number">2</span>, <span class="number">10</span>),</div><div class="line">        pow(<span class="number">3</span>, <span class="number">3</span>, <span class="number">20</span>),</div><div class="line">    )</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="native-type"><a href="#native-type" class="headerlink" title="native type"></a>native type</h2><p>bool</p>
+<p>string</p>
+<p>int  int8  int16  int32  int64<br>uint uint8 uint16 uint32 uint64 uintptr</p>
+<p>byte // uint8 的别名</p>
+<p>rune // int32 的别名<br>     // 代表一个Unicode码</p>
+<p>float32 float64</p>
+<p>complex64 complex128<br>这个例子演示了具有不同类型的变量。 同时与导入语句一样，变量的定义“打包”在一个语法块中。<br>int，uint 和 uintptr 类型在32位的系统上一般是32位，而在64位系统上是64位。当你需要使用一个整数类型时，你应该首选 int，仅当有特别的理由才使用定长整数类型或者无符号整数类型。</p>
+<h2 id="package"><a href="#package" class="headerlink" title="package"></a>package</h2><p>Go里面有两个保留的函数：init函数（能够应用于所有的package）和main函数（只能应用于package main）。这两个函数在定义时不能有任何的参数和返回值。虽然一个package里面可以写任意多个init函数，但这无论是对于可读性还是以后的可维护性来说，我们都强烈建议用户在一个package中每个文件只写一个init函数。<br>Go程序会自动调用init()和main()，所以你不需要在任何地方调用这两个函数。每个package中的init函数都是可选的，但package main就必须包含一个main函数。<br>程序的初始化和执行都起始于main包。如果main包还导入了其它的包，那么就会在编译时将它们依次导入。有时一个包会被多个包同时导入，那么它只会被导入一次（例如很多包可能都会用到fmt包，但它只会被导入一次，因为没有必要导入多次）。当一个包被导入时，如果该包还导入了其它的包，那么会先将其它包导入进来，然后再对这些包中的包级常量和变量进行初始化，接着执行init函数（如果有的话），依次类推。等所有被导入的包都加载完毕了，就会开始对main包中的包级常量和变量进行初始化，然后执行main包中的init函数（如果存在的话），最后执行main函数。<br>import 下划线（如：import <em> hello/imp）的作用：当导入一个包时，该包下的文件里所有init()函数都会被执行，然而，有些时候我们并不需要把整个包都导入进来，仅仅是是希望它执行init()函数而已。这个时候就可以使用 import </em> 引用该包。即使用【import _ 包路径】只是引用该包，仅仅是为了调用init()函数，所以无法通过包名来调用包中的其他函数。</p>
+<h2 id="内嵌"><a href="#内嵌" class="headerlink" title="内嵌"></a>内嵌</h2><p>内嵌是不用显式的指出内嵌类型再去调用内嵌结构的方法，而聚合需要<br>子结构中是不能覆盖内嵌结构中的变量的<br><figure class="highlight go"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">type</span> base <span class="keyword">struct</span> &#123;</div><div class="line">    a <span class="keyword">int</span></div><div class="line">    b <span class="keyword">string</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">type</span> derive <span class="keyword">struct</span> &#123;</div><div class="line">    base <span class="comment">//内嵌，这里就可以直接找得到print, 自动转换？还是调用的func (b *base) xfunc()&#123;&#125;</span></div><div class="line">    Base base <span class="comment">//这个就不是内嵌，是聚合所以不算是继承关系, 所以他的对象就不能调用到print, 要显式的指出</span></div><div class="line">    name <span class="keyword">string</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="params">(b *base)</span> <span class="title">print</span><span class="params">(s <span class="keyword">string</span>)</span> <span class="params">(ret <span class="keyword">string</span>)</span></span> &#123;</div><div class="line">    ret = <span class="string">"aaa"</span></div><div class="line">    fmt.Printf(<span class="string">"base\n"</span>)</div><div class="line">    <span class="keyword">return</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><p><a href="https://medium.com/@Jarema./golang-slice-append-gotcha-e9020ff37374#.mm7wo7moa" target="_blank" rel="external">slice and append gotcha</a><br><a href="https://medium.com/@divan/how-to-avoid-go-gotchas-744bff599b0c#.hjqyn7h1j" target="_blank" rel="external">How to avoid Go gotchas</a></p>
+<h2 id="编码规则"><a href="#编码规则" class="headerlink" title="编码规则"></a>编码规则</h2><ul>
+<li>全局变量：驼峰式，结合是否可导出确定首字母大小写</li>
+<li>参数传递：驼峰式，小写字母开头</li>
+<li>局部变量：下划线形式</li>
+<li>包名应该为小写单词，不要使用下划线或者混合大小写。</li>
+<li>单个函数的接口名以”er”作为后缀，如Reader,Writer，接口的实现则去掉“er”</li>
+<li>两个函数的接口名综合两个函数名</li>
+<li>三个以上函数的接口名，类似于结构体名</li>
+<li>采用全部大写或者全部小写来表示缩写单词</li>
+<li>对于少量数据，不要传递指针</li>
+<li>对于大量数据的struct可以考虑使用指针</li>
+<li>传入参数是map，slice，chan不要传递指针</li>
+<li>因为map，slice，chan是引用类型，不需要传递指针的指针</li>
+</ul>
+<h2 id="返回值"><a href="#返回值" class="headerlink" title="返回值"></a>返回值</h2><figure class="highlight nix"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">v, <span class="attr">ok</span> = m[key]             // <span class="built_in">map</span> lookup</div><div class="line">v, <span class="attr">ok</span> = x.(T)              // type assertion</div><div class="line">v, <span class="attr">ok</span> = &lt;-ch               // channel receive</div><div class="line"></div><div class="line"><span class="attr">v</span> = m[key]                // <span class="built_in">map</span>查找，失败时返回零值</div><div class="line"><span class="attr">v</span> = x.(T)                 // type断言，失败时panic异常</div><div class="line"><span class="attr">v</span> = &lt;-ch                  // 管道接收，失败时返回零值（阻塞不算是失败）</div><div class="line"></div><div class="line">_, <span class="attr">ok</span> = m[key]            // <span class="built_in">map</span>返回<span class="number">2</span>个值</div><div class="line">_, <span class="attr">ok</span> = mm[<span class="string">""</span>], <span class="literal">false</span>     // <span class="built_in">map</span>返回<span class="number">1</span>个值</div><div class="line"><span class="attr">_</span> = mm[<span class="string">""</span>]                // <span class="built_in">map</span>返回<span class="number">1</span>个值</div></pre></td></tr></table></figure>
+<h2 id="var"><a href="#var" class="headerlink" title="var"></a>var</h2><figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">var (</div><div class="line">	<span class="name">_</span> StdLogger = <span class="symbol">&amp;log</span>.Logger&#123;&#125;</div><div class="line">	_ StdLogger = <span class="symbol">&amp;Entry</span>&#123;&#125;</div><div class="line">	_ StdLogger = <span class="symbol">&amp;Logger</span>&#123;&#125;</div><div class="line">)</div></pre></td></tr></table></figure>
+<h2 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h2><ul>
+<li>数组是值。将一个数组赋予另一个数组会复制其所有元素。</li>
+<li>特别地，若将某个数组传入某个函数，它将接收到该数组的一份副本而非指针。</li>
+<li>数组的大小是其类型的一部分。类型 [10]int 和 [20]int 是不同的。</li>
+</ul>
+<h2 id="append"><a href="#append" class="headerlink" title="append"></a>append</h2><p>但如果我们要像 Append 那样将一个切片追加到另一个切片中呢？ 很简单：在调用的地方使用 …，就像我们在上面调用 Output 那样。以下代码片段的输出与上一个相同。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">x := []<span class="keyword">int</span>&#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>&#125;</div><div class="line">y := []<span class="keyword">int</span>&#123;<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>&#125;</div><div class="line">x = <span class="built_in">append</span>(x, y...)</div><div class="line">fmt.Println(x)</div></pre></td></tr></table></figure>
+<h2 id="runtime-keepAlive"><a href="#runtime-keepAlive" class="headerlink" title="runtime.keepAlive"></a>runtime.keepAlive</h2><p>The purpose of keep alive is to ensure that the garbage collector does not collect a value which is no longer referenced inside a function. The usual cases where this is a problem is if you have obtained the file descriptor to an underlying os.File, or you have passed memory to cgo which was allocated inside the same function.</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">func</span> <span class="selector-tag">g</span>() &#123;</div><div class="line">    <span class="attribute">x </span>:= <span class="built_in">make</span>([]byte, 2^24)</div><div class="line">    y := x[<span class="number">0</span>]</div><div class="line">    if y &gt; <span class="number">0</span> &#123;</div><div class="line">            <span class="built_in">panic</span>(<span class="string">"wat"</span>)</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>Most people would expect that x would be garbage collected before the end of the function because it is no longer referenced. But consider this situation</p>
+<figure class="highlight ada"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">func h() &#123;</div><div class="line">       x, _ := os.Open(<span class="string">"somefile"</span>)</div><div class="line">       fd := x.Fd()</div><div class="line">       // <span class="keyword">use</span> fd <span class="keyword">in</span> <span class="keyword">some</span> kind <span class="keyword">of</span> <span class="keyword">select</span> <span class="keyword">or</span> poll operation inside this <span class="keyword">function</span>.</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>If you’ve follow the logic of what I’ve said up to this point, you would expect x to be dead after the assignment to fd, but we know that *os.File values have a finaliser attached to them, which will be invoked soon after x goes out of scope at the end of the second line.</p>
+<p>When that happens, the finalizer will close the file descriptor that fd references. If you’re lucky you’ll get an error about writing to a closed file. If you’re unlucky, another goroutine will open a different file, and receive the same file descriptor number causing file corruption.</p>
+<p>The workaround is to use runtime.KeepAlive to keep the reference in x live for the duration of the function.</p>
+<p>The moral of the story is finalisers are terrible, and adding one to *os.File was a mistake.</p>
+<h2 id="编译"><a href="#编译" class="headerlink" title="编译"></a>编译</h2><ul>
+<li><code>go build -x</code> 打印出编译相关的信息</li>
+</ul>
+<h3 id="cgo编译"><a href="#cgo编译" class="headerlink" title="cgo编译"></a>cgo编译</h3><p><a href="http://blog.hashbangbash.com/2014/04/linking-golang-statically/" target="_blank" rel="external">Linking golang statically</a></p>
+<h3 id="交叉编译"><a href="#交叉编译" class="headerlink" title="交叉编译"></a>交叉编译</h3><figure class="highlight nix"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">env <span class="attr">GOOS=linux</span> <span class="attr">GOARCH=amd64</span> go build</div></pre></td></tr></table></figure>
+<h2 id="接口类型作为参数"><a href="#接口类型作为参数" class="headerlink" title="接口类型作为参数"></a>接口类型作为参数</h2><ul>
+<li>接口类型作为参数是否是copy取决于传入参数是指针类型还是struct类型，如果是一个指针类型那么就不会copy</li>
+<li>接口传给接口也不会复制</li>
+<li>struct赋值给接口会复制</li>
+<li>struct指针复制给接口不会复制</li>
+</ul>
+<p>实际上可以认为所有的类型都是穿值的，只不过有些是指针有些是值<br><a href="https://www.goinggo.net/2016/05/copying-interface-values-in-go.html" target="_blank" rel="external">Copying Interface Values In Go</a></p>
+<h2 id="微服务设计"><a href="#微服务设计" class="headerlink" title="微服务设计"></a>微服务设计</h2><ul>
+<li>同步是一个比较大的问题，尽量需要同步的由单独的模块来做</li>
+<li>Json token在某种情况下可以解决无状态的问题</li>
+<li>内部服务消息化更有助于解耦和和去同步</li>
+</ul>
+<h2 id="Test"><a href="#Test" class="headerlink" title="Test"></a>Test</h2><ul>
+<li><code>go test -v -run TESTNAME</code> 可以指定运行单个UT</li>
+<li>或者用<code>go test -v xxx_test.go</code> 这里有个问题：<br>But there’s a catch. This works well if</li>
+</ul>
+<ol>
+<li>foo.go is package foo</li>
+<li>foo_test.go is package foo_test and imports ‘foo’.</li>
+</ol>
+<p>If <code>foo_test.go</code> and <code>foo.go</code> are the same package (a common case), then you must name all other files required to build ‘foo_test’. In this example it would be:</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ <span class="keyword">go</span> test foo_test.<span class="keyword">go</span> foo.<span class="keyword">go</span></div></pre></td></tr></table></figure>
+<h3 id="单独编译成一个binary"><a href="#单独编译成一个binary" class="headerlink" title="单独编译成一个binary"></a>单独编译成一个binary</h3><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">go test -c stream_test<span class="selector-class">.go</span> -o stream<span class="selector-class">.test</span> 单独编译一个UT</div><div class="line">./stream<span class="selector-class">.test</span> -test<span class="selector-class">.v</span> 单独运行</div></pre></td></tr></table></figure>
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/go/" rel="tag"># go</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/php/" rel="next" title="PHP Note">
+                <i class="fa fa-chevron-left"></i> PHP Note
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/再见2016/" rel="prev" title="再见2016">
+                再见2016 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+  <a class="jiathis_button_tsina"></a>
+  <a class="jiathis_button_tqq"></a>
+  <a class="jiathis_button_weixin"></a>
+  <a class="jiathis_button_cqq"></a>
+  <a class="jiathis_button_douban"></a>
+  <a class="jiathis_button_renren"></a>
+  <a class="jiathis_button_qzone"></a>
+  <a class="jiathis_button_kaixin001"></a>
+  <a class="jiathis_button_copy"></a>
+  <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>
+  <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" >
+  var jiathis_config={
+    hideMore:false
+  }
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="go/"
+           data-title="Golang Note" data-url="http://matthewgao.github.io/go/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="Matthew Gao" />
+          <p class="site-author-name" itemprop="name">Matthew Gao</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">40</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">23</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">48</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/matthewgao" target="_blank" title="Github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  Github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/xxiaogao" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  Twitter
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/334332999" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/gaoshen" target="_blank" title="Zhihu">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  Zhihu
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#TIP"><span class="nav-number">1.</span> <span class="nav-text">TIP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TODO"><span class="nav-number">2.</span> <span class="nav-text">TODO</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#struct"><span class="nav-number">3.</span> <span class="nav-text">struct</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Conclude"><span class="nav-number">4.</span> <span class="nav-text">Conclude</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#interface"><span class="nav-number">5.</span> <span class="nav-text">interface</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#select"><span class="nav-number">6.</span> <span class="nav-text">select</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#constant"><span class="nav-number">7.</span> <span class="nav-text">constant</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#switch"><span class="nav-number">8.</span> <span class="nav-text">switch</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#array和slice"><span class="nav-number">9.</span> <span class="nav-text">array和slice</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#map"><span class="nav-number">10.</span> <span class="nav-text">map</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#闭包"><span class="nav-number">11.</span> <span class="nav-text">闭包</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#interface-1"><span class="nav-number">12.</span> <span class="nav-text">interface</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#defer"><span class="nav-number">13.</span> <span class="nav-text">defer</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#if"><span class="nav-number">14.</span> <span class="nav-text">if</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#native-type"><span class="nav-number">15.</span> <span class="nav-text">native type</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#package"><span class="nav-number">16.</span> <span class="nav-text">package</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#内嵌"><span class="nav-number">17.</span> <span class="nav-text">内嵌</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-number">18.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#编码规则"><span class="nav-number">19.</span> <span class="nav-text">编码规则</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#返回值"><span class="nav-number">20.</span> <span class="nav-text">返回值</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#var"><span class="nav-number">21.</span> <span class="nav-text">var</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数组"><span class="nav-number">22.</span> <span class="nav-text">数组</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#append"><span class="nav-number">23.</span> <span class="nav-text">append</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#runtime-keepAlive"><span class="nav-number">24.</span> <span class="nav-text">runtime.keepAlive</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#编译"><span class="nav-number">25.</span> <span class="nav-text">编译</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#cgo编译"><span class="nav-number">25.1.</span> <span class="nav-text">cgo编译</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#交叉编译"><span class="nav-number">25.2.</span> <span class="nav-text">交叉编译</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#接口类型作为参数"><span class="nav-number">26.</span> <span class="nav-text">接口类型作为参数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#微服务设计"><span class="nav-number">27.</span> <span class="nav-text">微服务设计</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Test"><span class="nav-number">28.</span> <span class="nav-text">Test</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#单独编译成一个binary"><span class="nav-number">28.1.</span> <span class="nav-text">单独编译成一个binary</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2012 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Matthew Gao</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="http://cdn.bootcss.com/jquery/2.1.3/jquery.min.js"></script>
+
+  
+  <script type="text/javascript" src="http://cdn.bootcss.com/fastclick/1.0.5/fastclick.min.js"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="http://cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"matthewgao"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+
+</body>
+</html>

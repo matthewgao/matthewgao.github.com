@@ -1,0 +1,782 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="xml," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Matthew Note" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="更多XSLT、XPATH的内容还是要看W3C的标准，W3CSHOOL讲的太含糊">
+<meta property="og:type" content="article">
+<meta property="og:title" content="XSLT and XPATH">
+<meta property="og:url" content="http://matthewgao.github.io/xslt/index.html">
+<meta property="og:site_name" content="Matthew Note">
+<meta property="og:description" content="更多XSLT、XPATH的内容还是要看W3C的标准，W3CSHOOL讲的太含糊">
+<meta property="og:updated_time" content="2016-07-19T05:47:09.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="XSLT and XPATH">
+<meta name="twitter:description" content="更多XSLT、XPATH的内容还是要看W3C的标准，W3CSHOOL讲的太含糊">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://matthewgao.github.io/xslt/"/>
+
+
+
+
+
+  <title> XSLT and XPATH | Matthew Note </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?0d7319169ed36fc7c6c76a85b1353472";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Matthew Note</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://matthewgao.github.io/xslt/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Matthew Gao">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/avatar.gif">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Matthew Note">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="Matthew Note" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                XSLT and XPATH
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <a href="/xslt/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="xslt/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+              <div class="post-description">
+                  更多XSLT、XPATH的内容还是要看W3C的标准，W3CSHOOL讲的太含糊
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="xslt"><a href="#xslt" class="headerlink" title="xslt"></a>xslt</h2><p>这次是为了用xslt来转换一个xml所以临时学习了下xslt</p>
+<h3 id="call-template和apply-templates"><a href="#call-template和apply-templates" class="headerlink" title="call-template和apply-templates"></a>call-template和apply-templates</h3><p>对xml模板 来说，name属性是很关键的 call-template /apply-template 的name必须要和模板的name相对应。模板相当于一个函数，可以暂时这么看。而name相当于函数名称.</p>
+<p>简单说apply是应用，call是调用。<br>用apply时，引擎自动搜索与当前select指定xpath的匹配节点相匹配的template（该template必须有属性match）并使用该template进行处理，此时需要指定的是select的path。<br>用call时就跟其它语言调用函数一样，必须指定name属性，相应的，该template必须有name属性，当然，也可以在这时with-param(当然相应的模板中有对应的param才行，不过这个不强制要求)。</p>
+<ol>
+<li>从名字区分：call-template，一次只对一个node名字有效；而apply-templates，注意是是复数，所以这个是对所有符合条件的node有效。</li>
+<li><p>从手法上：call-template，手段是通过name；apply-templates手段是通过match。</p>
+</li>
+<li><p>使用apply调用的模板,   其中的上下文节点是与之匹配的节点。使用call调用的模板,   它没有上下文节点，参数通过param进行传递</p>
+</li>
+</ol>
+<h2 id="xpath"><a href="#xpath" class="headerlink" title="xpath"></a>xpath</h2><p><code>xsl:if</code>的<code>test</code>，一般对象的<code>select</code>都是一个xpath的表达式</p>
+<ul>
+<li><code>name()</code>函数可以用来取当前element的名字</li>
+<li><code>text()</code>可以取当前element的内容</li>
+<li><code>count()</code>统计element个数</li>
+<li>一个xpath可以包含一些条件例如<code>$resource_type[@external = &#39;true&#39;]</code>，表示attribute有externel且为true的节点</li>
+</ul>
+<figure class="highlight dust"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="xml"><span class="tag">&lt;<span class="name">xsl:element</span> <span class="attr">name</span>=<span class="string">"</span></span></span><span class="template-variable">&#123;name($resource_type)&#125;</span><span class="xml"><span class="tag"><span class="string">"</span>&gt;</span></span></div><div class="line">    <span class="tag">&lt;<span class="name">xsl:attribute</span> <span class="attr">name</span>=<span class="string">"count"</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">xsl:value-of</span> <span class="attr">select</span>=<span class="string">"count($resource_type)"</span> /&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">xsl:attribute</span>&gt;</span></div><div class="line">    </div><div class="line">    <span class="tag">&lt;<span class="name">xsl:if</span> <span class="attr">test</span>=<span class="string">"count($resource_type[@external = 'true']) != 0"</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">xsl:element</span> <span class="attr">name</span>=<span class="string">"externalServer"</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">xsl:attribute</span> <span class="attr">name</span>=<span class="string">"count"</span>&gt;</span></div><div class="line">                <span class="tag">&lt;<span class="name">xsl:value-of</span> <span class="attr">select</span>=<span class="string">"count($resource_type[@external= 'true'])"</span> /&gt;</span></div><div class="line">            <span class="tag">&lt;/<span class="name">xsl:attribute</span>&gt;</span></div><div class="line">        <span class="tag">&lt;/<span class="name">xsl:element</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">xsl:if</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">xsl:element</span>&gt;</span></div></pre></td></tr></table></figure>
+<h2 id="parser"><a href="#parser" class="headerlink" title="parser"></a>parser</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#!/usr/bin/env python3</span></div><div class="line"><span class="comment"># coding=utf-8</span></div><div class="line"><span class="comment"># Created Time: 2016-06-20</span></div><div class="line"></div><div class="line">__author__ = <span class="string">'Matthew Gao'</span></div><div class="line"></div><div class="line"><span class="keyword">import</span> lxml.etree <span class="keyword">as</span> ET</div><div class="line"><span class="keyword">import</span> pprint</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">parse</span><span class="params">()</span>:</span></div><div class="line">    pp = pprint.PrettyPrinter(indent=<span class="number">4</span>)</div><div class="line">    xml_filename = <span class="string">'amc_one_of_everything.xml'</span></div><div class="line">    xsl_filename = <span class="string">'phonehometranslator.xsl'</span></div><div class="line"></div><div class="line">    dom = ET.parse(xml_filename)</div><div class="line">    xslt = ET.parse(xsl_filename)</div><div class="line">    transform = ET.XSLT(xslt)</div><div class="line">    newdom = transform(dom)</div><div class="line">    <span class="comment"># print(ET.tostring(newdom, pretty_print=True))</span></div><div class="line">    pp.pprint(ET.tostring(newdom, pretty_print=<span class="keyword">True</span>).decode())</div><div class="line"></div><div class="line">    print(transform.error_log)</div><div class="line"></div><div class="line">    <span class="keyword">for</span> entry <span class="keyword">in</span> transform.error_log:</div><div class="line">        print(<span class="string">'message from line %s, col %s: %s'</span> % (entry.line, entry.column, entry.message))</div><div class="line">        print(<span class="string">'domain: %s (%d)'</span> % (entry.domain_name, entry.domain))</div><div class="line">        print(<span class="string">'type: %s (%d)'</span> % (entry.type_name, entry.type))</div><div class="line">        print(<span class="string">'level: %s (%d)'</span> % (entry.level_name, entry.level))</div><div class="line">        print(<span class="string">'filename: %s'</span> % entry.filename)</div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</div><div class="line">    parse()</div></pre></td></tr></table></figure>
+<h2 id="调试"><a href="#调试" class="headerlink" title="调试"></a>调试</h2><p>有人会说用<xsl:message>来调试，但是这个在解析出错的时候似乎帮助不大，有些xslt的编辑器可以调试，但是都是付费的，所以没有具体尝试</xsl:message></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/xml/" rel="tag"># xml</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/vagrant/" rel="next" title="Vagrant">
+                <i class="fa fa-chevron-left"></i> Vagrant
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/elasticsearch/" rel="prev" title="ElasticSearch Note">
+                ElasticSearch Note <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+  <a class="jiathis_button_tsina"></a>
+  <a class="jiathis_button_tqq"></a>
+  <a class="jiathis_button_weixin"></a>
+  <a class="jiathis_button_cqq"></a>
+  <a class="jiathis_button_douban"></a>
+  <a class="jiathis_button_renren"></a>
+  <a class="jiathis_button_qzone"></a>
+  <a class="jiathis_button_kaixin001"></a>
+  <a class="jiathis_button_copy"></a>
+  <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>
+  <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" >
+  var jiathis_config={
+    hideMore:false
+  }
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="xslt/"
+           data-title="XSLT and XPATH" data-url="http://matthewgao.github.io/xslt/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="Matthew Gao" />
+          <p class="site-author-name" itemprop="name">Matthew Gao</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">40</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">23</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">48</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/matthewgao" target="_blank" title="Github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  Github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/xxiaogao" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  Twitter
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/334332999" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/gaoshen" target="_blank" title="Zhihu">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  Zhihu
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#xslt"><span class="nav-number">1.</span> <span class="nav-text">xslt</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#call-template和apply-templates"><span class="nav-number">1.1.</span> <span class="nav-text">call-template和apply-templates</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#xpath"><span class="nav-number">2.</span> <span class="nav-text">xpath</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#parser"><span class="nav-number">3.</span> <span class="nav-text">parser</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#调试"><span class="nav-number">4.</span> <span class="nav-text">调试</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2012 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Matthew Gao</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="http://cdn.bootcss.com/jquery/2.1.3/jquery.min.js"></script>
+
+  
+  <script type="text/javascript" src="http://cdn.bootcss.com/fastclick/1.0.5/fastclick.min.js"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="http://cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"matthewgao"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+
+</body>
+</html>
