@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://matthewgao.github.io/"/>
-  <updated>2016-12-31T03:53:16.000Z</updated>
+  <updated>2017-06-06T14:49:18.000Z</updated>
   <id>http://matthewgao.github.io/</id>
   
   <author>
@@ -14,28 +14,6 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
-  
-  <entry>
-    <title>再见2016</title>
-    <link href="http://matthewgao.github.io/%E5%86%8D%E8%A7%812016/"/>
-    <id>http://matthewgao.github.io/再见2016/</id>
-    <published>2016-12-31T03:50:05.000Z</published>
-    <updated>2016-12-31T03:53:16.000Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="0x01-生活"><a href="#0x01-生活" class="headerlink" title="0x01 生活"></a>0x01 生活</h2><h2 id="0x02-工作"><a href="#0x02-工作" class="headerlink" title="0x02 工作"></a>0x02 工作</h2><h2 id="0x03-一些感想"><a href="#0x03-一些感想" class="headerlink" title="0x03 一些感想"></a>0x03 一些感想</h2><h2 id="0x04-展望2017"><a href="#0x04-展望2017" class="headerlink" title="0x04 展望2017"></a>0x04 展望2017</h2>]]></content>
-    
-    <summary type="html">
-    
-      这可能是我最跌宕起伏的一年，发生了很多事情，好的坏的，还好在最后一年结束的时候，回头看看所有的结果都是好的，开心
-    
-    </summary>
-    
-      <category term="回顾" scheme="http://matthewgao.github.io/categories/%E5%9B%9E%E9%A1%BE/"/>
-    
-    
-      <category term="生活" scheme="http://matthewgao.github.io/tags/%E7%94%9F%E6%B4%BB/"/>
-    
-  </entry>
   
   <entry>
     <title>再见2016</title>
@@ -112,7 +90,7 @@
     <link href="http://matthewgao.github.io/go/"/>
     <id>http://matthewgao.github.io/go/</id>
     <published>2016-12-02T15:40:07.000Z</published>
-    <updated>2017-03-10T07:30:54.000Z</updated>
+    <updated>2017-06-10T14:20:09.000Z</updated>
     
     <content type="html"><![CDATA[<h2 id="TIP"><a href="#TIP" class="headerlink" title="TIP"></a>TIP</h2><ul>
 <li>Go command executables are statically linked; the package objects need not be present to run Go programs.</li>
@@ -277,7 +255,12 @@
 </ol>
 <p>If <code>foo_test.go</code> and <code>foo.go</code> are the same package (a common case), then you must name all other files required to build ‘foo_test’. In this example it would be:</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ <span class="keyword">go</span> test foo_test.<span class="keyword">go</span> foo.<span class="keyword">go</span></div></pre></td></tr></table></figure>
-<h3 id="单独编译成一个binary"><a href="#单独编译成一个binary" class="headerlink" title="单独编译成一个binary"></a>单独编译成一个binary</h3><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">go test -c stream_test<span class="selector-class">.go</span> -o stream<span class="selector-class">.test</span> 单独编译一个UT</div><div class="line">./stream<span class="selector-class">.test</span> -test<span class="selector-class">.v</span> 单独运行</div></pre></td></tr></table></figure>]]></content>
+<h3 id="单独编译成一个binary"><a href="#单独编译成一个binary" class="headerlink" title="单独编译成一个binary"></a>单独编译成一个binary</h3><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">go test -c stream_test<span class="selector-class">.go</span> -o stream<span class="selector-class">.test</span> 单独编译一个UT</div><div class="line">./stream<span class="selector-class">.test</span> -test<span class="selector-class">.v</span> 单独运行</div></pre></td></tr></table></figure>
+<h2 id="Reflect"><a href="#Reflect" class="headerlink" title="Reflect"></a>Reflect</h2><ul>
+<li>reflect.ValueOf会成成一个含有复制这个变量的Value对象，所以Set*方法都不能用，因为unaccessable, 如果需要修改，传入的应该是一个指针</li>
+<li>interface会复制原始对象</li>
+</ul>
+]]></content>
     
     <summary type="html">
     
@@ -1557,7 +1540,7 @@ c.front()/back(); //返回的是元素的引用
     <link href="http://matthewgao.github.io/mysql/"/>
     <id>http://matthewgao.github.io/mysql/</id>
     <published>2016-07-19T05:44:30.000Z</published>
-    <updated>2017-03-08T15:33:10.000Z</updated>
+    <updated>2017-08-01T02:15:07.000Z</updated>
     
     <content type="html"><![CDATA[<h2 id="基本命名和约束规范"><a href="#基本命名和约束规范" class="headerlink" title="基本命名和约束规范"></a>基本命名和约束规范</h2><ul>
 <li>表字符集选择UTF8 ，如果需要存储emoj表情，需要使用UTF8mb4(MySQL 5.5.3以后支持)</li>
@@ -1591,6 +1574,7 @@ c.front()/back(); //返回的是元素的引用
 <li>避免冗余索引</li>
 <li>关于索引规范，一定要记住索引这个东西是一把双刃剑，在加速读的同时也引入了很多额外的写入和锁，降低写入能力，这也是为什么要控制索引数原因。之前看到过不少人给表里每个字段都建了索引，其实对查询可能起不到什么作用。</li>
 <li>注意索引引起的死锁问题，会导致性能严重下降，可以通过组合索引来解决这个问题</li>
+<li>控制索引前缀长度可以有效的提高效率</li>
 </ul>
 <p>冗余索引例子</p>
 <figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="title">idx_abc</span><span class="params">(a,b,c)</span></span> </div><div class="line"></div><div class="line"><span class="function"><span class="title">idx_a</span><span class="params">(a)</span></span> 冗余 </div><div class="line"></div><div class="line"><span class="function"><span class="title">idx_ab</span><span class="params">(a,b)</span></span> 冗余</div></pre></td></tr></table></figure>
@@ -1606,6 +1590,19 @@ c.front()/back(); //返回的是元素的引用
 <h2 id="表设计"><a href="#表设计" class="headerlink" title="表设计"></a>表设计</h2><ul>
 <li>NULL 表示允许是空值，空值是不同于0，‘’这样的值，所以允许空值会降低索引的效率，通常都设置成NOT NULL</li>
 <li>在非STRICT模式下，插入记录时候没有显示的给出一个没有defalut值得时候，不会报错，会默认设置一个默认值，STRICT模式下回直接报错</li>
+</ul>
+<h2 id="Log"><a href="#Log" class="headerlink" title="Log"></a>Log</h2><ol>
+<li>error 日志：记录启动、运行或停止 mysqld 时出现的问题，默认开启。</li>
+<li>general 日志：通用查询日志，记录所有语句和指令，开启数据库会有 5% 左右性能损失。</li>
+<li>binlog 日志：二进制格式，记录所有更改数据的语句，主要用于 slave 复制和数据恢复。</li>
+<li>slow 日志：记录所有执行时间超过 long_query_time 秒的查询或不使用索引的查询，默认关闭。</li>
+<li>Innodb日志：innodb redo log、undo log，用于恢复数据和撤销操作。</li>
+</ol>
+<h2 id="Tips"><a href="#Tips" class="headerlink" title="Tips"></a>Tips</h2><ol>
+<li>innodb不仅会打印出事务和事务持有和等待的锁，而且还有记录本身，不幸的是，它可能超过innodb为输出结果预留的长度(只能打印1M的内容且只能保留最近一次的死锁信息)，如果你无法看到完整的输出，此时可以在任意库下创建innodb_monitor或innodb_lock_monitor表，这样innodb status信息会完整且每15s一次被记录到错误日志中。如：create table innodb_monitor(a int)engine=innodb;，不需要记录到错误日志中时就删掉这个表即可。</li>
+</ol>
+<h2 id="Commands"><a href="#Commands" class="headerlink" title="Commands"></a>Commands</h2><ul>
+<li><code>SHOW ENGINE INNODB STATUS</code></li>
 </ul>
 ]]></content>
     
@@ -2039,6 +2036,53 @@ c.front()/back(); //返回的是元素的引用
       <category term="editor" scheme="http://matthewgao.github.io/tags/editor/"/>
     
       <category term="sublime" scheme="http://matthewgao.github.io/tags/sublime/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Makefile Notes</title>
+    <link href="http://matthewgao.github.io/2014-9-26-makefile/"/>
+    <id>http://matthewgao.github.io/2014-9-26-makefile/</id>
+    <published>2016-04-17T16:50:55.000Z</published>
+    <updated>2016-04-17T16:50:55.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="样板"><a href="#样板" class="headerlink" title="样板"></a>样板</h2><figure class="highlight elixir"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">CC=g++ -g </div><div class="line">LPTHREAD= -lpthread</div><div class="line">TARGET=main</div><div class="line">OBJS=ThreadPool.o \</div><div class="line">	 main.o</div><div class="line"></div><div class="line">all : <span class="variable">$(</span>TARGET)</div><div class="line">	echo <span class="string">"ALL Done"</span></div><div class="line"><span class="comment">#$^ 会一次返回所有结果</span></div><div class="line"><span class="comment">#$&lt; 一次返回一个结果</span></div><div class="line"><span class="variable">$(</span>TARGET) : <span class="variable">$(</span>OBJS)</div><div class="line">	<span class="variable">$(</span>CC) <span class="variable">$(</span>LPTHREAD) -o <span class="variable">$@</span>  <span class="variable">$^</span></div><div class="line"></div><div class="line">%.o : %.cpp</div><div class="line">	<span class="variable">$(</span>CC) -c <span class="variable">$&lt;</span> -o <span class="variable">$@</span></div><div class="line"></div><div class="line"><span class="comment">#这部分可以保证对头文件的依赖性，不然会导致头文件更新，对应的</span></div><div class="line"><span class="comment">#cpp没有被更新的情况</span></div><div class="line">%.dep : %.cpp</div><div class="line">	<span class="variable">$(</span>CC) -M <span class="variable">$&lt;</span> &gt; <span class="variable">$@</span> <span class="variable">$(</span>BOOST_LIB)</div><div class="line"></div><div class="line"><span class="keyword">include</span> <span class="variable">$(</span><span class="symbol">OBJS:</span>.o=.dep)</div><div class="line"><span class="keyword">include</span> <span class="variable">$(</span><span class="symbol">TEST_OBJS:</span>.o=.dep)</div><div class="line">	</div><div class="line">	</div><div class="line"><span class="symbol">clean:</span></div><div class="line">	rm -f *.o main</div><div class="line">	echo <span class="string">"Remove Done"</span></div></pre></td></tr></table></figure>
+<h2 id="在make中有四种方式对变量赋值："><a href="#在make中有四种方式对变量赋值：" class="headerlink" title="在make中有四种方式对变量赋值："></a>在make中有四种方式对变量赋值：</h2><h3 id="运算符"><a href="#运算符" class="headerlink" title=":=运算符"></a><code>:=</code>运算符</h3><p>如<code>MAKE_DEPEND := $(CC) -M</code> 这种方式叫做“简单展开”，因为在读到makefile中的这一行时等号右边就立即被展开了， 等号右边引用的所有变量（如例子中的CC）也会被立即展开。其行为与一般编程和脚本语言相同。当等号右边引用的变量（如例子中的CC）还没有被定义时，它被展开成空（nothing）而不是空格之类。</p>
+<h3 id="运算符-1"><a href="#运算符-1" class="headerlink" title="=运算符"></a><code>=</code>运算符</h3><p>如<code>MAKE_DEPEND = $(CC) -M</code> 这种方式叫做“递归展开”，直到该变量被使用时等号右边的内容才会被展开，其实叫做“迟滞展开”更合适。神奇的是，这种展开方式可以不按顺序定义变量。比如：</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">MAKE_DEPEND = <span class="variable">$(CC)</span> -M</div><div class="line">...</div><div class="line"><span class="comment"># Some time later</span></div><div class="line">CC = gcc</div></pre></td></tr></table></figure>
+<p>只要在此之前没有引用过MAKE_DEPEND就没问题。另外，不止是“迟滞展开”，事实上每次使用该变量，等号右边的内容都会被重新展开。</p>
+<h3 id="运算符-2"><a href="#运算符-2" class="headerlink" title="?=运算符"></a><code>?=</code>运算符</h3><p>如<code>OUTPUT_DIR ?= $(PROJECT_DIR)/out</code> 这种方式叫“条件展开”，只有当OUTPUT_DIR 还没有被定义过时才进行赋值，否则什么都不做。这种方式在处理环境变量是特别有用。</p>
+<h3 id="运算符-3"><a href="#运算符-3" class="headerlink" title="+=运算符"></a><code>+=</code>运算符</h3><p>如<code>OUTPUT_DIR += $(PROJECT_DIR)/out</code> “追加”方式。 其主要目的是给“递归展开”的变量追加内容。因为简单变量可以用<code>simple := $(simple) new stuff</code>的方式来追加内容；而对于递归展开的变量，<code>recursive = $(recursive) new stuff</code>会导致循环引用。这种情况只能用<code>+=</code>运算符。 </p>
+<h3 id="Pattern模式"><a href="#Pattern模式" class="headerlink" title="Pattern模式"></a>Pattern模式</h3><p>模式中的%大体上等效于shell中的*星号，他可以代表任意多个字符，不过模式中只能出现一次。</p>
+<h2 id=""><a href="#" class="headerlink" title="$$"></a><code>$$</code></h2><p>Because dollar signs are used to start make variable references, if you really want a dollar sign in a target or prerequisite you must write two of them, ‘$$’ (see How to Use Variables). If you have enabled secondary expansion (see Secondary Expansion) and you want a literal dollar sign in the prerequisites list, you must actually write four dollar signs (‘$$$$’).</p>
+<h2 id="define"><a href="#define" class="headerlink" title="define"></a>define</h2><p>还有一种设置变量值的方法是使用define关键字。使用define关键字设置变量的值可以有换行，这有利于定义一系列的命令（前面我们讲过“命令包”的技术就是利用这个关键字）。</p>
+<p>define指示符后面跟的是变量的名字，而重起一行定义变量的值，定义是以endef关键字结束。其工作方式和“=”操作符一样。变量的值可以包含函数、命令、文字，或是其它变量。因为命令需要以[Tab]键开头，所以如果你用define定义的命令变量中没有以[Tab]键开头，那么make就不会把其认为是命令。</p>
+<p>下面的这个示例展示了define的用法：</p>
+<figure class="highlight puppet"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">define</span> <span class="section">two</span>-lines</div><div class="line">echo foo</div><div class="line">echo $(bar)</div><div class="line">endef</div></pre></td></tr></table></figure>
+<h2 id="origin-function"><a href="#origin-function" class="headerlink" title="origin function"></a>origin function</h2><p>The origin function is unlike most other functions in that it does not operate on the values of variables; it tells you something about a variable. Specifically, it tells you where it came from.</p>
+<p>The syntax of the origin function is:</p>
+<p>$(origin variable)<br>Note that variable is the name of a variable to inquire about, not a reference to that variable. Therefore you would not normally use a ‘$’ or parentheses when writing it. (You can, however, use a variable reference in the name if you want the name not to be a constant.)</p>
+<p>The result of this function is a string telling you how the variable variable was defined:</p>
+<p>‘undefined’<br>if variable was never defined.</p>
+<p>‘default’<br>if variable has a default definition, as is usual with CC and so on. See Variables Used by Implicit Rules. Note that if you have redefined a default variable, the origin function will return the origin of the later definition.</p>
+<p>‘environment’<br>if variable was inherited from the environment provided to make.</p>
+<p>‘environment override’<br>if variable was inherited from the environment provided to make, and is overriding a setting for variable in the makefile as a result of the ‘-e’ option (see Summary of Options).</p>
+<p>‘file’<br>if variable was defined in a makefile.</p>
+<p>‘command line’<br>if variable was defined on the command line.</p>
+<p>‘override’<br>if variable was defined with an override directive in a makefile (see The override Directive).</p>
+<p>‘automatic’<br>if variable is an automatic variable defined for the execution of the recipe for each rule (see Automatic Variables).</p>
+]]></content>
+    
+    <summary type="html">
+    
+      Makefile 学习笔记
+    
+    </summary>
+    
+      <category term="Dev Tool" scheme="http://matthewgao.github.io/categories/Dev-Tool/"/>
+    
+    
+      <category term="makefile" scheme="http://matthewgao.github.io/tags/makefile/"/>
     
   </entry>
   

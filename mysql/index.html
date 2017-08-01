@@ -92,7 +92,7 @@
 <meta property="og:url" content="http://matthewgao.github.io/mysql/index.html">
 <meta property="og:site_name" content="Matthew Note">
 <meta property="og:description" content="MySQL 优化">
-<meta property="og:updated_time" content="2017-03-08T15:33:10.000Z">
+<meta property="og:updated_time" content="2017-08-01T02:15:07.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MySQL Note">
 <meta name="twitter:description" content="MySQL 优化">
@@ -378,6 +378,7 @@
 <li>避免冗余索引</li>
 <li>关于索引规范，一定要记住索引这个东西是一把双刃剑，在加速读的同时也引入了很多额外的写入和锁，降低写入能力，这也是为什么要控制索引数原因。之前看到过不少人给表里每个字段都建了索引，其实对查询可能起不到什么作用。</li>
 <li>注意索引引起的死锁问题，会导致性能严重下降，可以通过组合索引来解决这个问题</li>
+<li>控制索引前缀长度可以有效的提高效率</li>
 </ul>
 <p>冗余索引例子</p>
 <figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="title">idx_abc</span><span class="params">(a,b,c)</span></span> </div><div class="line"></div><div class="line"><span class="function"><span class="title">idx_a</span><span class="params">(a)</span></span> 冗余 </div><div class="line"></div><div class="line"><span class="function"><span class="title">idx_ab</span><span class="params">(a,b)</span></span> 冗余</div></pre></td></tr></table></figure>
@@ -393,6 +394,19 @@
 <h2 id="表设计"><a href="#表设计" class="headerlink" title="表设计"></a>表设计</h2><ul>
 <li>NULL 表示允许是空值，空值是不同于0，‘’这样的值，所以允许空值会降低索引的效率，通常都设置成NOT NULL</li>
 <li>在非STRICT模式下，插入记录时候没有显示的给出一个没有defalut值得时候，不会报错，会默认设置一个默认值，STRICT模式下回直接报错</li>
+</ul>
+<h2 id="Log"><a href="#Log" class="headerlink" title="Log"></a>Log</h2><ol>
+<li>error 日志：记录启动、运行或停止 mysqld 时出现的问题，默认开启。</li>
+<li>general 日志：通用查询日志，记录所有语句和指令，开启数据库会有 5% 左右性能损失。</li>
+<li>binlog 日志：二进制格式，记录所有更改数据的语句，主要用于 slave 复制和数据恢复。</li>
+<li>slow 日志：记录所有执行时间超过 long_query_time 秒的查询或不使用索引的查询，默认关闭。</li>
+<li>Innodb日志：innodb redo log、undo log，用于恢复数据和撤销操作。</li>
+</ol>
+<h2 id="Tips"><a href="#Tips" class="headerlink" title="Tips"></a>Tips</h2><ol>
+<li>innodb不仅会打印出事务和事务持有和等待的锁，而且还有记录本身，不幸的是，它可能超过innodb为输出结果预留的长度(只能打印1M的内容且只能保留最近一次的死锁信息)，如果你无法看到完整的输出，此时可以在任意库下创建innodb_monitor或innodb_lock_monitor表，这样innodb status信息会完整且每15s一次被记录到错误日志中。如：create table innodb_monitor(a int)engine=innodb;，不需要记录到错误日志中时就删掉这个表即可。</li>
+</ol>
+<h2 id="Commands"><a href="#Commands" class="headerlink" title="Commands"></a>Commands</h2><ul>
+<li><code>SHOW ENGINE INNODB STATUS</code></li>
 </ul>
 
       
@@ -533,7 +547,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">41</span>
+              <span class="site-state-item-count">40</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -630,7 +644,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#基本命名和约束规范"><span class="nav-number">1.</span> <span class="nav-text">基本命名和约束规范</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#字段规范"><span class="nav-number">2.</span> <span class="nav-text">字段规范</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#索引规范"><span class="nav-number">3.</span> <span class="nav-text">索引规范</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SQL类规范"><span class="nav-number">4.</span> <span class="nav-text">SQL类规范</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#表设计"><span class="nav-number">5.</span> <span class="nav-text">表设计</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#基本命名和约束规范"><span class="nav-number">1.</span> <span class="nav-text">基本命名和约束规范</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#字段规范"><span class="nav-number">2.</span> <span class="nav-text">字段规范</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#索引规范"><span class="nav-number">3.</span> <span class="nav-text">索引规范</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SQL类规范"><span class="nav-number">4.</span> <span class="nav-text">SQL类规范</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#表设计"><span class="nav-number">5.</span> <span class="nav-text">表设计</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Log"><span class="nav-number">6.</span> <span class="nav-text">Log</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Tips"><span class="nav-number">7.</span> <span class="nav-text">Tips</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Commands"><span class="nav-number">8.</span> <span class="nav-text">Commands</span></a></li></ol></div>
             
 
           </div>
