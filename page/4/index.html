@@ -88,7 +88,7 @@
 
 <meta property="og:type" content="website">
 <meta property="og:title" content="Matthew Note">
-<meta property="og:url" content="http://matthewgao.github.io/page/4/index.html">
+<meta property="og:url" content="http://gaoshen.site/page/4/index.html">
 <meta property="og:site_name" content="Matthew Note">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Matthew Note">
@@ -119,7 +119,7 @@
 
 
 
-  <link rel="canonical" href="http://matthewgao.github.io/page/4/"/>
+  <link rel="canonical" href="http://gaoshen.site/page/4/"/>
 
 
 
@@ -268,7 +268,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://matthewgao.github.io/coroutine/">
+  <link itemprop="mainEntityOfPage" href="http://gaoshen.site/coroutine/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="Matthew Gao">
@@ -331,6 +331,10 @@
           
 
           
+              <div class="post-description">
+                  一种协程的实现思路，异步IO...
+              </div>
+          
 
         </div>
       </header>
@@ -344,14 +348,42 @@
 
       
         
-          一种协程的实现思路，异步IO...
-          <!--noindex-->
-          <div class="post-more-link text-center">
-            <a class="btn" href="/coroutine/">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
+          
+            <h2 id="基于就绪通知的协程框架"><a href="#基于就绪通知的协程框架" class="headerlink" title="基于就绪通知的协程框架"></a>基于就绪通知的协程框架</h2><ol>
+<li>首先需要包装read/write，在发生read的时候检查返回。如果是EAGAIN，那么将当前协程标记为阻塞在对应fd上，然后执行调度函数。</li>
+<li>调度函数需要执行epoll(或者从上次的返回结果缓存中取数据，减少内核陷入次数)，从中读取一个就绪的fd。如果没有，上下文应当被阻塞到至少有一个fd就绪。</li>
+<li>查找这个fd对应的协程上下文对象，并调度过去。</li>
+<li>当某个协程被调度到时，他多半应当在调度器返回的路上——也就是read/write读不到数据的时候。因此应当再重试读取，失败的话返回1。</li>
+<li>如果读取到数据了，直接返回。</li>
+</ol>
+<p>这样，异步的数据读写动作，在我们的想像中就可以变为同步的。而我们知道同步模型会极大降低我们的编程负担。</p>
+<h2 id="异步IO"><a href="#异步IO" class="headerlink" title="异步IO"></a>异步IO</h2><h3 id="Linux-AIO"><a href="#Linux-AIO" class="headerlink" title="Linux AIO"></a>Linux AIO</h3><table>
+<thead>
+<tr>
+<th style="text-align:center"></th>
+<th style="text-align:center">Blocking</th>
+<th style="text-align:center">Non-Blocking</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">Synchronous</td>
+<td style="text-align:center">Read/Write</td>
+<td style="text-align:center">Read/Write(O_NONBLOCK)</td>
+</tr>
+<tr>
+<td style="text-align:center">Asynchronous</td>
+<td style="text-align:center">IO Multiplexing</td>
+<td style="text-align:center">AIO</td>
+</tr>
+</tbody>
+</table>
+<p>基本方法：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">int</span> aio_read( <span class="class"><span class="keyword">struct</span> <span class="title">aiocb</span></span> *aiocbp );</div><div class="line"><span class="keyword">int</span> aio_error( <span class="class"><span class="keyword">struct</span> <span class="title">aiocb</span></span> *aiocbp );</div><div class="line">ssize_t aio_return( <span class="class"><span class="keyword">struct</span> <span class="title">aiocb</span></span> *aiocbp );</div><div class="line"><span class="keyword">int</span> aio_write( <span class="class"><span class="keyword">struct</span> <span class="title">aiocb</span></span> *aiocbp );</div><div class="line"><span class="keyword">int</span> aio_suspend( <span class="keyword">const</span> <span class="class"><span class="keyword">struct</span> <span class="title">aiocb</span></span> *<span class="keyword">const</span> cblist[], <span class="keyword">int</span> n, <span class="keyword">const</span> <span class="class"><span class="keyword">struct</span> <span class="title">timespec</span></span> *timeout );</div><div class="line"><span class="keyword">int</span> aio_cancel( <span class="keyword">int</span> fd, <span class="class"><span class="keyword">struct</span> <span class="title">aiocb</span></span> *aiocbp );</div><div class="line"><span class="keyword">int</span> lio_listio( <span class="keyword">int</span> mode, <span class="class"><span class="keyword">struct</span> <span class="title">aiocb</span></span> *list[], <span class="keyword">int</span> nent, <span class="class"><span class="keyword">struct</span> <span class="title">sigevent</span></span> *sig );</div></pre></td></tr></table></figure>
+<p>保存上下文的块：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">struct</span> aiocb &#123;</div><div class="line"></div><div class="line">  <span class="keyword">int</span> aio_fildes;               <span class="comment">// File Descriptor</span></div><div class="line">  <span class="keyword">int</span> aio_lio_opcode;           <span class="comment">// Valid only for lio_listio (r/w/nop)</span></div><div class="line">  <span class="keyword">volatile</span> <span class="keyword">void</span> *aio_buf;       <span class="comment">// Data Buffer</span></div><div class="line">  <span class="keyword">size_t</span> aio_nbytes;            <span class="comment">// Number of Bytes in Data Buffer</span></div><div class="line">  <span class="keyword">struct</span> sigevent aio_sigevent; <span class="comment">// Notification Structure</span></div><div class="line"></div><div class="line">  <span class="comment">/* Internal fields */</span></div><div class="line">  ...</div><div class="line"></div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h3 id="Libeio"><a href="#Libeio" class="headerlink" title="Libeio"></a>Libeio</h3><h2 id="Libevent"><a href="#Libevent" class="headerlink" title="Libevent"></a>Libevent</h2>
+          
         
       
     </div>
@@ -388,7 +420,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://matthewgao.github.io/http-notes/">
+  <link itemprop="mainEntityOfPage" href="http://gaoshen.site/http-notes/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="Matthew Gao">
@@ -451,6 +483,10 @@
           
 
           
+              <div class="post-description">
+                  HTTP笔记，Transfer-Encoding...
+              </div>
+          
 
         </div>
       </header>
@@ -464,14 +500,46 @@
 
       
         
-          HTTP笔记，Transfer-Encoding...
-          <!--noindex-->
-          <div class="post-more-link text-center">
-            <a class="btn" href="/http-notes/">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
+          
+            <h2 id="Transfer-Encoding"><a href="#Transfer-Encoding" class="headerlink" title="Transfer-Encoding"></a>Transfer-Encoding</h2><p>通常来说，HTTP 1.0 默认都不是持续连接，这使得判断HTTP包结束变得非常容易，只要连接关闭了，就可以作为结束的标志。但是这会带来很多额外的开销。所以HTTP 1.1把<code>keep-alive</code>作为了默认项，所以通常我们需要一个<code>Content-Length</code>来表示包的长度，以便于正确的判断包的边界，这样带来的问题是，如果一个文件非常大，那么只有能所有的文件都被下载完成才会开始显示给用户，这样延迟可能非常大，所以采用了另外一种办法<code>Transfer-Encoding</code>，与之相类似的还有<code>Content-Encoding</code>：</p>
+<ul>
+<li>Transfer-Encoding: 对于传输的定义，目前只有<code>chunked</code>一种类型，表示分块</li>
+<li>Content-Encoding：对于内容的编码，比如压缩什么的</li>
+</ul>
+<p>如果使用了<code>chunked</code>方式，那么HTTP报文要遵循如下规则：</p>
+<ol>
+<li>在头部加入 Transfer-Encoding: chunked 之后，就代表这个报文采用了分块编码。</li>
+<li>报文中的实体需要改为用一系列分块来传输。</li>
+<li>每个分块包含十六进制的长度值和数据，长度值独占一行，长度不包括它结尾的 CRLF（\r\n），也不包括分块数据结尾的 CRLF</li>
+<li>最后一个分块长度值必须为 0，对应的分块数据没有内容，表示实体结束。</li>
+</ol>
+<p>例如：</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">HTTP/1.1 <span class="number">200</span> OK</div><div class="line"><span class="attribute">Server</span>: nginx/1.1.19</div><div class="line"><span class="attribute">Date</span>: Mon, 13 Jul 2015 06:58:31 GMT</div><div class="line"><span class="attribute">Transfer-Encoding</span>: chunked</div><div class="line"><span class="attribute">Connection</span>: keep-alive</div><div class="line"></div><div class="line"><span class="go"><span class="number">2f</span></span></div><div class="line">&#123;<span class="string">"connectionId"</span>: <span class="string">"qwertyu23456"</span>,  <span class="string">"version"</span>: <span class="number">2</span>&#125;</div><div class="line"><span class="number">0</span></div></pre></td></tr></table></figure>
+<p>与之对应，如果采用<code>Content-Encoding</code></p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">HTTP/1.1 <span class="number">200</span> OK</div><div class="line"><span class="attribute">Server</span>: nginx/1.1.19</div><div class="line"><span class="attribute">Date</span>: Mon, 13 Jul 2015 07:07:42 GMT</div><div class="line"><span class="attribute">Content-Type</span>: vnd.collection+json</div><div class="line"><span class="attribute">Content-Length</span>: 47</div><div class="line"><span class="attribute">Connection</span>: keep-alive</div><div class="line"></div><div class="line"><span class="json">&#123;<span class="attr">"connectionId"</span>: <span class="string">"qwertyu23456"</span>,  <span class="attr">"version"</span>: <span class="number">2</span>&#125;</span></div></pre></td></tr></table></figure>
+<h2 id="GET-with-body-message"><a href="#GET-with-body-message" class="headerlink" title="GET with body message"></a>GET with body message</h2><p>通常来讲，GET方法的body是空的，但是这并不是一个强制标准，只是一个习惯的用法，有些语义下，一个带有Body的GET方法是符合情理的，但是可能所用的web框架不支持，甚至curl也不支持，所以要手写内容检查方法，比如：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">check_body</span><span class="params">(req)</span>:</span></div><div class="line">    msg_body = req.json</div><div class="line">    <span class="keyword">for</span> itr <span class="keyword">in</span> msg_body:</div><div class="line">        <span class="keyword">if</span> check(itr) == <span class="keyword">False</span>:</div><div class="line">            abort(<span class="number">404</span>)</div><div class="line">    <span class="keyword">return</span> msg_body</div></pre></td></tr></table></figure>
+<p>这里要注意，GET with body 不能够留下任何状态，必须是等幂的，不然违背GET的原则</p>
+<h2 id="web-py"><a href="#web-py" class="headerlink" title="web.py"></a>web.py</h2><p>FastCGI/WSGI各个参数在web.ctx中的解释，我遇到的问题是关于homepath，如果在nginx的<code>location</code>中配置了<code>/api/hello</code>，而在webpy中配置了<code>(&quot;/api/hello&quot;,&quot;hello&quot;)</code>， 那么webpy中homepath会是<code>/api/home</code> 而path是<code>\</code>，这显然会匹配失败，正确的做法是<code>(&quot;&quot;,&quot;hello&quot;)</code></p>
+<ul>
+<li>environ a.k.a. env – a dictionary containing the standard WSGI environment variables</li>
+<li>home – the base path for the application, including any parts “consumed” by outer applications <a href="http://example.org/admin" target="_blank" rel="external">http://example.org/admin</a></li>
+<li>homedomain – ? (appears to be protocol + host) <a href="http://example.org" target="_blank" rel="external">http://example.org</a></li>
+<li>homepath – The part of the path requested by the user which was trimmed off the current app. That is homepath + path = the path actually requested in HTTP by the user. E.g. /admin This seems to be derived during startup from the environment variable REAL_SCRIPT_NAME. It affects what web.url() will prepend to supplied urls. This in turn affects where web.seeother() will go, which might interact badly with your url rewriting scheme (e.g. mod_rewrite)</li>
+<li>host – the hostname (domain) and (if not default) the port requested by the user. E.g. example.org, example.org:8080</li>
+<li>ip – the IP address of the user. E.g. xxx.xxx.xxx.xxx</li>
+<li>method – the HTTP method used. E.g. GET</li>
+<li>path – the path requested by the user, relative to the current application. If you are using subapplications, any part of the url matched by the outer application will be trimmed off. E.g. you have a main app in code.py, and a subapplication called admin.py. In code.py, you point /admin to admin.app. In admin.py, you point /stories to a class called stories. Within stories, web.ctx.path will be /stories, not /admin/stories. E.g. /articles/845</li>
+<li>protocol – the protocol used. E.g. https</li>
+<li>query – an empty string if there are no query arguments otherwise a ? followed by the query string. E.g. ?fourlegs=good&amp;twolegs=bad</li>
+<li>fullpath a.k.a. path + query – the path requested including query arguments but not including homepath. E.g. /articles/845?fourlegs=good&amp;twolegs=bad</li>
+</ul>
+<h2 id="跨域"><a href="#跨域" class="headerlink" title="跨域"></a>跨域</h2><ul>
+<li>form是不受跨域影响的</li>
+<li>xmlhttprequest受跨域影响，不过可以通过<code>Access-Control-Allow-Origin</code>来突破<a href="https://www.w3.org/TR/cors/?spm=5176.doc31870.2.1.X32eGa" target="_blank" rel="external">W3C document</a></li>
+</ul>
+
+          
         
       
     </div>
@@ -508,7 +576,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://matthewgao.github.io/2014-9-2-vim-command-note/">
+  <link itemprop="mainEntityOfPage" href="http://gaoshen.site/2014-9-2-vim-command-note/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="Matthew Gao">
@@ -571,6 +639,10 @@
           
 
           
+              <div class="post-description">
+                  记录下VIM的命令，不断学习中
+              </div>
+          
 
         </div>
       </header>
@@ -584,14 +656,43 @@
 
       
         
-          记录下VIM的命令，不断学习中
-          <!--noindex-->
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2014-9-2-vim-command-note/">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
+          
+            <h2 id="生成tags"><a href="#生成tags" class="headerlink" title="生成tags"></a>生成tags</h2><p>在所在目录运行</p>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="attribute">ctags -R</span></div></pre></td></tr></table></figure>
+<p>在vim中</p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">:<span class="keyword">set</span> <span class="keyword">tags</span> = /your/path/<span class="keyword">tags</span></div></pre></td></tr></table></figure>
+<h2 id="生成cscope索引"><a href="#生成cscope索引" class="headerlink" title="生成cscope索引"></a>生成cscope索引</h2><figure class="highlight ebnf"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="attribute">cscope -Rbq</span></div></pre></td></tr></table></figure>
+<h2 id="命令"><a href="#命令" class="headerlink" title="命令"></a>命令</h2><ul>
+<li><code>:A</code> 打开头文件</li>
+<li><code>:E</code> 浏览打开文件</li>
+<li><code>:wqa</code></li>
+<li><code>:b(buffer)</code> 浏览/切换缓冲区, 例如:<code>b1</code></li>
+<li><code>:cd</code> 改变工作目录</li>
+<li><code>:lcd</code> 改变当前窗口工作目录</li>
+<li><code>:pwd</code> 显示当前工作目录</li>
+<li><code>:He</code></li>
+<li><code>:He!</code>上分屏</li>
+<li><code>:Ve</code> 横分屏</li>
+<li><code>:Te</code> tag explore</li>
+<li><code>:colorscheme test3</code> 更改配色方案</li>
+</ul>
+<h2 id="快捷键"><a href="#快捷键" class="headerlink" title="快捷键"></a>快捷键</h2><ul>
+<li><code>{c-f12}</code>, <code>{c-n}</code> 自动补全</li>
+<li><code>,</code> <code>;</code> 结合<code>f{char}</code>查找, 上一个, 下一个</li>
+<li><code>g;</code> 上一个修改过的地方</li>
+<li><code>g,</code> 下一个修改过的地方</li>
+<li><code>{c-o}</code>,<code>{c-i}</code> 回到上一个地方, 下一个地方</li>
+<li><code>{c-a}{num}</code>,<code>{c-x}{num}</code> 增加num, 减少num</li>
+<li><code>u</code> undo</li>
+<li><code>{c-r}</code> 重做</li>
+</ul>
+<h2 id="文件比较"><a href="#文件比较" class="headerlink" title="文件比较"></a>文件比较</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">vim <span class="_">-d</span> file1 file2</div></pre></td></tr></table></figure>
+<blockquote>
+<p>d = diff</p>
+</blockquote>
+<h2 id="在你忘记用-root-方式打开文件时的文件保存"><a href="#在你忘记用-root-方式打开文件时的文件保存" class="headerlink" title="在你忘记用 root 方式打开文件时的文件保存"></a>在你忘记用 root 方式打开文件时的文件保存</h2><figure class="highlight erlang-repl"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">:w !sudo tee <span class="comment">%</span></div></pre></td></tr></table></figure>
+<h2 id="按时间回退文件"><a href="#按时间回退文件" class="headerlink" title="按时间回退文件"></a>按时间回退文件</h2><figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="selector-pseudo">:earlier</span> 1<span class="selector-tag">m</span> \\会把文件回退到 1 分钟以前的状态。</div><div class="line"></div><div class="line"><span class="selector-pseudo">:later</span> \\ 注意，你可以使用这个的命令进行相反的转换</div></pre></td></tr></table></figure>
+          
         
       
     </div>
@@ -628,7 +729,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://matthewgao.github.io/2014-12-18-softwareengineering/">
+  <link itemprop="mainEntityOfPage" href="http://gaoshen.site/2014-12-18-softwareengineering/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="Matthew Gao">
@@ -691,6 +792,10 @@
           
 
           
+              <div class="post-description">
+                  <The pragmatic Programmer> 读书笔记
+              </div>
+          
 
         </div>
       </header>
@@ -704,14 +809,23 @@
 
       
         
-          <The pragmatic Programmer> 读书笔记
-          <!--noindex-->
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2014-12-18-softwareengineering/">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
+          
+            <h2 id="原则"><a href="#原则" class="headerlink" title="原则"></a>原则</h2><ul>
+<li>DRY原则- Don’t repeat yourself</li>
+<li>总是使用get/set方法来读写对象的属性， 这将使未来增加功能更方便。</li>
+</ul>
+<h3 id="构建正交系统"><a href="#构建正交系统" class="headerlink" title="构建正交系统"></a>构建正交系统</h3><ul>
+<li>编写shame代码，不会没有必要的向其他模块暴露任何事情，也不依赖于其他模块的实现。如果需要改变这个对象的状态，让这个对象替你去做。</li>
+<li>避免使用全局变量，单例经常被用作全局变量</li>
+<li>避免写相似的函数</li>
+</ul>
+<h3 id="原型"><a href="#原型" class="headerlink" title="原型"></a>原型</h3><ul>
+<li>prototype与 曳光弹</li>
+</ul>
+<h2 id="类设计"><a href="#类设计" class="headerlink" title="类设计"></a>类设计</h2><h3 id="高扇入"><a href="#高扇入" class="headerlink" title="高扇入"></a>高扇入</h3><p>让大量的类使用某个给定的类</p>
+<h3 id="低扇出"><a href="#低扇出" class="headerlink" title="低扇出"></a>低扇出</h3><p>让一个类里少量的或者适中的使用其他的类，一般不要超过七个</p>
+
+          
         
       
     </div>
@@ -748,7 +862,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://matthewgao.github.io/2014-9-2-git-note/">
+  <link itemprop="mainEntityOfPage" href="http://gaoshen.site/2014-9-2-git-note/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="Matthew Gao">
@@ -811,6 +925,10 @@
           
 
           
+              <div class="post-description">
+                  记录我与git和github的点点滴滴
+              </div>
+          
 
         </div>
       </header>
@@ -824,14 +942,58 @@
 
       
         
-          记录我与git和github的点点滴滴
-          <!--noindex-->
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2014-9-2-git-note/">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
+          
+            <h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><p>Git 是一个分布式的版本管理工具，不同于perforce的是，他每个人都有一个完整的版本库，这种结构及其像bitcoin的原理。</p>
+<h3 id="工作区-Workplace"><a href="#工作区-Workplace" class="headerlink" title="工作区 Workplace"></a>工作区 Workplace</h3><p>即文件夹所在的位置</p>
+<h3 id="索引区-Index（stage）"><a href="#索引区-Index（stage）" class="headerlink" title="索引区 Index（stage）"></a>索引区 Index（stage）</h3><p>git add 提交到的区域，可以理解为缓存区</p>
+<h3 id="版本库-Repository"><a href="#版本库-Repository" class="headerlink" title="版本库 Repository"></a>版本库 Repository</h3><p>git commit 提交到的区域，即为本地Repository。即.git文件夹</p>
+<h3 id="stash"><a href="#stash" class="headerlink" title="stash"></a>stash</h3><p>与perforce中shelve的概念非常相似</p>
+<h2 id="基本应用"><a href="#基本应用" class="headerlink" title="基本应用"></a>基本应用</h2><h3 id="创建一个Repository"><a href="#创建一个Repository" class="headerlink" title="创建一个Repository"></a>创建一个Repository</h3><figure class="highlight ebnf"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="attribute">git init</span></div></pre></td></tr></table></figure>
+<h3 id="添加文件到stage区"><a href="#添加文件到stage区" class="headerlink" title="添加文件到stage区"></a>添加文件到stage区</h3><figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git <span class="keyword">add</span><span class="bash"> readme.md</span></div></pre></td></tr></table></figure>
+<h3 id="提交到版本库"><a href="#提交到版本库" class="headerlink" title="提交到版本库"></a>提交到版本库</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git <span class="keyword">commit</span> -m “<span class="keyword">new</span> <span class="keyword">file</span>”</div></pre></td></tr></table></figure>
+<h3 id="查看现有branch的状态"><a href="#查看现有branch的状态" class="headerlink" title="查看现有branch的状态"></a>查看现有branch的状态</h3><figure class="highlight ebnf"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="attribute">git status</span></div></pre></td></tr></table></figure>
+<h3 id="查看工作区中文件和版本库中区别"><a href="#查看工作区中文件和版本库中区别" class="headerlink" title="查看工作区中文件和版本库中区别"></a>查看工作区中文件和版本库中区别</h3><figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">git</span> <span class="selector-tag">diff</span> <span class="selector-tag">readme</span><span class="selector-class">.md</span></div></pre></td></tr></table></figure>
+<h3 id="查看commit历史记录"><a href="#查看commit历史记录" class="headerlink" title="查看commit历史记录"></a>查看commit历史记录</h3><figure class="highlight applescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">git <span class="built_in">log</span></div><div class="line">git <span class="built_in">log</span> <span class="comment">--pretty=oneline</span></div><div class="line">git <span class="built_in">log</span> <span class="comment">--graph --pretty=oneline --abbrev-commit \\显示分支图</span></div></pre></td></tr></table></figure>
+<h3 id="退回上一个版本"><a href="#退回上一个版本" class="headerlink" title="退回上一个版本"></a>退回上一个版本</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">git <span class="keyword">reset</span> <span class="comment">--hard HEAD^</span></div><div class="line">git <span class="keyword">reset</span> <span class="comment">--hard 3628164</span></div></pre></td></tr></table></figure>
+<ul>
+<li>上一个版本就是HEAD^，上上一个版本就是HEAD^^，当然往上100个版本写100个^比较容易数不过来，所以写成HEAD~100。</li>
+<li>当你用$ git reset –hard HEAD^回退到“add distributed”版本时，再想恢复到“append GPL”，就必须找到“append GPL”的commit id。Git提供了一个命令git reflog用来记录你的每一次命令：</li>
+</ul>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">$ git reflog</div><div class="line">ea34578 HEAD@&#123;<span class="number">0</span>&#125;: rese<span class="variable">t:</span> moving <span class="keyword">to</span> HEAD^</div><div class="line"><span class="number">3628164</span> HEAD@&#123;<span class="number">1</span>&#125;: commi<span class="variable">t:</span> <span class="keyword">append</span> GPL</div><div class="line">ea34578 HEAD@&#123;<span class="number">2</span>&#125;: commi<span class="variable">t:</span> <span class="built_in">add</span> distributed</div><div class="line">cb926e7 HEAD@&#123;<span class="number">3</span>&#125;: commit (initial): wrote <span class="keyword">a</span> readme <span class="keyword">file</span></div></pre></td></tr></table></figure>
+<h3 id="丢弃工作区的修改"><a href="#丢弃工作区的修改" class="headerlink" title="丢弃工作区的修改"></a>丢弃工作区的修改</h3><figure class="highlight ada"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git checkout <span class="comment">-- readme.md</span></div></pre></td></tr></table></figure>
+<blockquote>
+<p>注意：有无 “–” 是有区别的，没有表示切换branch</p>
+</blockquote>
+<h3 id="删除文件"><a href="#删除文件" class="headerlink" title="删除文件"></a>删除文件</h3><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">git rm readme<span class="selector-class">.md</span></div><div class="line">git commit -m <span class="string">"remove file"</span></div></pre></td></tr></table></figure>
+<h2 id="分支管理"><a href="#分支管理" class="headerlink" title="分支管理"></a>分支管理</h2><p>git的分支与perforce的分支大不同，git的分支是基于类似于指针的方式来实现的，它是在创建不同的指针指向不同的commit版本</p>
+<h3 id="创建分支"><a href="#创建分支" class="headerlink" title="创建分支"></a>创建分支</h3><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git checkout -<span class="selector-tag">b</span> dev</div></pre></td></tr></table></figure>
+<p>上面的命令建立了dev分支并切换到dev，等同于如下：</p>
+<figure class="highlight q"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">git branch <span class="built_in">dev</span></div><div class="line">git checkout <span class="built_in">dev</span></div></pre></td></tr></table></figure>
+<h3 id="切换分支"><a href="#切换分支" class="headerlink" title="切换分支"></a>切换分支</h3><figure class="highlight ebnf"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="attribute">git checkout dev</span></div></pre></td></tr></table></figure>
+<h3 id="查看分支"><a href="#查看分支" class="headerlink" title="查看分支"></a>查看分支</h3><figure class="highlight ebnf"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="attribute">git branch</span></div></pre></td></tr></table></figure>
+<h3 id="删除分支"><a href="#删除分支" class="headerlink" title="删除分支"></a>删除分支</h3><figure class="highlight armasm"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="symbol">git</span> <span class="keyword">branch </span>-d dev</div></pre></td></tr></table></figure>
+<h3 id="合并分支"><a href="#合并分支" class="headerlink" title="合并分支"></a>合并分支</h3><figure class="highlight crmsh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">git checkou <span class="keyword">master</span></div><div class="line"><span class="title">git</span> merge dev</div></pre></td></tr></table></figure>
+<p>如果有冲突，git会标示在有冲突的文件中，按照如下格式</p>
+<figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">Git tracks changes of files.</div><div class="line">&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</div><div class="line"><span class="section">Creating a new branch is quick &amp; simple.</span></div><div class="line">=======</div><div class="line">Creating a new branch is quick AND simple.</div><div class="line">&gt;&gt;&gt;&gt;&gt;&gt;&gt; feature1</div></pre></td></tr></table></figure>
+<p>另外一种合并分支的方法是</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="attribute">git</span> merge --<span class="literal">no</span>-ff -m <span class="string">"merge with no-ff"</span> dev</div></pre></td></tr></table></figure>
+<p>这种方法的不同是 合并会是一个新的commit， 而之前的只是简单的把master指向dev</p>
+<h2 id="远程管理"><a href="#远程管理" class="headerlink" title="远程管理"></a>远程管理</h2><h3 id="查看远程库信息"><a href="#查看远程库信息" class="headerlink" title="查看远程库信息"></a>查看远程库信息</h3><figure class="highlight ebnf"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="attribute">git remote -v</span></div></pre></td></tr></table></figure>
+<h3 id="推送分支"><a href="#推送分支" class="headerlink" title="推送分支"></a>推送分支</h3><figure class="highlight maxima"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">git <span class="built_in">push</span> <span class="built_in">origin</span> master</div><div class="line">git <span class="built_in">push</span> <span class="built_in">origin</span> dev</div></pre></td></tr></table></figure>
+<h3 id="获得分支"><a href="#获得分支" class="headerlink" title="获得分支"></a>获得分支</h3><figure class="highlight q"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">git branch --<span class="built_in">set</span>-upstream <span class="built_in">dev</span> origin/<span class="built_in">dev</span> \\第一次的时候需要关联本地和远程的分支</div><div class="line">git pull</div></pre></td></tr></table></figure>
+<h3 id="在本地创建和远程分支对应的分支"><a href="#在本地创建和远程分支对应的分支" class="headerlink" title="在本地创建和远程分支对应的分支"></a>在本地创建和远程分支对应的分支</h3><figure class="highlight applescript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git checkout -b branch-<span class="built_in">name</span> origin/branch-<span class="built_in">name</span></div></pre></td></tr></table></figure>
+<h2 id="标签"><a href="#标签" class="headerlink" title="标签"></a>标签</h2><h3 id="添加标签"><a href="#添加标签" class="headerlink" title="添加标签"></a>添加标签</h3><p>在某个分支上执行</p>
+<figure class="highlight crmsh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">git <span class="keyword">tag</span> <span class="title">v1</span>.<span class="number">0</span></div><div class="line">git <span class="keyword">tag</span> <span class="title">v1</span>.<span class="number">0</span> <span class="number">6224799</span> \\commit id</div></pre></td></tr></table></figure>
+<h3 id="查看标签"><a href="#查看标签" class="headerlink" title="查看标签"></a>查看标签</h3><figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git <span class="keyword">show </span><span class="built_in">v1</span>.<span class="number">0</span></div></pre></td></tr></table></figure>
+<h3 id="删除标签"><a href="#删除标签" class="headerlink" title="删除标签"></a>删除标签</h3><figure class="highlight crmsh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git <span class="keyword">tag</span> <span class="title">-d</span> v0.<span class="number">1</span></div></pre></td></tr></table></figure>
+<h2 id="reset-某个文件"><a href="#reset-某个文件" class="headerlink" title="reset 某个文件"></a>reset 某个文件</h2><ol>
+<li>首先查看该文件的历史版本信息：git log Default@2x.png</li>
+<li>记录下需要恢复的commit版本号：如 9aa51d89799716aa68cff3f30c26f8815408e926</li>
+<li>恢复该文件：git reset 9aa51d89799716aa68cff3f30c26f8815408e926 Default@2x.png</li>
+<li>提交git:git commit -m “revert old file”</li>
+</ol>
+
+          
         
       
     </div>
@@ -868,7 +1030,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://matthewgao.github.io/howtowritesplunkplugin/">
+  <link itemprop="mainEntityOfPage" href="http://gaoshen.site/howtowritesplunkplugin/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="Matthew Gao">
@@ -931,6 +1093,10 @@
           
 
           
+              <div class="post-description">
+                  Splunk plugin 是负责搜集数据的第三方插件，Splunk提供了一个SDK，但是似乎国内这方面的开发指导不是很多，所以写篇文章供大家分享
+              </div>
+          
 
         </div>
       </header>
@@ -944,14 +1110,42 @@
 
       
         
-          Splunk plugin 是负责搜集数据的第三方插件，Splunk提供了一个SDK，但是似乎国内这方面的开发指导不是很多，所以写篇文章供大家分享
-          <!--noindex-->
-          <div class="post-more-link text-center">
-            <a class="btn" href="/howtowritesplunkplugin/">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
+          
+            <h2 id="Splunk简介"><a href="#Splunk简介" class="headerlink" title="Splunk简介"></a>Splunk简介</h2><p>Splunk是一个广泛用于信息分析的一个软件，功能非常强大，并且提供了非常好的二次开发体验，总的来说Splunk支持两种二次开发，一种是关于统计分析内容的，splunk提供多种多样的数据可视化的功能，开发人员只要简单的编写符合splunk标准的xml文件或者Django的文件就可以轻松实现多种多样的数据分析和显示；另外一种是关于数据导入的，虽然splunk提供了众多的导入方式，但是并不是所有的都能覆盖到，所以用户可以根据自己的数据结构来开发plugin，来导入特定的信息类型，比如IPFIX。本文就简述如何开发一个splunk plugin。</p>
+<h2 id="Splunk-SDK"><a href="#Splunk-SDK" class="headerlink" title="Splunk SDK"></a>Splunk SDK</h2><p>Splunk 提供了多种语言的SDK，本文我们以Python为例，猛击这里下载<a href="http://dev.splunk.com/goto/sdk-python" title="Title" target="_blank" rel="external">Python SDK</a> </p>
+<h2 id="建立自己的splunk-plugin"><a href="#建立自己的splunk-plugin" class="headerlink" title="建立自己的splunk plugin"></a>建立自己的splunk plugin</h2><p>Splunk SDK 提供三种主要的功能</p>
+<ol>
+<li>设置plugin需要接受的参数, 这部分参数会在你配置你的plugin的时候在splunk页面上显示出来</li>
+<li>验证参数, 确保你设置的参数有效.</li>
+<li>发送数据流.</li>
+</ol>
+<p>下面是一个plugin的框架, 你必须继承于splunk提供的Script类, 并且实现三个函数: <code>get_scheme</code>, <code>validate_input</code>, <code>stream_events</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> sys</div><div class="line"></div><div class="line"><span class="keyword">from</span> splunklib.modularinput <span class="keyword">import</span> *</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyScript</span><span class="params">(Script)</span>:</span></div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_scheme</span><span class="params">(self)</span>:</span></div><div class="line">        <span class="comment"># Returns scheme.</span></div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">validate_input</span><span class="params">(self, validation_definition)</span>:</span></div><div class="line">        <span class="comment"># Validates input.</span></div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">stream_events</span><span class="params">(self, inputs, ew)</span>:</span></div><div class="line">        <span class="comment"># Splunk Enterprise calls the modular input, </span></div><div class="line">        <span class="comment"># streams XML describing the inputs to stdin,</span></div><div class="line">        <span class="comment"># and waits for XML on stdout describing events.</span></div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</div><div class="line">    sys.exit(MyScript().run(sys.argv))</div></pre></td></tr></table></figure>
+<p>好, 这就是最基本的plugin的框架, 下面我们来具体实现它, 我们将建立一个plugin来监听UDP端口, 来转发到Splunk server, 你可能要说Splunk不是已经提供了一个UDP类型的输入么, 当然, 我们这里只是以此为例, 因为很多UDP的数据都是自定义的, 所以Splunk自带的UDP未必能够满足你的需求, 所以还是可能需要自己开发.</p>
+<h2 id="UDP-receiver例子"><a href="#UDP-receiver例子" class="headerlink" title="UDP receiver例子"></a>UDP receiver例子</h2><p>我把各个部分的解释放到了注释中。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">UDPreceiver</span><span class="params">(Script)</span>:</span></div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_scheme</span><span class="params">(self)</span>:</span></div><div class="line">    	<span class="string">"""</span></div><div class="line">    	这里我们声明了 Scheme, 叫做UDP receiver. 然后use_external_validation = true 表示我们要用自己写的函数来验证这个receiver的参数</div><div class="line">    	use_single_instance 表示如果只想启用一个plugin的实例, 则设为true, 不然设置为false.</div><div class="line"></div><div class="line">    	接下来Argument("port"), 声明了一个输入参数叫做port</div><div class="line">    	required_on_create = True 设置这个参数是必须的。</div><div class="line">    	"""</div><div class="line">        scheme = Scheme(<span class="string">"UDP receiver"</span>)</div><div class="line">        scheme.description = <span class="string">"UDP receiver"</span></div><div class="line">        scheme.use_external_validation = <span class="keyword">True</span></div><div class="line">        </div><div class="line">        <span class="comment">#if con-current start the input modular set it False</span></div><div class="line">        scheme.use_single_instance = <span class="keyword">False</span></div><div class="line">        </div><div class="line">        port_argument = Argument(<span class="string">"port"</span>)</div><div class="line">        port_argument.data_type = Argument.data_type_number</div><div class="line">        port_argument.description = <span class="string">"Listen Port"</span></div><div class="line">        port_argument.required_on_create = <span class="keyword">True</span></div><div class="line">        scheme.add_argument(port_argument)</div><div class="line"></div><div class="line">        <span class="keyword">return</span> scheme</div><div class="line"></div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">validate_input</span><span class="params">(self, validation_definition)</span>:</span></div><div class="line">    	<span class="string">"""</span></div><div class="line">    	这里我们要验证我们的参数。</div><div class="line">    	通过"port"这个key我们找到要验证的参数, 如果没有则调用raise ValueError("Port is not a integer"),</div><div class="line">    	这样会在splunk web上弹出错误提醒.</div><div class="line">    	接下来我们在验证端口是否在范围内, 是否被占用.</div><div class="line">    	"""</div><div class="line">        <span class="keyword">try</span>:</div><div class="line">            port = int(validation_definition.parameters[<span class="string">"port"</span>])</div><div class="line">        <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</div><div class="line">            <span class="keyword">raise</span> ValueError(<span class="string">"Port is not a integer"</span>)</div><div class="line">        </div><div class="line">        <span class="keyword">if</span>(port&lt;<span class="number">0</span> <span class="keyword">or</span> port&gt;<span class="number">65535</span>):</div><div class="line">            <span class="keyword">raise</span> ValueError(<span class="string">"Port range exceeded"</span>)</div><div class="line"></div><div class="line">        <span class="keyword">try</span>:</div><div class="line">            sk = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)</div><div class="line">            sk.settimeout(<span class="number">2</span>)</div><div class="line">            sk.bind((<span class="string">''</span>, port))</div><div class="line">            sk.close()</div><div class="line">        <span class="keyword">except</span> socket.error, e:</div><div class="line">            sk.close()</div><div class="line">            <span class="keyword">if</span> e.errno == <span class="number">98</span> <span class="keyword">or</span> e.errno == <span class="number">13</span>:</div><div class="line">                <span class="keyword">raise</span> ValueError(<span class="string">"This port is already in use"</span>)</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">stream_events</span><span class="params">(self, inputs, ew)</span>:</span></div><div class="line">    	<span class="string">"""</span></div><div class="line">    	这里就是我们建立一个UDP socket监听端口的地方</div><div class="line">    	"""</div><div class="line">        host =<span class="string">''</span></div><div class="line">        port =<span class="number">0</span></div><div class="line"></div><div class="line">        <span class="keyword">for</span> input_name, input_item <span class="keyword">in</span> inputs.inputs.iteritems():</div><div class="line">            port = int(input_item[<span class="string">"port"</span>])</div><div class="line">        </div><div class="line">        ew.log(EventWriter.INFO,<span class="string">"IPFIX converter init"</span>)</div><div class="line">        <span class="comment">#checkForRunningProcess(port)</span></div><div class="line">        <span class="comment">#writePidFile(port)</span></div><div class="line">        <span class="comment">#ew.log(EventWriter.INFO,"Start to listen port "+str(port))</span></div><div class="line">        <span class="comment">#ew.log(EventWriter.INFO,port)</span></div><div class="line">        </div><div class="line">        <span class="keyword">try</span>:</div><div class="line">            s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)</div><div class="line">            s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, <span class="number">1</span>)</div><div class="line">            s.bind((host, port))</div><div class="line">        <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</div><div class="line">            ew.log(EventWriter.ERROR,str(sys._getframe().f_code.co_name)+<span class="string">":Failed When Establish Connection:"</span>+str(e))</div><div class="line"></div><div class="line"></div><div class="line">        <span class="keyword">while</span> <span class="keyword">True</span>:</div><div class="line">            <span class="keyword">try</span>:</div><div class="line">                message, address = s.recvfrom(<span class="number">16384</span>)</div><div class="line">            <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</div><div class="line">                ew.log(EventWriter.ERROR,str(sys._getframe().f_code.co_name)+<span class="string">"="</span>+str(e))</div><div class="line">    		<span class="string">"""</span></div><div class="line">    		Event() 是Splunk一条数据的一个对象, 里面可以设置多种信息, 包括data, stanza, time, host等等</div><div class="line">    		最主要的还是data信息</div><div class="line">    		最后调用ew.write_event()来发送这条数据</div><div class="line">    		"""</div><div class="line">            <span class="keyword">try</span>:</div><div class="line">            	event1 = Event()</div><div class="line">                event1.data = str(message)</div><div class="line">                event1.stanza = str(address)</div><div class="line">                event1.time = time.strftime(<span class="string">"%Y-%m-%d %H:%M:%S"</span>)</div><div class="line">                event1.host = str(address[<span class="number">0</span>])</div><div class="line">                event1.sourcetype = <span class="string">"UDP packets"</span></div><div class="line">                <span class="comment">#event1.index=None</span></div><div class="line">                <span class="comment">#event1.done=None</span></div><div class="line">                <span class="comment">#event1.unbroken=None</span></div><div class="line">                ew.write_event(event1)</div><div class="line">                        </div><div class="line">            <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</div><div class="line">                f = sys.exc_info()[<span class="number">2</span>].tb_frame.f_back</div><div class="line">                ew.log(EventWriter.ERROR,str(f.f_code.co_name)+<span class="string">" at line "</span>+str(f.f_lineno)+<span class="string">", failure reason:"</span>+ str(e))</div><div class="line"></div><div class="line">        s.close()</div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</div><div class="line">    sys.exit(UDPreceiver().run(sys.argv))</div></pre></td></tr></table></figure>
+<p>stream_events方法中包含两个参数，一个是input，一个是ew， 从input中可以获取我们设置的参数，ew是eventWriter，是splunk sdk内置的一个类，用来发送数据，同时也具备log功能。</p>
+<h2 id="添加log"><a href="#添加log" class="headerlink" title="添加log"></a>添加log</h2><p>Splunk具有log的功能，在sdk也提供了写入系统log的功能，我们可以通过这样的语句来发送一个log <code>ew.log(EventWriter.ERROR,&quot;OUTPUT STRING:&quot;+str(outstr))</code> 除了ERROR我们还有几种log level</p>
+<ul>
+<li>ERROR</li>
+<li>WARNING</li>
+<li>INFO</li>
+<li>DEBUG</li>
+</ul>
+<p>现在的DEBUG level的log似乎会有问题，不知道原因，所以慎用。log最终被写入splunkd.log文件中，实际上splunk sdk的log是对标准输出和标准错误输出进行了重新定向。</p>
+<h2 id="生成安装包"><a href="#生成安装包" class="headerlink" title="生成安装包"></a>生成安装包</h2><p>在生成之前先建立自己的目录结构</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="variable">$SPLUNK_HOME</span>/etc/apps/&lt;app_name&gt;/</div><div class="line">  bin/</div><div class="line">    app_name<span class="selector-class">.py</span></div><div class="line">    splunklib/</div><div class="line">      __init__<span class="selector-class">.py</span></div><div class="line">      ...</div><div class="line">  default/</div><div class="line">    app<span class="selector-class">.conf</span></div><div class="line">  README/</div><div class="line">    inputs<span class="selector-class">.conf</span><span class="selector-class">.spec</span></div></pre></td></tr></table></figure>
+<p>需要把splunklib目录拷贝到<code>$SPLUNK_HOME/etc/apps/&lt;app_name&gt;/bin</code>, 然后根据需要建立app.conf和inputs.conf.spec. </p>
+<p>Splunk的安装包是spl格式，但实际上就是个tar.gz格式，所以可以直接打包<app_name>目录：</app_name></p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">cd <span class="variable">$SPLUNK_HOME</span>/etc/apps</div><div class="line">tar cv MyApp/ &gt; MyApp<span class="selector-class">.tar</span></div><div class="line">gzip MyApp<span class="selector-class">.tar</span></div><div class="line">mv MyApp<span class="selector-class">.tar</span><span class="selector-class">.gz</span> MyApp.spl</div></pre></td></tr></table></figure>
+<p>之后我们就可以在splunk上直接安装啦。</p>
+<h2 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h2><ol>
+<li><a href="http://docs.splunk.com/Documentation/Splunk/6.2.2/AdvancedDev/PackageApp" title="Title" target="_blank" rel="external">Package your app or add-on</a></li>
+<li><a href="http://dev.splunk.com/view/python-sdk/SP-CAAAER3" title="Title" target="_blank" rel="external">How to create modular inputs</a></li>
+</ol>
+<h2 id="联系方式"><a href="#联系方式" class="headerlink" title="联系方式"></a>联系方式</h2><p>Matthew Gao, matthewgao[at]gmail.com</p>
+
+          
         
       
     </div>
@@ -988,7 +1182,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://matthewgao.github.io/2014-7-9-staticlinkandinclude/">
+  <link itemprop="mainEntityOfPage" href="http://gaoshen.site/2014-7-9-staticlinkandinclude/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="Matthew Gao">
@@ -1051,6 +1245,10 @@
           
 
           
+              <div class="post-description">
+                  include和静态链接是我们开发中经常碰到的概念，但是对于我来讲这两样东西总是让我感觉有些迷惑，最近空闲下来细细的研究了下其中的门道做以总结，仅供参考
+              </div>
+          
 
         </div>
       </header>
@@ -1064,14 +1262,43 @@
 
       
         
-          include和静态链接是我们开发中经常碰到的概念，但是对于我来讲这两样东西总是让我感觉有些迷惑，最近空闲下来细细的研究了下其中的门道做以总结，仅供参考
-          <!--noindex-->
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2014-7-9-staticlinkandinclude/">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
+          
+            <h2 id="include简介"><a href="#include简介" class="headerlink" title="include简介"></a>include简介</h2><p>最简单的对于include的理解可以这样理解，实际上他就是把多个文件组成一个文件，编译的时候include的所有的文件都会包含到C/CPP文件中，这里涉及到一个重复定义的问题#ifndef来解决这个问题，大家应该都会使用。</p>
+<h2 id="静态链接简介"><a href="#静态链接简介" class="headerlink" title="静态链接简介"></a>静态链接简介</h2><p>静态链接是把多个目标文件链接成一个可执行文件，这些链接过程在编译时候就完成的就是静态链接。下面我们来举例说明静态链接和include的区别。</p>
+<h2 id="比较-Case1"><a href="#比较-Case1" class="headerlink" title="比较 Case1"></a>比较 Case1</h2><p>我们现在定义三个文件a.h/c main.c<br>a.h:</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">funca</span><span class="params">()</span></span>;</div></pre></td></tr></table></figure>
+<p>a.c:</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"a.h"</span></span></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">funca</span><span class="params">()</span></span>&#123;</div><div class="line">	<span class="built_in">printf</span>(<span class="string">"Hello\n"</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>main.c:</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</div><div class="line">        funca();</div><div class="line">        <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>下面我们编译一下生成目标文件</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">gcc -c <span class="selector-tag">a</span><span class="selector-class">.c</span></div><div class="line">gcc -c main.c</div></pre></td></tr></table></figure>
+<p>然后我们用objdump来查看下目标文件</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">objdump -t <span class="selector-tag">a</span>.o</div></pre></td></tr></table></figure>
+<p>可以得到如下结果</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">SYMBOL</span> <span class="selector-tag">TABLE</span>:</div><div class="line">0000000000000000 <span class="selector-tag">l</span>    <span class="selector-tag">df</span> *<span class="selector-tag">ABS</span>*	0000000000000000 <span class="selector-tag">a</span><span class="selector-class">.c</span></div><div class="line">0000000000000000 <span class="selector-tag">l</span>    <span class="selector-tag">d</span>  <span class="selector-class">.text</span>	0000000000000000 <span class="selector-class">.text</span></div><div class="line">0000000000000000 <span class="selector-tag">l</span>    <span class="selector-tag">d</span>  <span class="selector-class">.data</span>	0000000000000000 <span class="selector-class">.data</span></div><div class="line">0000000000000000 <span class="selector-tag">l</span>    <span class="selector-tag">d</span>  <span class="selector-class">.bss</span>	0000000000000000 <span class="selector-class">.bss</span></div><div class="line">0000000000000000 <span class="selector-tag">l</span>    <span class="selector-tag">d</span>  <span class="selector-class">.rodata</span>	0000000000000000 <span class="selector-class">.rodata</span></div><div class="line">0000000000000000 <span class="selector-tag">l</span>    <span class="selector-tag">d</span>  <span class="selector-class">.note</span><span class="selector-class">.GNU-stack</span>	0000000000000000 <span class="selector-class">.note</span><span class="selector-class">.GNU-stack</span></div><div class="line">0000000000000000 <span class="selector-tag">l</span>    <span class="selector-tag">d</span>  <span class="selector-class">.eh_frame</span>	0000000000000000 <span class="selector-class">.eh_frame</span></div><div class="line">0000000000000000 <span class="selector-tag">l</span>    <span class="selector-tag">d</span>  <span class="selector-class">.comment</span>	0000000000000000 <span class="selector-class">.comment</span></div><div class="line">0000000000000000 <span class="selector-tag">g</span>     <span class="selector-tag">F</span> <span class="selector-class">.text</span>	0000000000000010 <span class="selector-tag">funca</span></div><div class="line">0000000000000000         *<span class="selector-tag">UND</span>*	0000000000000000 <span class="selector-tag">puts</span></div></pre></td></tr></table></figure>
+<p>我们可以看到我们自己定义的函数funca<br>在查看下main.o</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">SYMBOL</span> <span class="selector-tag">TABLE</span>:</div><div class="line">0000000000000000 <span class="selector-tag">l</span>    <span class="selector-tag">df</span> *<span class="selector-tag">ABS</span>*	0000000000000000 <span class="selector-tag">main</span><span class="selector-class">.c</span></div><div class="line">0000000000000000 <span class="selector-tag">l</span>    <span class="selector-tag">d</span>  <span class="selector-class">.text</span>	0000000000000000 <span class="selector-class">.text</span></div><div class="line">0000000000000000 <span class="selector-tag">l</span>    <span class="selector-tag">d</span>  <span class="selector-class">.data</span>	0000000000000000 <span class="selector-class">.data</span></div><div class="line">0000000000000000 <span class="selector-tag">l</span>    <span class="selector-tag">d</span>  <span class="selector-class">.bss</span>	0000000000000000 <span class="selector-class">.bss</span></div><div class="line">0000000000000000 <span class="selector-tag">l</span>    <span class="selector-tag">d</span>  <span class="selector-class">.note</span><span class="selector-class">.GNU-stack</span>	0000000000000000 <span class="selector-class">.note</span><span class="selector-class">.GNU-stack</span></div><div class="line">0000000000000000 <span class="selector-tag">l</span>    <span class="selector-tag">d</span>  <span class="selector-class">.eh_frame</span>	0000000000000000 <span class="selector-class">.eh_frame</span></div><div class="line">0000000000000000 <span class="selector-tag">l</span>    <span class="selector-tag">d</span>  <span class="selector-class">.comment</span>	0000000000000000 <span class="selector-class">.comment</span></div><div class="line">0000000000000000 <span class="selector-tag">g</span>     <span class="selector-tag">F</span> <span class="selector-class">.text</span>	0000000000000015 <span class="selector-tag">main</span></div><div class="line">0000000000000000         *<span class="selector-tag">UND</span>*	0000000000000000 <span class="selector-tag">funca</span></div></pre></td></tr></table></figure>
+<p>main中有一个未定义的函数funca，虽然main.c这里并没有include “a.h” 但是这并不影响最后的连接 我们可以得到一个最终正确的应用程序。</p>
+<h2 id="比较-Case2"><a href="#比较-Case2" class="headerlink" title="比较 Case2"></a>比较 Case2</h2><p>修改main.c</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"a.c"</span></span></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</div><div class="line">	funca();</div><div class="line">	<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>在编译之后我们查看目标文件main.o，得到如下结果：</p>
+<figure class="highlight basic"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="symbol">0000000000000000 </span>l    df *<span class="keyword">ABS</span>*	<span class="number">0000000000000000</span> main.c</div><div class="line"><span class="symbol">0000000000000000 </span>l    d  .text	<span class="number">0000000000000000</span> .text</div><div class="line"><span class="symbol">0000000000000000 </span>l    d  .<span class="keyword">data</span>	<span class="number">0000000000000000</span> .<span class="keyword">data</span></div><div class="line"><span class="symbol">0000000000000000 </span>l    d  .bss	<span class="number">0000000000000000</span> .bss</div><div class="line"><span class="symbol">0000000000000000 </span>l    d  .rodata	<span class="number">0000000000000000</span> .rodata</div><div class="line"><span class="symbol">0000000000000000 </span>l    d  .note.GNU-stack	<span class="number">0000000000000000</span> .note.GNU-stack</div><div class="line"><span class="symbol">0000000000000000 </span>l    d  .eh_frame	<span class="number">0000000000000000</span> .eh_frame</div><div class="line"><span class="symbol">0000000000000000 </span>l    d  .comment	<span class="number">0000000000000000</span> .comment</div><div class="line"><span class="symbol">0000000000000000 </span>g     F .text	<span class="number">0000000000000010</span> funca</div><div class="line"><span class="symbol">0000000000000000 </span>        *UND*	<span class="number">0000000000000000</span> puts</div><div class="line"><span class="symbol">0000000000000010 </span>g     F .text	<span class="number">0000000000000015</span> main</div></pre></td></tr></table></figure>
+<p>可见a.c被简单的直接加入到了main.c中，所以这里的funca 不是一个UND函数（UND 意为 undefined，是找不到这个函数的定义，需要从其他目标文件中寻找）。如果直接<code>gcc -o main main.o</code>是可以直接得到一个正确的可执行文件的。</p>
+<h2 id="比较-Case3"><a href="#比较-Case3" class="headerlink" title="比较 Case3"></a>比较 Case3</h2><p>把a.h/c中的funca改为static，这样理论上这个函数是不能被其他文件所使用的</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"a.h"</span></span></div><div class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">funca</span><span class="params">()</span></span>&#123;</div><div class="line">	<span class="built_in">printf</span>(<span class="string">"Hello\n"</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>再重新编译获得main的目标文件，并查看：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">SYMBOL</span> <span class="selector-tag">TABLE</span>:</div><div class="line">0000000000000000 <span class="selector-tag">l</span>    <span class="selector-tag">df</span> *<span class="selector-tag">ABS</span>*	0000000000000000 <span class="selector-tag">main</span><span class="selector-class">.c</span></div><div class="line">0000000000000000 <span class="selector-tag">l</span>    <span class="selector-tag">d</span>  <span class="selector-class">.text</span>	0000000000000000 <span class="selector-class">.text</span></div><div class="line">0000000000000000 <span class="selector-tag">l</span>    <span class="selector-tag">d</span>  <span class="selector-class">.data</span>	0000000000000000 <span class="selector-class">.data</span></div><div class="line">0000000000000000 <span class="selector-tag">l</span>    <span class="selector-tag">d</span>  <span class="selector-class">.bss</span>	0000000000000000 <span class="selector-class">.bss</span></div><div class="line">0000000000000000 <span class="selector-tag">l</span>    <span class="selector-tag">d</span>  <span class="selector-class">.rodata</span>	0000000000000000 <span class="selector-class">.rodata</span></div><div class="line">0000000000000000 <span class="selector-tag">l</span>     <span class="selector-tag">F</span> <span class="selector-class">.text</span>	0000000000000010 <span class="selector-tag">funca</span></div><div class="line">0000000000000000 <span class="selector-tag">l</span>    <span class="selector-tag">d</span>  <span class="selector-class">.note</span><span class="selector-class">.GNU-stack</span>	0000000000000000 <span class="selector-class">.note</span><span class="selector-class">.GNU-stack</span></div><div class="line">0000000000000000 <span class="selector-tag">l</span>    <span class="selector-tag">d</span>  <span class="selector-class">.eh_frame</span>	0000000000000000 <span class="selector-class">.eh_frame</span></div><div class="line">0000000000000000 <span class="selector-tag">l</span>    <span class="selector-tag">d</span>  <span class="selector-class">.comment</span>	0000000000000000 <span class="selector-class">.comment</span></div><div class="line">0000000000000000         *<span class="selector-tag">UND</span>*	0000000000000000 <span class="selector-tag">puts</span></div><div class="line">0000000000000010 <span class="selector-tag">g</span>     <span class="selector-tag">F</span> <span class="selector-class">.text</span>	0000000000000015 <span class="selector-tag">main</span></div></pre></td></tr></table></figure>
+<p>可见我们依然可以正确的得到funca的定义。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ul>
+<li>1.正常函数的声明，默认就为extern</li>
+<li>2.static只是针对不同模块间链接的时候有效，并不是以前经常所说的其他文件中，应该叫其他目标文件中。</li>
+<li>3.实际上#include和静态链接两者是互通的，或者说作用及其相似，至少以我现在的经验来看，而且他们生成的最终文件大小是相同的。大概静态链接的方法更适合代码的管理吧。</li>
+<li>4.所有未被定义的函数和变量在编译时都会被标记为UND，在之后的连接过程中来进行连接，<code>#include</code>和gcc时候用<code>-I folder/header</code> 似乎是有同样的效果的，另外前置声明也可以达到同样效果</li>
+<li>5.<code>-L</code> 告诉编译器动态库位置</li>
+</ul>
+
+          
         
       
     </div>
@@ -1108,7 +1335,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://matthewgao.github.io/2013-11-7-ipfix/">
+  <link itemprop="mainEntityOfPage" href="http://gaoshen.site/2013-11-7-ipfix/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="Matthew Gao">
@@ -1171,6 +1398,10 @@
           
 
           
+              <div class="post-description">
+                  最近研究了一下IPFIX（IP Flow Information Export），把自己的经验留下来，以备以后复习使用。也供他人参考(尚未完成)
+              </div>
+          
 
         </div>
       </header>
@@ -1184,14 +1415,14 @@
 
       
         
-          最近研究了一下IPFIX（IP Flow Information Export），把自己的经验留下来，以备以后复习使用。也供他人参考(尚未完成)
-          <!--noindex-->
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2013-11-7-ipfix/">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
+          
+            <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>Internet Protocol Flow Information Export (IPFIX)是一个IETF标准协议，他是用来标准化输出IP流的一个格式，可以用在网络监控，审计，管理等多个方面，方便的分析网络上数据流的情况，它在设置QoS 策略、部署应用和进行容量规划上都有着巨大的价值。他定义了一个标准的传输格式，IPFIX的格式是以思科的NetFlow v9为基础的，可以使IP流从一个exporter传输到collector上去。</p>
+<h2 id="术语"><a href="#术语" class="headerlink" title="术语"></a>术语</h2><ul>
+<li>IE: Information Element</li>
+<li>Template &amp; TemplateID</li>
+</ul>
+<h2 id="To-Be-Continue"><a href="#To-Be-Continue" class="headerlink" title="(To Be Continue)"></a>(To Be Continue)</h2>
+          
         
       
     </div>
@@ -1476,11 +1707,6 @@
     })();
   </script>
 
-  
-    
-    
-    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
-    <script src="/js/src/hook-duoshuo.js"></script>
   
 
 

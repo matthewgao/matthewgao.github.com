@@ -88,7 +88,7 @@
 
 <meta property="og:type" content="website">
 <meta property="og:title" content="Matthew Note">
-<meta property="og:url" content="http://matthewgao.github.io/page/3/index.html">
+<meta property="og:url" content="http://gaoshen.site/page/3/index.html">
 <meta property="og:site_name" content="Matthew Note">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Matthew Note">
@@ -119,7 +119,7 @@
 
 
 
-  <link rel="canonical" href="http://matthewgao.github.io/page/3/"/>
+  <link rel="canonical" href="http://gaoshen.site/page/3/"/>
 
 
 
@@ -268,7 +268,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://matthewgao.github.io/docker/">
+  <link itemprop="mainEntityOfPage" href="http://gaoshen.site/docker/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="Matthew Gao">
@@ -331,6 +331,10 @@
           
 
           
+              <div class="post-description">
+                  Docker Note
+              </div>
+          
 
         </div>
       </header>
@@ -344,14 +348,27 @@
 
       
         
-          Docker Note
-          <!--noindex-->
-          <div class="post-more-link text-center">
-            <a class="btn" href="/docker/">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
+          
+            <h2 id="Docker-vs-Vagrant"><a href="#Docker-vs-Vagrant" class="headerlink" title="Docker vs Vagrant"></a>Docker vs Vagrant</h2><p>为了解决固件编译环境的种种问题，我们尝试了使用vagrant来创建一个编译环境的镜像，但是vagrant基于VM的实现导致了对于宿主机的要求很高，同时编译多个release耗费相当多的系统资源，并且严重拖慢编译速度。</p>
+<p>所以我考虑用Docker来替代vagrant，Docker提供了足够的隔离，所以可以像一个虚拟机一样运行，但是非常轻且高效，能满足所有编译环境的需求。</p>
+<h2 id="Build-RBE-Image"><a href="#Build-RBE-Image" class="headerlink" title="Build RBE Image"></a>Build RBE Image</h2><figure class="highlight clean"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"># Build a docker image</div><div class="line">    `mkdir docker-builder &amp;&amp; cd docker-builder`</div><div class="line">    `rsync -av this_Dockerfile .`</div><div class="line">    `docker build -t release_name .`</div></pre></td></tr></table></figure>
+<h2 id="Run-It"><a href="#Run-It" class="headerlink" title="Run It"></a>Run It</h2><figure class="highlight applescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># Run this docker image</span></div><div class="line">    `docker <span class="built_in">run</span> -itd -v tip_on_host:tip_on_container /bin/bash`</div><div class="line"></div><div class="line"><span class="comment"># Access to the console</span></div><div class="line">    `docker attach &lt;CID <span class="keyword">or</span> <span class="built_in">name</span>&gt;` <span class="keyword">or</span> `docker exec -<span class="keyword">it</span> &lt;CID <span class="keyword">or</span> <span class="built_in">name</span>&gt;`</div></pre></td></tr></table></figure>
+<h2 id="Util"><a href="#Util" class="headerlink" title="Util"></a>Util</h2><figure class="highlight clean"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"># How to get the CID or name</div><div class="line">    `docker ps`</div><div class="line"></div><div class="line"># List all the image which avaiable <span class="keyword">in</span> your host</div><div class="line">    `docker images`</div></pre></td></tr></table></figure>
+<h2 id="Dockerfile"><a href="#Dockerfile" class="headerlink" title="Dockerfile"></a>Dockerfile</h2><h3 id="FROM"><a href="#FROM" class="headerlink" title="FROM"></a>FROM</h3><p>指定base image</p>
+<h3 id="MAINTAINER"><a href="#MAINTAINER" class="headerlink" title="MAINTAINER"></a>MAINTAINER</h3><p>Author信息</p>
+<h3 id="LABEL"><a href="#LABEL" class="headerlink" title="LABEL"></a>LABEL</h3><p>描述性的，不重要</p>
+<h3 id="RUN"><a href="#RUN" class="headerlink" title="RUN"></a>RUN</h3><p>运行一些命令</p>
+<h3 id="CMD"><a href="#CMD" class="headerlink" title="CMD"></a>CMD</h3><p>每个container时候启动的，只能有一个</p>
+<h3 id="ENV"><a href="#ENV" class="headerlink" title="ENV"></a>ENV</h3><p>设置环境变量</p>
+<h2 id="Attach-or-Exec"><a href="#Attach-or-Exec" class="headerlink" title="Attach or Exec"></a>Attach or Exec</h2><p>我们有两种方式来attach到container的TTY</p>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">docker attach &lt;CID <span class="keyword">or</span> <span class="built_in">name</span>&gt;</div><div class="line">docker exec -<span class="keyword">it</span> &lt;CID&gt;</div></pre></td></tr></table></figure>
+<p>Attach会有个问题是如果从container中exit，那么container会被结束，而exec不会，但是exec每次执行会返回一个exit code，因为他是stdout到了stdin来得到tty结果的</p>
+<h2 id="配置文件"><a href="#配置文件" class="headerlink" title="配置文件"></a>配置文件</h2><p><code>/etc/default/docker</code>管理docker所有启动的配置</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">echo <span class="string">'DOCKER_OPTS="-b=bridge0"'</span> <span class="meta">&gt;&gt; </span>/etc/default/docker</div></pre></td></tr></table></figure>
+<h2 id="网络"><a href="#网络" class="headerlink" title="网络"></a>网络</h2><p>docker的网络依赖于一个linux网桥<code>docker0</code>， 所以你也可以使用自己建立的网桥来处理docker container之间的网络</p>
+<h2 id="存储"><a href="#存储" class="headerlink" title="存储"></a>存储</h2><p>docker支持建立数据容器，那么正常的容易可以通过<code>--volume-from</code>挂载数据容器</p>
+
+          
         
       
     </div>
@@ -388,7 +405,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://matthewgao.github.io/python-notes/">
+  <link itemprop="mainEntityOfPage" href="http://gaoshen.site/python-notes/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="Matthew Gao">
@@ -451,6 +468,10 @@
           
 
           
+              <div class="post-description">
+                  Python 相关笔记
+              </div>
+          
 
         </div>
       </header>
@@ -464,14 +485,231 @@
 
       
         
-          Python 相关笔记
-          <!--noindex-->
-          <div class="post-more-link text-center">
-            <a class="btn" href="/python-notes/">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
+          
+            <h2 id="Pypi镜像"><a href="#Pypi镜像" class="headerlink" title="Pypi镜像"></a>Pypi镜像</h2><p>解决国内访问pypi速度慢的问题，注意要加上<code>--trusted-host pypi.mirrors.ustc.edu.cn</code> 因为有些不提供安全连接，或者证书不可信</p>
+<figure class="highlight dts"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="symbol">http:</span><span class="comment">//pypi.douban.com/simple  豆瓣</span></div><div class="line"><span class="symbol">http:</span><span class="comment">//pypi.hustunique.com/simple  华中理工大学</span></div><div class="line"><span class="symbol">http:</span><span class="comment">//pypi.sdutlinux.org/simple 山东理工大学</span></div><div class="line"><span class="symbol">http:</span><span class="comment">//pypi.mirrors.ustc.edu.cn/simple 中国科学技术大学</span></div></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pip3.4 <span class="keyword">install</span> -i <span class="keyword">http</span>://pypi.mirrors.ustc.edu.cn/simple <span class="comment">--trusted-host pypi.mirrors.ustc.edu.cn  flask-restful</span></div></pre></td></tr></table></figure>
+<h2 id="模块"><a href="#模块" class="headerlink" title="模块"></a>模块</h2><h3 id="from-import"><a href="#from-import" class="headerlink" title="from import"></a>from import</h3><ul>
+<li>如果module1中有变量X，module2用from来导入module1，则在赋值X的时候并不会改动module1中的X，而用import可以。</li>
+<li>from会导致reload失效，因为from导入的模块拿的只是一个被reload的引用，必须在reload之后再执行一次from import</li>
+</ul>
+<h2 id="类"><a href="#类" class="headerlink" title="类"></a>类</h2><ul>
+<li>子类并不会自动调用父类的构造函数，需要显示的调用。</li>
+<li>类的赋值操作并不会查询搜索树。</li>
+<li><strong>init</strong> 函数不支持重载，因为python支持可变参数</li>
+<li>两个下划线开头的是伪私有类属性, 他会变成_ClassName__X</li>
+</ul>
+<h3 id="内建属性"><a href="#内建属性" class="headerlink" title="内建属性"></a>内建属性</h3><figure class="highlight clean"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">__class__ # 返回类名</div><div class="line">__base__ # 父类</div><div class="line">__dict__ # 属性字典，dir()</div><div class="line">__slot__ # 禁止生成dict树</div><div class="line">__getattr__ # X.undefined</div><div class="line">__getattribute__ # X.any</div><div class="line">__contain__ # item <span class="keyword">in</span> X</div><div class="line">__call__ # 可以直接这样使用 class_object_name()</div></pre></td></tr></table></figure>
+<h3 id="委托"><a href="#委托" class="headerlink" title="委托"></a>委托</h3><figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Super</span>:</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">delegate</span><span class="params">(<span class="keyword">self</span>)</span></span>:</div><div class="line">        <span class="keyword">self</span>.action() <span class="comment">#action需要被实现</span></div><div class="line">        </div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Provider</span>(<span class="title">Super</span>):</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">action</span><span class="params">(<span class="keyword">self</span>)</span></span>:</div><div class="line">        print(<span class="string">'in provider.action'</span>)</div></pre></td></tr></table></figure>
+<h2 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h2><h3 id="闭包"><a href="#闭包" class="headerlink" title="闭包"></a>闭包</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span><span class="params">()</span>:</span></div><div class="line">    _x = <span class="string">"attr"</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">printf</span><span class="params">()</span>:</span></div><div class="line">        print(_x)</div><div class="line">    <span class="keyword">return</span> printf</div></pre></td></tr></table></figure>
+<h2 id="Decorator"><a href="#Decorator" class="headerlink" title="Decorator"></a>Decorator</h2><h3 id="Singleton"><a href="#Singleton" class="headerlink" title="Singleton"></a>Singleton</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">singleton</span><span class="params">(cls, *args, **kw)</span>:</span>   </div><div class="line">    _instance = &#123;&#125; </div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">wrapper</span><span class="params">()</span>:</span> </div><div class="line">        <span class="keyword">if</span> cls <span class="keyword">not</span> <span class="keyword">in</span> _instance:   </div><div class="line">            _instance[cls] = cls(*args, **kw)   </div><div class="line">        <span class="keyword">return</span> _instance[cls]      </div><div class="line">    <span class="keyword">return</span> wrapper                 </div><div class="line"></div><div class="line"><span class="meta">@singleton </span></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyClass</span><span class="params">(gentoo.LXRPClientHandler)</span>:</span></div></pre></td></tr></table></figure>
+<ul>
+<li>缺点是MyClass实际上是一个函数（wrapper），所以不能直接通过MyClass取类中属性</li>
+<li><p>且<code>m = MyClass(); n = MyClass(); o = type(n)(); then m == n &amp;&amp; m != o &amp;&amp; n != o</code></p>
+</li>
+<li><p><code>@staticmethod</code>不需要表示自身对象的self和自身类的cls参数，就跟使用函数一样。</p>
+</li>
+<li><code>@classmethod</code>也不需要self参数，但第一个参数需要是表示自身类的cls参数。</li>
+</ul>
+<h2 id="规范"><a href="#规范" class="headerlink" title="规范"></a>规范</h2><h3 id="命名规则"><a href="#命名规则" class="headerlink" title="命名规则"></a>命名规则</h3><table>
+<thead>
+<tr>
+<th style="text-align:center">Type</th>
+<th style="text-align:center">Public</th>
+<th style="text-align:center">Internal</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">Modules</td>
+<td style="text-align:center">lower_with_under</td>
+<td style="text-align:center">_lower_with_under</td>
+</tr>
+<tr>
+<td style="text-align:center">Packages</td>
+<td style="text-align:center">lower_with_under</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">Classes</td>
+<td style="text-align:center">CapWords</td>
+<td style="text-align:center">_CapWords</td>
+</tr>
+<tr>
+<td style="text-align:center">Exceptions</td>
+<td style="text-align:center">CapWords</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">Functions</td>
+<td style="text-align:center">lower_with_under()</td>
+<td style="text-align:center">_lower_with_under()</td>
+</tr>
+<tr>
+<td style="text-align:center">Global/Class Constants</td>
+<td style="text-align:center">CAPS_WITH_UNDER</td>
+<td style="text-align:center">_CAPS_WITH_UNDER</td>
+</tr>
+<tr>
+<td style="text-align:center">Global/Class Variables</td>
+<td style="text-align:center">lower_with_under</td>
+<td style="text-align:center">_lower_with_under</td>
+</tr>
+<tr>
+<td style="text-align:center">Instance Variables</td>
+<td style="text-align:center">lower_with_under</td>
+<td style="text-align:center">_lower_with_under (protected) or __lower_with_under (private)</td>
+</tr>
+<tr>
+<td style="text-align:center">Method Names</td>
+<td style="text-align:center">lower_with_under()</td>
+<td style="text-align:center">_lower_with_under() (protected) or __lower_with_under() (private)</td>
+</tr>
+<tr>
+<td style="text-align:center">Function/Method Parameters</td>
+<td style="text-align:center">lower_with_under</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">Local Variables</td>
+<td style="text-align:center">lower_with_under</td>
+</tr>
+</tbody>
+</table>
+<ol>
+<li><code>single_trailing_underscore_</code> : used by convention to avoid conflicts with Python keyword, e.g.</li>
+</ol>
+<figure class="highlight ceylon"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Tkinter.Toplevel(master, <span class="keyword">class</span><span class="number">_</span>=<span class="string">'ClassName'</span>)</div></pre></td></tr></table></figure>
+<ol>
+<li><p><code>__double_leading_underscore</code> : when naming a class attribute, invokes name mangling (inside class FooBar, <strong>boo becomes _FooBar</strong>boo).</p>
+</li>
+<li><p><code>__double_leading_and_trailing_underscore__</code> : “magic” objects or attributes that live in user-controlled namespaces. E.g. <strong>init</strong> , <strong>import</strong> or <strong>file</strong> . Never invent such names; only use them as documented.</p>
+</li>
+<li><p><code>_single_leading_underscore</code> : weak “internal use” indicator. E.g. from M import * does not import objects whose name starts with an underscore.</p>
+</li>
+</ol>
+<h3 id="编程规范"><a href="#编程规范" class="headerlink" title="编程规范"></a>编程规范</h3><ul>
+<li>每行80字符，注释72字符</li>
+<li>参数多的时候要换行，少数情况下要用<code>\</code></li>
+<li>使用 <code>if not alist</code> 检查是否为空，而不是用<code>if len(alist) == 0</code></li>
+</ul>
+<h3 id="import顺序"><a href="#import顺序" class="headerlink" title="import顺序"></a>import顺序</h3><p>不要一行import多个包</p>
+<p>Imports should be grouped in the following order:</p>
+<ol>
+<li>standard library imports</li>
+<li>related third party imports</li>
+<li>local application/library specific imports</li>
+<li>Wildcard imports ( from <module> import * ) should be avoided</module></li>
+</ol>
+<h3 id="类设计"><a href="#类设计" class="headerlink" title="类设计"></a>类设计</h3><p>如果在不确定函数或者属性是public还是non-public，尽量还是先声明为non-public，从non到public很容易，反过来则很难</p>
+<h3 id="Programming-Recommendations"><a href="#Programming-Recommendations" class="headerlink" title="Programming Recommendations"></a>Programming Recommendations</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">Yes:</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">f</span><span class="params">(x)</span>:</span> <span class="keyword">return</span> <span class="number">2</span>*x</div><div class="line"></div><div class="line">No:</div><div class="line"></div><div class="line">f = <span class="keyword">lambda</span> x: <span class="number">2</span>*x</div></pre></td></tr></table></figure>
+<p>The first form means that the name of the resulting function object is specifically ‘f’ instead of the generic ‘<lambda>‘. This is more useful for tracebacks and string representations in general. The use of the assignment statement eliminates the sole benefit a lambda expression can offer over an explicit def statement (i.e. that it can be embedded inside a larger expression)</lambda></p>
+<ul>
+<li>Use exception chaining appropriately. In Python 3, “raise X from Y” should be used to indicate explicit replacement without losing the original traceback.</li>
+<li>Derive exceptions from Exception rather than BaseException . Direct inheritance from BaseException is reserved for exceptions where catching them is almost always the wrong thing to do.</li>
+<li>Additionally, for all try/except clauses, limit the try clause to the absolute minimum amount of code necessary. Again, this avoids masking bugs.</li>
+</ul>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">Yes:</div><div class="line"></div><div class="line"><span class="keyword">try</span>:</div><div class="line">    value = collection[key]</div><div class="line">except KeyError:</div><div class="line">    <span class="keyword">return</span> key_not_found(key)</div><div class="line"><span class="keyword">else</span>:</div><div class="line">    <span class="keyword">return</span> handle_value(value)</div><div class="line">No:</div><div class="line"></div><div class="line"><span class="keyword">try</span>:</div><div class="line">    # Too broad!</div><div class="line">    <span class="keyword">return</span> handle_value(collection[key])</div><div class="line">except KeyError:</div><div class="line">    # Will also <span class="keyword">catch</span> KeyError raised <span class="keyword">by</span> handle_value()</div><div class="line">    <span class="keyword">return</span> key_not_found(key)</div></pre></td></tr></table></figure>
+<ul>
+<li>Object type comparisons should always use isinstance() instead of comparing types directly.</li>
+</ul>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="attribute">Yes</span>: if isinstance(obj, int):</div><div class="line"></div><div class="line"><span class="elm"><span class="type">No</span>:  <span class="keyword">if</span> <span class="keyword">type</span>(obj) is <span class="keyword">type</span>(1):</span></div></pre></td></tr></table></figure>
+<ul>
+<li>For sequences, (strings, lists, tuples), use the fact that empty sequences are false.</li>
+</ul>
+<figure class="highlight nimrod"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="type">Yes</span>: <span class="keyword">if</span> <span class="keyword">not</span> <span class="built_in">seq</span>:</div><div class="line">     <span class="keyword">if</span> <span class="built_in">seq</span>:</div><div class="line"></div><div class="line"><span class="type">No</span>: <span class="keyword">if</span> len(<span class="built_in">seq</span>)</div><div class="line">    <span class="keyword">if</span> <span class="keyword">not</span> len(<span class="built_in">seq</span>)</div></pre></td></tr></table></figure>
+<ul>
+<li>Don’t compare boolean values to True or False using == .</li>
+</ul>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="string">Yes:</span>   <span class="keyword">if</span> <span class="string">greeting:</span></div><div class="line"><span class="string">No:</span>    <span class="keyword">if</span> greeting == <span class="string">True:</span></div><div class="line"><span class="string">Worse:</span> <span class="keyword">if</span> greeting is <span class="string">True:</span></div></pre></td></tr></table></figure>
+<h2 id="Class-继承"><a href="#Class-继承" class="headerlink" title="Class 继承"></a>Class 继承</h2><p>当一个类被设计为基类的时候，要考虑到那些方法是要被子类覆盖的，那些是给子类用的（subclass API），那些只是基类用的</p>
+<ul>
+<li>公共属性，前面不应该有一个下划线</li>
+<li>如果你的属性名与keyword或者其他什么的冲突，则可以考虑在尾部加一个下划线</li>
+<li>对于简单的公共属性，直接用属性名访问，而不要像jave一样定义一些accessor/mutator methods，如果之后需要对于这个属性进行额外处理， 那么可以使用<code>@property</code>来强化这个属性（防止用property来计算复杂属性）</li>
+<li>如果你的类可能被继承，则把那些不想被子类使用的属性和方法用两个下划线开头</li>
+</ul>
+<h3 id="super-还是-BaseClass"><a href="#super-还是-BaseClass" class="headerlink" title="super() 还是 BaseClass()"></a>super() 还是 BaseClass()</h3><figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Base</span>:</span></div><div class="line">    name = <span class="string">"Base"</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(<span class="keyword">self</span>)</span></span><span class="symbol">:pass</span></div><div class="line">    </div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Sub</span>(<span class="title">Base</span>):</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(<span class="keyword">self</span>)</span></span>:</div><div class="line">        <span class="comment">#Base.__init__(self)</span></div><div class="line">        <span class="keyword">super</span>().__init_<span class="number">_</span>()</div></pre></td></tr></table></figure>
+<p>这两种方法都可以用作调用父类初始化函数，但是super()更好，不会在菱形继承中导致一些重复初始化的问题</p>
+<p>为了弄清它的原理，我们需要花点时间解释下Python是如何实现继承的。对于你定义的每一个类而已，Python会计算出一个所谓的方法解析顺序(MRO)列表。 这个MRO列表就是一个简单的所有基类的线性顺序表。例如：</p>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">C.__mro__</div><div class="line">(&lt;<span class="keyword">class</span> <span class="string">'__main__.C'</span>&gt;, &lt;<span class="keyword">class</span> <span class="string">'__main__.A'</span>&gt;, &lt;<span class="keyword">class</span> <span class="string">'__main__.B'</span>&gt;,</div><div class="line">&lt;<span class="keyword">class</span> <span class="string">'__main__.Base'</span>&gt;, &lt;<span class="keyword">class</span> <span class="string">'object'</span>&gt;)</div></pre></td></tr></table></figure>
+<p>为了实现继承，Python会在MRO列表上从左到右开始查找基类，直到找到第一个匹配这个属性的类为止。</p>
+<p>而这个MRO列表的构造是通过一个C3线性化算法来实现的。 我们不去深究这个算法的数学原理，它实际上就是合并所有父类的MRO列表并遵循如下三条准则：</p>
+<ul>
+<li>子类会先于父类被检查</li>
+<li>多个父类会根据它们在列表中的顺序被检查</li>
+<li>如果对下一个类存在两个合法的选择，选择第一个父类</li>
+</ul>
+<p>当你使用 <code>super()</code> 函数时，Python会在MRO列表上继续搜索下一个类。 只要每个重定义的方法统一使用 <code>super()</code> 并只调用它一次， 那么控制流最终会遍历完整个MRO列表，每个方法也只会被调用一次。 </p>
+<p>我们来看下super的实现，可以发现他在找这个列表里后一个class</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">super</span><span class="params">(cls, inst)</span></span>:</div><div class="line">    mro = inst.__class__mro()</div><div class="line">    <span class="keyword">return</span> mro[mro.index(cls)+<span class="number">1</span>]</div></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Base</span>:</span></div><div class="line">    name = <span class="string">"Base"</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span><span class="keyword">pass</span></div><div class="line"></div><div class="line">a = Base()</div><div class="line">print(a.name)</div><div class="line">a.name = <span class="string">"Base c"</span></div><div class="line">print(a.name)</div><div class="line">print(Base.name)</div><div class="line">print(<span class="string">'--------'</span>)</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Sub</span><span class="params">(Base)</span>:</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></div><div class="line">        Base.__init__(self)</div><div class="line">    </div><div class="line"><span class="meta">    @property</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">name</span><span class="params">(self)</span>:</span></div><div class="line">        print(<span class="string">'property name'</span>)</div><div class="line">        print(Base.name)</div><div class="line">        Base.name = <span class="string">'abc'</span></div><div class="line">        print(super(Sub,self).name)</div><div class="line"></div><div class="line">b = Sub()</div><div class="line">b.name</div><div class="line">print(b.__dict__)</div><div class="line">print(Base.name)</div><div class="line">print(<span class="string">'--------'</span>)</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Sub2</span><span class="params">(Sub)</span>:</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></div><div class="line">        Base.__init__(self)</div><div class="line">        print(super(Sub, self).name)</div><div class="line"></div><div class="line">c = Sub2()</div><div class="line">c.name</div><div class="line">print(c.__class__.mro())</div></pre></td></tr></table></figure>
+<p>结果是：<br><figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">Base</div><div class="line">Base c</div><div class="line"><span class="section">Base</span></div><div class="line">--------</div><div class="line">property name</div><div class="line">Base</div><div class="line">abc</div><div class="line">&#123;&#125;</div><div class="line"><span class="section">abc</span></div><div class="line">--------</div><div class="line">abc</div><div class="line">property name</div><div class="line">abc</div><div class="line">abc</div><div class="line"><span class="meta">[&lt;class '__main__.Sub2'&gt;, &lt;class '__main__.Sub'&gt;, &lt;class '__main__.Base'&gt;, &lt;class 'object'&gt;]</span></div></pre></td></tr></table></figure></p>
+<h2 id="weakref"><a href="#weakref" class="headerlink" title="weakref"></a>weakref</h2><p>List和Dict不支持weakref，但是他们的子类可以</p>
+<h2 id="Unicode"><a href="#Unicode" class="headerlink" title="Unicode"></a>Unicode</h2><p>为了解决多国语言的问题，ASCII显然已经不适合，他是用一个字节代表一个字符，这远远不够世界各种语言使用，Unicode是一个更大的集合，他包含了ASCII，因此他是一个变长的编码方式<br>我们有两种方式来声明一个str</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="attr">str</span> = ‘abcd’ # 这是一个str</div><div class="line"><span class="attr">uni</span> = u‘Hi \u2119\u2602’ # 这是一个unicode类型</div></pre></td></tr></table></figure>
+<ul>
+<li><code>unicode.encode(‘UTF-8’) -&gt; bytes</code></li>
+<li><code>bytes.decode(‘UTF-8’) -&gt; unicode</code></li>
+</ul>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="string">u'abcd'</span>.encode(<span class="string">'ascii'</span>, <span class="string">'replace'</span>) <span class="comment">#不能被encode就会变成一个`?`</span></div><div class="line"><span class="string">u'abcd'</span>.encode(<span class="string">'ascii'</span>, <span class="string">'xmlcharrefreplace'</span>) <span class="comment">#produces an HTML/XML character entity reference</span></div><div class="line"><span class="string">u'abcd'</span>.encode(<span class="string">'ascii'</span>, <span class="string">'ignore'</span>) <span class="comment">#ignore</span></div></pre></td></tr></table></figure>
+<ul>
+<li>Python 2 will automatically decode the byte string to produce a second unicode string, then will complete the operation with the two unicode strings.</li>
+<li>So “str” in Python 2 is now called “bytes,” and “unicode” in Python 2 is now called “str”. This makes more sense than the Python 2 names, since Unicode is how you want all text stored, and byte strings are only for when you are dealing with bytes.<br>[Pragmatic Unicode][<a href="http://nedbatchelder.com/text/unipain.html" target="_blank" rel="external">http://nedbatchelder.com/text/unipain.html</a>]</li>
+</ul>
+<h2 id="元类"><a href="#元类" class="headerlink" title="元类"></a>元类</h2><p>type是所有类的元类(<strong>metaclass</strong>)</p>
+<h2 id="TIP"><a href="#TIP" class="headerlink" title="TIP"></a>TIP</h2><h3 id="in"><a href="#in" class="headerlink" title="in"></a>in</h3><p><code>if elem in alist</code> 用来检查元素是否在列表里，但是注意这里的elem必须是一个元素，不能是alist列表中的一个子集，他是不能够检查子集的。</p>
+<h3 id="yeild"><a href="#yeild" class="headerlink" title="yeild"></a>yeild</h3><p>generator可以包含一个return语句，但是他会导致generator不再能返回任何结果，而且return不能有返回值，<code>return 5</code>会报一个syntax error</p>
+<h3 id="占位符"><a href="#占位符" class="headerlink" title="_ 占位符"></a>_ 占位符</h3><p>可以像Haskell一样有个占位符<code>_</code> 来表示不关心的内容</p>
+<h2 id="Flask"><a href="#Flask" class="headerlink" title="Flask"></a>Flask</h2><h3 id="获得message-body"><a href="#获得message-body" class="headerlink" title="获得message body"></a>获得message body</h3><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">request<span class="selector-class">.form</span></div><div class="line">request<span class="selector-class">.json</span></div><div class="line">request.headers</div></pre></td></tr></table></figure>
+<h2 id="Functional-programming"><a href="#Functional-programming" class="headerlink" title="Functional programming"></a>Functional programming</h2><h3 id="generator-expression-and-list-comprehensions"><a href="#generator-expression-and-list-comprehensions" class="headerlink" title="generator expression and list comprehensions"></a>generator expression and list comprehensions</h3><figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># Generator expression -- returns iterator</span></div><div class="line">stripped_iter = (<span class="built_in">line</span>.strip() <span class="keyword">for</span> <span class="built_in">line</span> <span class="keyword">in</span> line_list)</div><div class="line"></div><div class="line"><span class="comment"># List comprehension -- returns list</span></div><div class="line">stripped_list = [<span class="built_in">line</span>.strip() <span class="keyword">for</span> <span class="built_in">line</span> <span class="keyword">in</span> line_list]</div></pre></td></tr></table></figure>
+<p>List comprehension 会一次性返回所有的值，而generator expression返回一个可迭代的对象，他不会一次性返回所有值，只会根据需要获取，适合处理无限长度的数据。</p>
+<h3 id="Passing-values-into-a-generator"><a href="#Passing-values-into-a-generator" class="headerlink" title="Passing values into a generator"></a>Passing values into a generator</h3><p>In Python 2.4 and earlier, generators only produced output. Once a generator’s code was invoked to create an iterator, there was no way to pass any new information into the function when its execution is resumed. You could hack together this ability by making the generator look at a global variable or by passing in some mutable object that callers then modify, but these approaches are messy.<br>In Python 2.5 there’s a simple way to pass values into a generator. yield became an expression, returning a value that can be assigned to a variable or otherwise operated on:</p>
+<figure class="highlight fsharp"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">val</span> = (<span class="keyword">yield</span> i)</div></pre></td></tr></table></figure>
+<p>I recommend that you always put parentheses around a yield expression when you’re doing something with the returned value, as in the above example. The parentheses aren’t always necessary, but it’s easier to always add them instead of having to remember when they’re needed.</p>
+<p>(PEP 342 explains the exact rules, which are that a yield-expression must always be parenthesized except when it occurs at the top-level expression on the right-hand side of an assignment. This means you can write val = yield i but have to use parentheses when there’s an operation, as in val = (yield i) + 12.)</p>
+<p>Values are sent into a generator by calling its send(value) method. This method resumes the generator’s code and the yield expression returns the specified value. If the regular next() method is called, the yield returns None.</p>
+<p>Here’s a simple counter that increments by 1 and allows changing the value of the internal counter.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">counter</span> <span class="params">(maximum)</span>:</span></div><div class="line">    i = <span class="number">0</span></div><div class="line">    <span class="keyword">while</span> i &lt; maximum:</div><div class="line">        val = (<span class="keyword">yield</span> i)</div><div class="line">        <span class="comment"># If value provided, change counter</span></div><div class="line">        <span class="keyword">if</span> val <span class="keyword">is</span> <span class="keyword">not</span> <span class="keyword">None</span>:</div><div class="line">            i = val</div><div class="line">        <span class="keyword">else</span>:</div><div class="line">            i += <span class="number">1</span></div></pre></td></tr></table></figure>
+<p>And here’s an example of changing the counter:</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&gt;&gt;</span>&gt;</div><div class="line">&gt;&gt;&gt; it = counter(<span class="number">10</span>)</div><div class="line"><span class="meta">&gt;&gt;</span>&gt; print it.next()</div><div class="line"><span class="number">0</span></div><div class="line"><span class="meta">&gt;&gt;</span>&gt; print it.next()</div><div class="line"><span class="number">1</span></div><div class="line"><span class="meta">&gt;&gt;</span>&gt; print it.send(<span class="number">8</span>)</div><div class="line"><span class="number">8</span></div><div class="line"><span class="meta">&gt;&gt;</span>&gt; print it.next()</div><div class="line"><span class="number">9</span></div><div class="line"><span class="meta">&gt;&gt;</span>&gt; print it.next()</div><div class="line">Traceback (most recent call last):</div><div class="line">  File <span class="string">"t.py"</span>, line <span class="number">15</span>, <span class="keyword">in</span> ?</div><div class="line">    print it.<span class="keyword">next</span>()</div><div class="line">StopIteration</div></pre></td></tr></table></figure>
+<p>Because yield will often be returning None, you should always check for this case. Don’t just use its value in expressions unless you’re sure that the send() method will be the only method used to resume your generator function.</p>
+<p>In addition to send(), there are two other new methods on generators:</p>
+<ul>
+<li><p>throw(type, value=None, traceback=None) is used to raise an exception inside the generator; the exception is raised by the yield expression where the generator’s execution is paused.</p>
+</li>
+<li><p>close() raises a GeneratorExit exception inside the generator to terminate the iteration. On receiving this exception, the generator’s code must either raise GeneratorExit or StopIteration; catching the exception and doing anything else is illegal and will trigger a RuntimeError. close() will also be called by Python’s garbage collector when the generator is garbage-collected.</p>
+</li>
+</ul>
+<p>If you need to run cleanup code when a GeneratorExit occurs, I suggest using a try: … finally: suite instead of catching GeneratorExit.</p>
+<p>The cumulative effect of these changes is to turn generators from one-way producers of information into both producers and consumers.</p>
+<p>Generators also become coroutines, a more generalized form of subroutines. Subroutines are entered at one point and exited at another point (the top of the function, and a return statement), but coroutines can be entered, exited, and resumed at many different points (the yield statements).</p>
+<h2 id="getattr"><a href="#getattr" class="headerlink" title="getattr"></a>getattr</h2><ul>
+<li>getattr(object, name[, default])<br>Return the value of the named attribute of object. name must be a string. If the string is the name of one of the object’s attributes, the result is the value of that attribute. For example, <code>getattr(x, &#39;foobar&#39;)</code> is equivalent to <code>x.foobar</code>. If the named attribute does not exist, default is returned if provided, otherwise AttributeError is raised.</li>
+</ul>
+<h2 id="class-type-object"><a href="#class-type-object" class="headerlink" title="class type(object)"></a>class type(object)</h2><ul>
+<li>class type(object)</li>
+<li>class type(name, bases, dict)<br>With one argument, return the type of an object. The return value is a type object and generally the same object as returned by object.<strong>class</strong>.</li>
+</ul>
+<p>The isinstance() built-in function is recommended for testing the type of an object, because it takes subclasses into account.</p>
+<p>With three arguments, return a new type object. This is essentially a dynamic form of the class statement. The name string is the class name and becomes the <strong>name</strong> attribute; the bases tuple itemizes the base classes and becomes the <strong>bases</strong> attribute; and the dict dictionary is the namespace containing definitions for class body and becomes the <strong>dict</strong> attribute. For example, the following two statements create identical type objects:</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&gt;&gt;</span>&gt;</div><div class="line">&gt;&gt;&gt; <span class="class"><span class="keyword">class</span> <span class="title">X</span>:</span></div><div class="line">...     a = <span class="number">1</span></div><div class="line">...</div><div class="line"><span class="meta">&gt;&gt;</span>&gt; X = type(<span class="string">'X'</span>, (object,), dict(a=<span class="number">1</span>))</div></pre></td></tr></table></figure>
+<h2 id="monkey-patch"><a href="#monkey-patch" class="headerlink" title="monkey patch"></a>monkey patch</h2><p>monkey patch指的是在运行时动态替换,一般是在startup的时候.</p>
+<p>用过gevent就会知道,会在最开头的地方gevent.monkey.patch_all();把标准库中的thread/socket等给替换掉.这样我们在后面使用socket的时候可以跟平常一样使用,无需修改任何代码,但是它变成非阻塞的了. 之前做的一个游戏服务器,很多地方用的import json,后来发现ujson比自带json快了N倍,于是问题来了,难道几十个文件要一个个把import json改成import ujson as json吗? 其实只需要在进程startup的地方monkey patch就行了.是影响整个进程空间的.</p>
+<p>同一进程空间中一个module只会被运行一次.<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> json</div><div class="line"><span class="keyword">import</span> ujson</div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">monkey_patch_json</span><span class="params">()</span>:</span></div><div class="line">  json.__name__ = <span class="string">'ujson'</span></div><div class="line">  json.dumps = ujson.dumps</div><div class="line">  json.loads = ujson.loads</div><div class="line"></div><div class="line">monkey_patch_json()</div><div class="line"><span class="keyword">print</span> <span class="string">'main.py'</span>,json.__name__</div><div class="line"><span class="keyword">import</span> sub</div></pre></td></tr></table></figure></p>
+<p>sub.py<br><figure class="highlight arduino"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> json</div><div class="line"><span class="built_in">print</span> <span class="string">'sub.py'</span>,json.__name__</div></pre></td></tr></table></figure></p>
+<h2 id="with"><a href="#with" class="headerlink" title="with"></a>with</h2><p>如下情况 with一旦结束，那么as后面的对象就会被清除，即便是赋值给了c.response，那只是一个引用，除非用deepcopy<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">with urllib<span class="selector-class">.request</span><span class="selector-class">.urlopen</span>(c<span class="selector-class">.request</span>, context=context) as response:</div><div class="line">    c<span class="selector-class">.response</span> = response</div><div class="line">    return c</div><div class="line"></div><div class="line">#print(c<span class="selector-class">.response</span><span class="selector-class">.read</span>())</div><div class="line"><span class="selector-id">#return</span> c</div></pre></td></tr></table></figure></p>
+<h2 id="pdb"><a href="#pdb" class="headerlink" title="pdb"></a>pdb</h2><p>可以通过代用<code>set_trace()</code>来设置一个断点，然后运行的时候就会自动进入pdb，然后就可以调试啦<br><figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">import inspect</div><div class="line">import pdb</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">a</span>:<span class="title">pass</span></span></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">b</span>(<span class="title">a</span>):</span></div><div class="line">    <span class="class"><span class="keyword">class</span> <span class="title">c</span>(<span class="title">a</span>):</span></div><div class="line">        <span class="function"><span class="keyword">def</span> <span class="title">hell</span><span class="params">(<span class="keyword">self</span>)</span></span>:</div><div class="line">            print(inspect.getmodule(<span class="keyword">self</span>))</div><div class="line">        <span class="function"><span class="keyword">def</span> <span class="title">guess</span><span class="params">(<span class="keyword">self</span>)</span></span>:</div><div class="line">            <span class="keyword">self</span>.hell()</div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__call__</span><span class="params">(<span class="keyword">self</span>)</span></span>:</div><div class="line">        cc = <span class="keyword">self</span>.c()</div><div class="line">        pdb.set_trace()</div><div class="line">        cc.guess()</div><div class="line"></div><div class="line">cc()</div></pre></td></tr></table></figure></p>
+<h2 id="函数式编程"><a href="#函数式编程" class="headerlink" title="函数式编程"></a>函数式编程</h2><h3 id="map"><a href="#map" class="headerlink" title="map"></a>map</h3><p>从python3开始map变得lazy，如果你不主动调用next或者使用它 它是不会马上返回结果的，跟Haskell一样</p>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">class</span> Test：</div><div class="line">	def __init__(self, <span class="keyword">string</span>)</div><div class="line">		<span class="built_in">print</span>(<span class="keyword">string</span>)</div><div class="line">		</div><div class="line">x = <span class="built_in">map</span>(Test, [<span class="string">'ggg'</span>,<span class="string">'rrr'</span>]) <span class="comment">//return only a map object</span></div><div class="line"></div><div class="line">x.next()</div><div class="line">list(x)<span class="comment">// will get a result.</span></div></pre></td></tr></table></figure>
+<h2 id="TIP-1"><a href="#TIP-1" class="headerlink" title="TIP"></a>TIP</h2><h3 id="OrderedDict-move-to-end-key-last-False"><a href="#OrderedDict-move-to-end-key-last-False" class="headerlink" title="OrderedDict.move_to_end(key, last=False)"></a>OrderedDict.move_to_end(key, last=False)</h3><p>这种方式并不能用于排序，在把某个元素放到最后的同时也会改变其他元素的顺序</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">x=OrderedDict(&#123;<span class="string">'a'</span>:<span class="number">1</span>,<span class="string">'b'</span>:<span class="number">2</span>,<span class="string">'c'</span>:<span class="number">3</span>&#125;)</div><div class="line">x.move_to_end(<span class="string">'a'</span>)</div><div class="line"><span class="function"><span class="title">print</span><span class="params">(x)</span></span></div><div class="line">&gt;&gt;OrderedDict([(<span class="string">'c'</span>, <span class="number">3</span>), (<span class="string">'b'</span>, <span class="number">2</span>), (<span class="string">'a'</span>, <span class="number">1</span>)])</div></pre></td></tr></table></figure>
+<h3 id="raise-new-exc-from-original-exc"><a href="#raise-new-exc-from-original-exc" class="headerlink" title="raise new_exc from original_exc"></a>raise new_exc from original_exc</h3><p>When raising a new exception (rather than using a bare raise to re-raise the exception currently being handled), the implicit exception context can be supplemented with an explicit cause by using from with raise:</p>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ol>
+<li><a href="https://www.python.org/dev/peps/pep-0008/" target="_blank" rel="external">PEP 0008 – Style Guide for Python Code</a></li>
+</ol>
+
+          
         
       
     </div>
@@ -508,7 +746,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://matthewgao.github.io/sublime-and-its-plugin/">
+  <link itemprop="mainEntityOfPage" href="http://gaoshen.site/sublime-and-its-plugin/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="Matthew Gao">
@@ -571,6 +809,10 @@
           
 
           
+              <div class="post-description">
+                  Sublime Hot key & How to write a Sublime plugin
+              </div>
+          
 
         </div>
       </header>
@@ -584,14 +826,31 @@
 
       
         
-          Sublime Hot key & How to write a Sublime plugin
-          <!--noindex-->
-          <div class="post-more-link text-center">
-            <a class="btn" href="/sublime-and-its-plugin/">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
+          
+            <h2 id="没记住的快捷键"><a href="#没记住的快捷键" class="headerlink" title="没记住的快捷键"></a>没记住的快捷键</h2><ul>
+<li>Ctrl+G 跳转到相应的行</li>
+<li>Ctrl+J 合并行（已选择需要合并的多行时）</li>
+<li>Ctrl+L 选择整行（按住-继续选择下行）</li>
+<li>Shift+鼠标右键（或使用鼠标中键）可以用鼠标进行竖向多行选择</li>
+<li>Ctrl+Shift+L 鼠标选中多行（按下快捷键），即可同时编辑这些行</li>
+<li>Ctrl+T 词互换</li>
+<li>Ctrl+U 软撤销</li>
+<li>Ctrl+Y 恢复撤销</li>
+<li>Ctrl+K Backspace 从光标处删除至行首</li>
+<li><em>Ctrl+Shift+K 删除整行</em></li>
+<li>Ctrl+K+B 开启/关闭侧边栏</li>
+<li><em>Ctrl+KK 从光标处删除至行尾</em></li>
+<li>Ctrl+K+U 改为大写</li>
+<li>Ctrl+K+L 改为小写</li>
+<li>Ctrl+Tab 当前窗口中的标签页切换</li>
+<li>Shift+F2 上一个书签</li>
+<li>F2 下一个书签</li>
+<li>Ctrl+F2 设置/取消书签</li>
+<li><em>Ctrl+Shift+↑可以移动此行代码，与上行互换</em></li>
+<li><em>Ctrl+Shift+↓可以移动此行代码，与下行互换</em></li>
+</ul>
+<h2 id="来写一个插件"><a href="#来写一个插件" class="headerlink" title="来写一个插件"></a>来写一个插件</h2><figure class="highlight vim"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div></pre></td><td class="code"><pre><div class="line">import sublime, sublime_plugin</div><div class="line">import datetime</div><div class="line"></div><div class="line">class FileHeaderCreatorCommand(sublime_plugin.TextCommand):</div><div class="line"></div><div class="line">    def run(self, <span class="keyword">edit</span>):</div><div class="line">        # <span class="keyword">print</span>(self.<span class="keyword">view</span>.settings().<span class="built_in">get</span>(<span class="string">"author"</span>))</div><div class="line">        <span class="keyword">if</span> self.<span class="keyword">view</span>.size() == <span class="number">0</span>:</div><div class="line">            self.check_file_type(<span class="keyword">edit</span>)</div><div class="line"></div><div class="line">    def check_file_type(self, <span class="keyword">edit</span>):</div><div class="line">        file_path = self.<span class="keyword">view</span>.file_name()</div><div class="line">        pos = file_path.rfind(<span class="string">'.'</span>)</div><div class="line">        <span class="keyword">if</span> pos == -<span class="number">1</span>:</div><div class="line">            <span class="keyword">return</span></div><div class="line">        suffix = file_path[pos+<span class="number">1</span>:]</div><div class="line"></div><div class="line">        token = <span class="string">'/'</span></div><div class="line">        <span class="keyword">if</span> sublime.platform() == <span class="string">'windows'</span>:</div><div class="line">            token = <span class="string">'\\'</span></div><div class="line">        file_name_pos = file_path.rfind(token)</div><div class="line">        <span class="keyword">if</span> file_name_pos == -<span class="number">1</span>:</div><div class="line">            <span class="keyword">return</span></div><div class="line">        file_name = file_path[file_name_pos+<span class="number">1</span>:]</div><div class="line"></div><div class="line">        header = <span class="string">''</span></div><div class="line">        <span class="keyword">if</span> suffix == <span class="string">'py'</span>:</div><div class="line">            header = self._python(file_name)</div><div class="line">        elif suffix == <span class="string">'cpp'</span>:</div><div class="line">            header = self._cpp(file_name)</div><div class="line">        elif suffix == <span class="string">'h'</span>:</div><div class="line">            header = self._h(file_name)</div><div class="line">        elif suffix == <span class="string">'hs'</span>:</div><div class="line">            header = self._haskell(file_name)</div><div class="line"></div><div class="line">        self.<span class="keyword">view</span>.<span class="keyword">insert</span>(<span class="keyword">edit</span>, <span class="number">0</span>, header)</div><div class="line"></div><div class="line">    def _h(self, name):</div><div class="line">        author = self.<span class="keyword">view</span>.settings().<span class="built_in">get</span>(<span class="string">"author"</span>)</div><div class="line">        <span class="keyword">if</span> author <span class="keyword">is</span> None:</div><div class="line">            author = <span class="string">"Anonymous"</span></div><div class="line"></div><div class="line">        company = self.<span class="keyword">view</span>.settings().<span class="built_in">get</span>(<span class="string">"company"</span>)</div><div class="line">        <span class="keyword">if</span> company <span class="keyword">is</span> None:</div><div class="line">            company = <span class="string">"Anonymous"</span></div><div class="line"></div><div class="line">        <span class="built_in">string</span> = <span class="string">"/*\n"</span></div><div class="line">        <span class="built_in">string</span> += <span class="string">" * "</span> + name + <span class="string">"\n"</span></div><div class="line">        <span class="built_in">string</span> += <span class="string">" * Created By: "</span> + author + <span class="string">"\n"</span></div><div class="line">        <span class="built_in">string</span> += <span class="string">" * "</span> + company + <span class="string">"\n"</span></div><div class="line">        <span class="built_in">string</span> += <span class="string">" * Created Time: "</span> + datetime.date.today().isoformat() + <span class="string">"\n"</span></div><div class="line">        <span class="built_in">string</span> += <span class="string">" */\n"</span></div><div class="line">        <span class="built_in">string</span> += <span class="string">"#ifndef _"</span> + name.replace(<span class="string">'.'</span>, <span class="string">'_'</span>).upper() + <span class="string">"\n"</span></div><div class="line">        <span class="built_in">string</span> += <span class="string">"#define _"</span> + name.replace(<span class="string">'.'</span>, <span class="string">'_'</span>).upper() + <span class="string">"\n\n\n"</span></div><div class="line">        <span class="built_in">string</span> += <span class="string">"#endif"</span></div><div class="line">        <span class="keyword">return</span> <span class="built_in">string</span></div><div class="line">    </div><div class="line">    def _python(self, name):</div><div class="line">        author = self.<span class="keyword">view</span>.settings().<span class="built_in">get</span>(<span class="string">"author"</span>)</div><div class="line">        <span class="keyword">if</span> author <span class="keyword">is</span> None:</div><div class="line">            author = <span class="string">"Anonymous"</span></div><div class="line">        <span class="built_in">string</span> = <span class="string">"#!/usr/bin/env python3\n"</span></div><div class="line">        <span class="built_in">string</span> += <span class="string">"# coding=utf-8\n"</span></div><div class="line">        <span class="built_in">string</span> += <span class="string">"# Created Time: "</span> + datetime.date.today().isoformat() + <span class="string">"\n\n"</span></div><div class="line">        <span class="built_in">string</span> += <span class="string">"__author__ = "</span> + <span class="string">"\'"</span> + author + <span class="string">"\'"</span></div><div class="line">        </div><div class="line">        <span class="keyword">return</span> <span class="built_in">string</span></div><div class="line"></div><div class="line">    def _cpp(self, name):</div><div class="line">        author = self.<span class="keyword">view</span>.settings().<span class="built_in">get</span>(<span class="string">"author"</span>)</div><div class="line">        <span class="keyword">if</span> author <span class="keyword">is</span> None:</div><div class="line">            author = <span class="string">"Anonymous"</span></div><div class="line"></div><div class="line">        company = self.<span class="keyword">view</span>.settings().<span class="built_in">get</span>(<span class="string">"company"</span>)</div><div class="line">        <span class="keyword">if</span> company <span class="keyword">is</span> None:</div><div class="line">            company = <span class="string">"Anonymous"</span></div><div class="line">            </div><div class="line">        <span class="built_in">string</span> = <span class="string">"/*\n"</span></div><div class="line">        <span class="built_in">string</span> += <span class="string">" * "</span> + name + <span class="string">"\n"</span></div><div class="line">        <span class="built_in">string</span> += <span class="string">" * Created By: "</span> + author + <span class="string">"\n"</span></div><div class="line">        <span class="built_in">string</span> += <span class="string">" * "</span> + company + <span class="string">"\n"</span></div><div class="line">        <span class="built_in">string</span> += <span class="string">" * Created Time: "</span> + datetime.date.today().isoformat() + <span class="string">"\n"</span></div><div class="line">        <span class="built_in">string</span> += <span class="string">" */\n"</span></div><div class="line">        <span class="keyword">return</span> <span class="built_in">string</span></div><div class="line"></div><div class="line">    def _haskell(self, name):</div><div class="line">        pass</div><div class="line"></div><div class="line"></div><div class="line">class FileHeaderCreator(sublime_plugin.EventListener):</div><div class="line">    def on_load(self, <span class="keyword">view</span>):</div><div class="line">        <span class="keyword">print</span>(<span class="string">"FileHeaderCreator on_load invoked"</span>)</div><div class="line">        <span class="keyword">view</span>.run_command(<span class="string">"file_header_creator"</span>)</div><div class="line"></div><div class="line">    def on_post_save(self, <span class="keyword">view</span>):</div><div class="line">        <span class="keyword">print</span>(<span class="string">"FileHeaderCreator on_post_save invoked"</span>)</div><div class="line">        <span class="keyword">view</span>.run_command(<span class="string">"file_header_creator"</span>)</div></pre></td></tr></table></figure>
+          
         
       
     </div>
@@ -628,7 +887,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://matthewgao.github.io/2014-9-26-makefile/">
+  <link itemprop="mainEntityOfPage" href="http://gaoshen.site/2014-9-26-makefile/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="Matthew Gao">
@@ -691,6 +950,10 @@
           
 
           
+              <div class="post-description">
+                  Makefile 学习笔记
+              </div>
+          
 
         </div>
       </header>
@@ -704,14 +967,34 @@
 
       
         
-          Makefile 学习笔记
-          <!--noindex-->
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2014-9-26-makefile/">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
+          
+            <h2 id="样板"><a href="#样板" class="headerlink" title="样板"></a>样板</h2><figure class="highlight elixir"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">CC=g++ -g </div><div class="line">LPTHREAD= -lpthread</div><div class="line">TARGET=main</div><div class="line">OBJS=ThreadPool.o \</div><div class="line">	 main.o</div><div class="line"></div><div class="line">all : <span class="variable">$(</span>TARGET)</div><div class="line">	echo <span class="string">"ALL Done"</span></div><div class="line"><span class="comment">#$^ 会一次返回所有结果</span></div><div class="line"><span class="comment">#$&lt; 一次返回一个结果</span></div><div class="line"><span class="variable">$(</span>TARGET) : <span class="variable">$(</span>OBJS)</div><div class="line">	<span class="variable">$(</span>CC) <span class="variable">$(</span>LPTHREAD) -o <span class="variable">$@</span>  <span class="variable">$^</span></div><div class="line"></div><div class="line">%.o : %.cpp</div><div class="line">	<span class="variable">$(</span>CC) -c <span class="variable">$&lt;</span> -o <span class="variable">$@</span></div><div class="line"></div><div class="line"><span class="comment">#这部分可以保证对头文件的依赖性，不然会导致头文件更新，对应的</span></div><div class="line"><span class="comment">#cpp没有被更新的情况</span></div><div class="line">%.dep : %.cpp</div><div class="line">	<span class="variable">$(</span>CC) -M <span class="variable">$&lt;</span> &gt; <span class="variable">$@</span> <span class="variable">$(</span>BOOST_LIB)</div><div class="line"></div><div class="line"><span class="keyword">include</span> <span class="variable">$(</span><span class="symbol">OBJS:</span>.o=.dep)</div><div class="line"><span class="keyword">include</span> <span class="variable">$(</span><span class="symbol">TEST_OBJS:</span>.o=.dep)</div><div class="line">	</div><div class="line">	</div><div class="line"><span class="symbol">clean:</span></div><div class="line">	rm -f *.o main</div><div class="line">	echo <span class="string">"Remove Done"</span></div></pre></td></tr></table></figure>
+<h2 id="在make中有四种方式对变量赋值："><a href="#在make中有四种方式对变量赋值：" class="headerlink" title="在make中有四种方式对变量赋值："></a>在make中有四种方式对变量赋值：</h2><h3 id="运算符"><a href="#运算符" class="headerlink" title=":=运算符"></a><code>:=</code>运算符</h3><p>如<code>MAKE_DEPEND := $(CC) -M</code> 这种方式叫做“简单展开”，因为在读到makefile中的这一行时等号右边就立即被展开了， 等号右边引用的所有变量（如例子中的CC）也会被立即展开。其行为与一般编程和脚本语言相同。当等号右边引用的变量（如例子中的CC）还没有被定义时，它被展开成空（nothing）而不是空格之类。</p>
+<h3 id="运算符-1"><a href="#运算符-1" class="headerlink" title="=运算符"></a><code>=</code>运算符</h3><p>如<code>MAKE_DEPEND = $(CC) -M</code> 这种方式叫做“递归展开”，直到该变量被使用时等号右边的内容才会被展开，其实叫做“迟滞展开”更合适。神奇的是，这种展开方式可以不按顺序定义变量。比如：</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">MAKE_DEPEND = <span class="variable">$(CC)</span> -M</div><div class="line">...</div><div class="line"><span class="comment"># Some time later</span></div><div class="line">CC = gcc</div></pre></td></tr></table></figure>
+<p>只要在此之前没有引用过MAKE_DEPEND就没问题。另外，不止是“迟滞展开”，事实上每次使用该变量，等号右边的内容都会被重新展开。</p>
+<h3 id="运算符-2"><a href="#运算符-2" class="headerlink" title="?=运算符"></a><code>?=</code>运算符</h3><p>如<code>OUTPUT_DIR ?= $(PROJECT_DIR)/out</code> 这种方式叫“条件展开”，只有当OUTPUT_DIR 还没有被定义过时才进行赋值，否则什么都不做。这种方式在处理环境变量是特别有用。</p>
+<h3 id="运算符-3"><a href="#运算符-3" class="headerlink" title="+=运算符"></a><code>+=</code>运算符</h3><p>如<code>OUTPUT_DIR += $(PROJECT_DIR)/out</code> “追加”方式。 其主要目的是给“递归展开”的变量追加内容。因为简单变量可以用<code>simple := $(simple) new stuff</code>的方式来追加内容；而对于递归展开的变量，<code>recursive = $(recursive) new stuff</code>会导致循环引用。这种情况只能用<code>+=</code>运算符。 </p>
+<h3 id="Pattern模式"><a href="#Pattern模式" class="headerlink" title="Pattern模式"></a>Pattern模式</h3><p>模式中的%大体上等效于shell中的*星号，他可以代表任意多个字符，不过模式中只能出现一次。</p>
+<h2 id=""><a href="#" class="headerlink" title="$$"></a><code>$$</code></h2><p>Because dollar signs are used to start make variable references, if you really want a dollar sign in a target or prerequisite you must write two of them, ‘$$’ (see How to Use Variables). If you have enabled secondary expansion (see Secondary Expansion) and you want a literal dollar sign in the prerequisites list, you must actually write four dollar signs (‘$$$$’).</p>
+<h2 id="define"><a href="#define" class="headerlink" title="define"></a>define</h2><p>还有一种设置变量值的方法是使用define关键字。使用define关键字设置变量的值可以有换行，这有利于定义一系列的命令（前面我们讲过“命令包”的技术就是利用这个关键字）。</p>
+<p>define指示符后面跟的是变量的名字，而重起一行定义变量的值，定义是以endef关键字结束。其工作方式和“=”操作符一样。变量的值可以包含函数、命令、文字，或是其它变量。因为命令需要以[Tab]键开头，所以如果你用define定义的命令变量中没有以[Tab]键开头，那么make就不会把其认为是命令。</p>
+<p>下面的这个示例展示了define的用法：</p>
+<figure class="highlight puppet"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">define</span> <span class="section">two</span>-lines</div><div class="line">echo foo</div><div class="line">echo $(bar)</div><div class="line">endef</div></pre></td></tr></table></figure>
+<h2 id="origin-function"><a href="#origin-function" class="headerlink" title="origin function"></a>origin function</h2><p>The origin function is unlike most other functions in that it does not operate on the values of variables; it tells you something about a variable. Specifically, it tells you where it came from.</p>
+<p>The syntax of the origin function is:</p>
+<p>$(origin variable)<br>Note that variable is the name of a variable to inquire about, not a reference to that variable. Therefore you would not normally use a ‘$’ or parentheses when writing it. (You can, however, use a variable reference in the name if you want the name not to be a constant.)</p>
+<p>The result of this function is a string telling you how the variable variable was defined:</p>
+<p>‘undefined’<br>if variable was never defined.</p>
+<p>‘default’<br>if variable has a default definition, as is usual with CC and so on. See Variables Used by Implicit Rules. Note that if you have redefined a default variable, the origin function will return the origin of the later definition.</p>
+<p>‘environment’<br>if variable was inherited from the environment provided to make.</p>
+<p>‘environment override’<br>if variable was inherited from the environment provided to make, and is overriding a setting for variable in the makefile as a result of the ‘-e’ option (see Summary of Options).</p>
+<p>‘file’<br>if variable was defined in a makefile.</p>
+<p>‘command line’<br>if variable was defined on the command line.</p>
+<p>‘override’<br>if variable was defined with an override directive in a makefile (see The override Directive).</p>
+<p>‘automatic’<br>if variable is an automatic variable defined for the execution of the recipe for each rule (see Automatic Variables).</p>
+
+          
         
       
     </div>
@@ -748,7 +1031,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://matthewgao.github.io/NodeJS/">
+  <link itemprop="mainEntityOfPage" href="http://gaoshen.site/NodeJS/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="Matthew Gao">
@@ -811,6 +1094,10 @@
           
 
           
+              <div class="post-description">
+                  NodeJS Note
+              </div>
+          
 
         </div>
       </header>
@@ -824,14 +1111,22 @@
 
       
         
-          NodeJS Note
-          <!--noindex-->
-          <div class="post-more-link text-center">
-            <a class="btn" href="/NodeJS/">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
+          
+            <h2 id="Unit-test"><a href="#Unit-test" class="headerlink" title="Unit test"></a>Unit test</h2><h3 id="mocha"><a href="#mocha" class="headerlink" title="mocha"></a>mocha</h3><ul>
+<li>describe可以嵌套</li>
+<li>it不能嵌套</li>
+</ul>
+<h4 id="时序"><a href="#时序" class="headerlink" title="时序"></a>时序</h4><ul>
+<li>describe里地it的非异步部分按它们定义的顺序执行，它们所触发的回调的注册顺序也遵从it的注册顺序</li>
+<li>不被describe包裹的部分执行顺序的优先级最高</li>
+<li>同一层次的describe执行顺序遵从它们的定义顺序</li>
+<li>外层describe的所有it执行优先级高于嵌套的describe</li>
+<li>describe内所有函数全部是non-block的，所以不能再其中指望以顺序的方式传递变量什么的</li>
+</ul>
+<h4 id="处理异步单元测试"><a href="#处理异步单元测试" class="headerlink" title="处理异步单元测试"></a>处理异步单元测试</h4><p>尤其在需要发出请求，处理返回的时候，由于NodeJs是全异步的，所以describe不会捕捉到返回结果，所以需要在it的callback中给一个done，并在异步调用结束后调用<code>done()</code></p>
+<p>同时它的几个hook也接受使用done的异步调用。</p>
+
+          
         
       
     </div>
@@ -868,7 +1163,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://matthewgao.github.io/nodejs-promise-issue/">
+  <link itemprop="mainEntityOfPage" href="http://gaoshen.site/nodejs-promise-issue/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="Matthew Gao">
@@ -931,6 +1226,10 @@
           
 
           
+              <div class="post-description">
+                  在读《深入浅出NodeJS》的时候发现的一个小问题
+              </div>
+          
 
         </div>
       </header>
@@ -944,14 +1243,23 @@
 
       
         
-          在读《深入浅出NodeJS》的时候发现的一个小问题
-          <!--noindex-->
-          <div class="post-more-link text-center">
-            <a class="btn" href="/nodejs-promise-issue/">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
+          
+            <h2 id="描述"><a href="#描述" class="headerlink" title="描述"></a>描述</h2><hr>
+<p>在《深入浅出NodeJS》一书中的第四章，给出了一个promise/deferred的一个简单实现，但是读来读去总觉得有些问题，所以拿来作者的代码做了个实验</p>
+<ul>
+<li>[Code in Github][<a href="https://github.com/JacksonTian/diveintonode_examples/tree/master/04/promise_a" target="_blank" rel="external">https://github.com/JacksonTian/diveintonode_examples/tree/master/04/promise_a</a>]</li>
+</ul>
+<h2 id="实验代码"><a href="#实验代码" class="headerlink" title="实验代码"></a>实验代码</h2><hr>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> util = <span class="built_in">require</span>(<span class="string">"util"</span>);</div><div class="line"><span class="keyword">var</span> http = <span class="built_in">require</span>(<span class="string">"http"</span>);</div><div class="line"></div><div class="line"><span class="keyword">var</span> EventEmitter = <span class="built_in">require</span>(<span class="string">'events'</span>).EventEmitter;</div><div class="line"></div><div class="line"><span class="keyword">var</span> Deferred = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="keyword">this</span>.state = <span class="string">'unfulfilled'</span>;</div><div class="line">  <span class="keyword">this</span>.promise = <span class="keyword">new</span> <span class="built_in">Promise</span>();</div><div class="line">&#125;;</div><div class="line"></div><div class="line">Deferred.prototype.resolve = <span class="function"><span class="keyword">function</span> (<span class="params">obj</span>) </span>&#123;</div><div class="line">  <span class="keyword">this</span>.state = <span class="string">'fulfilled'</span>;</div><div class="line">  <span class="keyword">this</span>.promise.emit(<span class="string">'success'</span>, obj);</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">"emit success"</span>);</div><div class="line">&#125;;</div><div class="line"></div><div class="line">Deferred.prototype.reject = <span class="function"><span class="keyword">function</span> (<span class="params">err</span>) </span>&#123;</div><div class="line">  <span class="keyword">this</span>.state = <span class="string">'failed'</span>;</div><div class="line">  <span class="keyword">this</span>.promise.emit(<span class="string">'error'</span>, err);</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">"emit error"</span>);</div><div class="line">&#125;;</div><div class="line"></div><div class="line">Deferred.prototype.progress = <span class="function"><span class="keyword">function</span> (<span class="params">data</span>) </span>&#123;</div><div class="line">  <span class="keyword">this</span>.promise.emit(<span class="string">'progress'</span>, data);</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">"emit progress"</span>);</div><div class="line">&#125;;</div><div class="line"></div><div class="line">Deferred.prototype.all = <span class="function"><span class="keyword">function</span> (<span class="params">promises</span>) </span>&#123;</div><div class="line">  <span class="keyword">var</span> count = promises.length;</div><div class="line">  <span class="keyword">var</span> that = <span class="keyword">this</span>;</div><div class="line">  promises.forEach(<span class="function"><span class="keyword">function</span> (<span class="params">promise</span>) </span>&#123;</div><div class="line">    promise.then(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">      count--;</div><div class="line">      <span class="keyword">if</span> (count === <span class="number">0</span>) &#123;</div><div class="line">        that.resolve();</div><div class="line">      &#125;</div><div class="line">    &#125;, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">      that.reject();</div><div class="line">    &#125;);</div><div class="line">  &#125;);</div><div class="line">  <span class="keyword">return</span> <span class="keyword">this</span>.promise;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="keyword">var</span> <span class="built_in">Promise</span> = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">  EventEmitter.call(<span class="keyword">this</span>);</div><div class="line">&#125;;</div><div class="line">util.inherits(<span class="built_in">Promise</span>, EventEmitter);</div><div class="line"></div><div class="line"><span class="built_in">Promise</span>.prototype.then = <span class="function"><span class="keyword">function</span> (<span class="params">fulfilledHandler, errorHandler, progressHandler</span>) </span>&#123;</div><div class="line">  <span class="keyword">if</span> (<span class="keyword">typeof</span> fulfilledHandler === <span class="string">'function'</span>) &#123;</div><div class="line">    <span class="comment">// 利用once方法，保证成功回调只执行一次</span></div><div class="line">    <span class="keyword">this</span>.once(<span class="string">'success'</span>, fulfilledHandler);</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">"register success"</span>);</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">if</span> (<span class="keyword">typeof</span> errorHandler === <span class="string">'function'</span>) &#123;</div><div class="line">    <span class="comment">// 利用once方法，保证异常回调只执行一次</span></div><div class="line">    <span class="keyword">this</span>.once(<span class="string">'error'</span>, errorHandler);</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">"register error"</span>);</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">if</span> (<span class="keyword">typeof</span> progressHandler === <span class="string">'function'</span>) &#123;</div><div class="line">    <span class="keyword">this</span>.on(<span class="string">'progress'</span>, progressHandler);</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">"register progress"</span>);</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> <span class="keyword">this</span>;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">var</span> client = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">    <span class="keyword">var</span> options = &#123;</div><div class="line">        <span class="attr">hostname</span>:<span class="string">'103.249.252.29'</span>,</div><div class="line">        <span class="attr">port</span>:<span class="number">80</span>,</div><div class="line">        <span class="attr">path</span>:<span class="string">'/'</span>,</div><div class="line">        <span class="attr">method</span>: <span class="string">'get'</span></div><div class="line">    &#125;;</div><div class="line">    <span class="keyword">var</span> deferred = <span class="keyword">new</span> Deferred();</div><div class="line">    <span class="keyword">var</span> req = http.request(options, <span class="function"><span class="keyword">function</span>(<span class="params">res</span>)</span>&#123;</div><div class="line">        res.setEncoding(<span class="string">'utf-8'</span>);</div><div class="line">        <span class="keyword">var</span> data = <span class="string">''</span>;</div><div class="line">        <span class="built_in">console</span>.log(<span class="string">"callback called"</span>);</div><div class="line">        <span class="comment">//必须consume这个data不然会一直保持下去，直到内存满了，所以可以晚点注册这个</span></div><div class="line">        <span class="comment">//callback</span></div><div class="line">        res.on(<span class="string">'data'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">chunk</span>)</span>&#123;</div><div class="line">            data += chunk;</div><div class="line">            <span class="built_in">console</span>.log(<span class="string">"res.on('data')"</span>);</div><div class="line">            deferred.progress(chunk);</div><div class="line">        &#125;);</div><div class="line">        res.on(<span class="string">'end'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">            <span class="built_in">console</span>.log(<span class="string">"res.on('end')"</span>);</div><div class="line">            deferred.resolve(data);</div><div class="line">        &#125;);</div><div class="line">    &#125;);</div><div class="line">    req.on(<span class="string">'error'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">err</span>)</span>&#123;</div><div class="line">        deferred.reject(err);</div><div class="line">    &#125;)</div><div class="line">    req.end();</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">"request sended"</span>);</div><div class="line">    <span class="keyword">return</span> deferred.promise;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">var</span> c = client();</div><div class="line"><span class="built_in">console</span>.log(<span class="string">"Going to call then1"</span>);</div><div class="line"><span class="comment">// c.then1(function(data)&#123;</span></div><div class="line"><span class="comment">//     // console.log('请求完成', data);</span></div><div class="line"><span class="comment">//     console.log('请求完成');</span></div><div class="line"><span class="comment">// &#125;, function(err)&#123;</span></div><div class="line"><span class="comment">//     console.log('访问错误', err);</span></div><div class="line"><span class="comment">// &#125;, function(chunk)&#123;</span></div><div class="line"><span class="comment">//     // console.log('正在读取', chunk);</span></div><div class="line"><span class="comment">//     console.log('正在读取');</span></div><div class="line"><span class="comment">// &#125;);</span></div><div class="line"></div><div class="line">setTimeout(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">    c.then(<span class="function"><span class="keyword">function</span>(<span class="params">data</span>)</span>&#123;</div><div class="line">        <span class="comment">//console.log('请求完成', data);</span></div><div class="line">        <span class="built_in">console</span>.log(<span class="string">'请求完成'</span>);</div><div class="line">    &#125;, <span class="function"><span class="keyword">function</span>(<span class="params">err</span>)</span>&#123;</div><div class="line">        <span class="built_in">console</span>.log(<span class="string">'访问错误'</span>, err);</div><div class="line">    &#125;, <span class="function"><span class="keyword">function</span>(<span class="params">chunk</span>)</span>&#123;</div><div class="line">        <span class="comment">//console.log('正在读取', chunk);</span></div><div class="line">        <span class="built_in">console</span>.log(<span class="string">'正在读取'</span>);</div><div class="line">    &#125;);</div><div class="line">&#125;, <span class="number">10</span>);</div></pre></td></tr></table></figure>
+<p>如果我们在最后setTimeout中设置10ms之后执行，那么then函数注册的三个callback可以正常处理response，结果如下</p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">request sended</div><div class="line">Going <span class="keyword">to</span> <span class="keyword">call</span> then1</div><div class="line">register success</div><div class="line">register error</div><div class="line">register progress</div><div class="line">callback called</div><div class="line"><span class="keyword">res</span>.<span class="keyword">on</span>(<span class="string">'data'</span>)</div><div class="line">正在读取</div><div class="line">emit progress</div><div class="line"><span class="keyword">res</span>.<span class="keyword">on</span>(<span class="string">'data'</span>)</div><div class="line">正在读取</div><div class="line">emit progress</div><div class="line"><span class="keyword">res</span>.<span class="keyword">on</span>(<span class="string">'data'</span>)</div><div class="line">正在读取</div><div class="line">emit progress</div><div class="line"><span class="keyword">res</span>.<span class="keyword">on</span>(<span class="string">'end'</span>)</div><div class="line">请求完成</div><div class="line">emit success</div></pre></td></tr></table></figure>
+<p>可以看出register callback发生在emit之前，这大概是网络IO速度比较慢造成的，那我们加大setTimeout延迟的时间到1000ms</p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">request sended</div><div class="line">Going <span class="keyword">to</span> <span class="keyword">call</span> then1</div><div class="line">callback called</div><div class="line"><span class="keyword">res</span>.<span class="keyword">on</span>(<span class="string">'data'</span>)</div><div class="line">emit progress</div><div class="line"><span class="keyword">res</span>.<span class="keyword">on</span>(<span class="string">'data'</span>)</div><div class="line">emit progress</div><div class="line"><span class="keyword">res</span>.<span class="keyword">on</span>(<span class="string">'data'</span>)</div><div class="line">emit progress</div><div class="line"><span class="keyword">res</span>.<span class="keyword">on</span>(<span class="string">'end'</span>)</div><div class="line">emit success</div><div class="line">register success</div><div class="line">register error</div><div class="line">register progress</div></pre></td></tr></table></figure>
+<p>可以看到emit发生在register callback之前，所以then注册的callback并没有执行</p>
+<h2 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h2><hr>
+<p>这实际上就是一个巧合，因为IO的低速导致了register callback之前，这种promise方式并不能保证then每次都能拿到结果</p>
+
+          
         
       
     </div>
@@ -988,7 +1296,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://matthewgao.github.io/thread-safe/">
+  <link itemprop="mainEntityOfPage" href="http://gaoshen.site/thread-safe/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="Matthew Gao">
@@ -1051,6 +1359,10 @@
           
 
           
+              <div class="post-description">
+                  各种线程安全问题
+              </div>
+          
 
         </div>
       </header>
@@ -1064,14 +1376,47 @@
 
       
         
-          各种线程安全问题
-          <!--noindex-->
-          <div class="post-more-link text-center">
-            <a class="btn" href="/thread-safe/">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
+          
+            <h2 id="Multiple-Thread"><a href="#Multiple-Thread" class="headerlink" title="Multiple Thread"></a>Multiple Thread</h2><h3 id="pthread-mutex"><a href="#pthread-mutex" class="headerlink" title="pthread_mutex"></a>pthread_mutex</h3><p>有两种方式创建一个mutex一种是静态方法，一种是动态方法，似乎静态方法不需要Destroy???</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;</div><div class="line">pthread_mutex_t <span class="keyword">lock</span>;</div><div class="line">pthread_mutex_init (&amp;<span class="keyword">lock</span>, <span class="literal">NULL</span>);</div></pre></td></tr></table></figure>
+<h3 id="pthread-cancel"><a href="#pthread-cancel" class="headerlink" title="pthread_cancel"></a>pthread_cancel</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_cancel</span><span class="params">(<span class="keyword">pthread_t</span> thread)</span></span>;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_setcancelstate</span><span class="params">(<span class="keyword">int</span> state, <span class="keyword">int</span> *oldstate)</span></span>;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_setcanceltype</span><span class="params">(<span class="keyword">int</span> type, <span class="keyword">int</span> *oldtype)</span></span>;</div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">pthread_testcancel</span><span class="params">(<span class="keyword">void</span>)</span></span>; [Option End]</div></pre></td></tr></table></figure>
+<p>cancel，用来取消一个线程，但是按照默认的配置他是不会立刻退出的，会在cancelpoint选择退出。取消点是在程序在运行的时候检测是否收到取消请求，是否允许允许操作执行的点。下面的POSIX线程函数就是取消点：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">pthread_join()</div><div class="line">pthread_cond_wait()</div><div class="line">pthread_cond_timedwait()</div><div class="line">pthread_testcancel()</div><div class="line">sem_wait()</div><div class="line">sigwait()</div><div class="line">...</div></pre></td></tr></table></figure>
+<h4 id="pthread-setcancelstate"><a href="#pthread-setcancelstate" class="headerlink" title="pthread_setcancelstate"></a>pthread_setcancelstate</h4><p>设置状态，有两种</p>
+<ul>
+<li>PTHREAD_CANCEL_ENABLE （default）</li>
+<li>PTHREAD_CANCEL_DISABLE<br>Enable表示线程支持cancel</li>
+</ul>
+<h4 id="pthread-setcanceltype"><a href="#pthread-setcanceltype" class="headerlink" title="pthread_setcanceltype"></a>pthread_setcanceltype</h4><ul>
+<li>PTHREAD_CANCEL_DEFERRED： 默认值，他不会马上结束，会在下一个cancelpoint结束</li>
+<li>PTHREAD_CANCEL_ASYNCHRONOUS： 马上结束</li>
+</ul>
+<h3 id="pthread-cleanup-push-amp-pthread-cleanup-pop"><a href="#pthread-cleanup-push-amp-pthread-cleanup-pop" class="headerlink" title="pthread_cleanup_push &amp; pthread_cleanup_pop"></a>pthread_cleanup_push &amp; pthread_cleanup_pop</h3><figure class="highlight delphi"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">void pthread_cleanup_push(void <span class="comment">(*routine)(void *)</span>, void *arg);</div><div class="line">void pthread_cleanup_pop(int execute);</div></pre></td></tr></table></figure>
+<p>##Thread Safety</p>
+<p>###对象构造</p>
+<ul>
+<li>不要在构造函数中注册毁掉</li>
+<li>不要过早的把this传给其他线程的对象</li>
+</ul>
+<p>两段式构造，是个有效的解决方案</p>
+<p>###对象析构<br>尽管我们会用互斥量来保证线程安全，但是还是难免会碰到如下情况</p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">global</span> shared_ptr<span class="symbol">&lt;Job&gt;</span> <span class="keyword">ptr</span> = make_shared<span class="symbol">&lt;Job&gt;</span>()</div><div class="line"></div><div class="line">Thread A</div><div class="line">shared_ptr<span class="symbol">&lt;Job&gt;</span> p1(<span class="keyword">ptr</span>)</div><div class="line"></div><div class="line">Thread B</div><div class="line"><span class="keyword">ptr</span> <span class="keyword">is</span> going out of scope</div></pre></td></tr></table></figure>
+<ul>
+<li>在这种情况下，直接使用互斥量就很难保证不会出问题，所以使用一个RAII构建的mutex是一个解决方法</li>
+</ul>
+<figure class="highlight cos"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">MutexGuard <span class="keyword">lock</span>(mtx)</div><div class="line"><span class="comment">//operate the ptr</span></div><div class="line">..</div><div class="line"><span class="built_in">..When</span> it'<span class="keyword">s</span> going out of the scope, the <span class="keyword">lock</span> object will <span class="keyword">continue</span> to protect it until ptr destroyed</div></pre></td></tr></table></figure>
+<p>或者使用如下方法，p1和p2都是栈上对象，所以没有析构问题。</p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">global</span> shared_ptr<span class="symbol">&lt;Job&gt;</span> <span class="keyword">ptr</span> = make_shared<span class="symbol">&lt;Job&gt;</span>()</div><div class="line"></div><div class="line">Thread A</div><div class="line">shared_ptr<span class="symbol">&lt;Job&gt;</span> p1(<span class="keyword">ptr</span>)</div><div class="line">use p1 <span class="keyword">to</span> operate object <span class="keyword">ptr</span> pointed <span class="keyword">to</span></div><div class="line"></div><div class="line">Thread B</div><div class="line">shared_ptr<span class="symbol">&lt;Job&gt;</span> p2(<span class="keyword">ptr</span>)</div><div class="line"></div><div class="line">use p2 <span class="keyword">to</span> operate object</div></pre></td></tr></table></figure>
+<ul>
+<li>另外一个解决方法是可以用另外一个线程专门管理这些对象的析构，相当于维护一个对象池</li>
+<li>或者考虑使用atomic来保护对象</li>
+<li></li>
+</ul>
+<p>###不要使用递归mutex</p>
+<p>###每个对象保证自身的数据安全<br>对于数据的访问给予互斥量保护，这个时候要留心析构的问题，因为内部互斥量无法保证析构，如果两个线程同时在做析构（在使用shared_ptr的时候），那么会有双重释放的问题，一个符合RAII标准的mutexlock能够派上用场，因为他可以保护析构，在析构结束前lock不会析构。</p>
+<p>###TCP作为进程间通信的方法<br>TCP是一个相对普适的方法来处理进程间通信，他甚至可以扩展到主机间通信，所以是个非常好的选择</p>
+
+          
         
       
     </div>
@@ -1108,7 +1453,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://matthewgao.github.io/Vim-on-OSX/">
+  <link itemprop="mainEntityOfPage" href="http://gaoshen.site/Vim-on-OSX/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="Matthew Gao">
@@ -1171,6 +1516,10 @@
           
 
           
+              <div class="post-description">
+                  实现一个自动化配置Vim脚本。刚刚加入OSX大军，继续使用Vim作为编辑器，尝试配置，发现和Linux区别不大，所以打算把它写成一个脚本可以在各个系统上自动配置，并且详细研究了下各个配置和插件的用例
+              </div>
+          
 
         </div>
       </header>
@@ -1184,14 +1533,50 @@
 
       
         
-          实现一个自动化配置Vim脚本。刚刚加入OSX大军，继续使用Vim作为编辑器，尝试配置，发现和Linux区别不大，所以打算把它写成一个脚本可以在各个系统上自动配置，并且详细研究了下各个配置和插件的用例
-          <!--noindex-->
-          <div class="post-more-link text-center">
-            <a class="btn" href="/Vim-on-OSX/">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
+          
+            <h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><p>已经实现了一个非常基本的自动化脚本，可以输入如下命令进行自动化安装，如果是OSX，需要提前安装brew：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ruby <span class="_">-e</span> <span class="string">"<span class="variable">$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)</span>"</span></div></pre></td></tr></table></figure>
+<p>之后运行：<br><figure class="highlight vim"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">wget -qO- http<span class="variable">s:</span>//raw.github.<span class="keyword">com</span>/matthewgao/MyVim/master/setup.<span class="keyword">sh</span> | <span class="keyword">sh</span></div></pre></td></tr></table></figure></p>
+<p>当所有安装完成，就得到了一个包含如下插件的Vim：</p>
+<ul>
+<li>Bundle</li>
+<li>FuzzyFinder</li>
+<li>L9</li>
+<li>tagslist</li>
+<li>ctags</li>
+<li>NERDtree</li>
+<li>NERD-Commenter</li>
+<li>Auto-pair</li>
+<li>Ctrlp</li>
+<li>ctrlp-funky</li>
+<li>airline</li>
+<li>powerline</li>
+<li>translate</li>
+<li>vim chinese doc</li>
+<li>calendar</li>
+<li>molokai colorscheme</li>
+</ul>
+<p>项目托管在github上 <a href="https://github.com/matthewgao/MyVim" target="_blank" rel="external">MyVim</a></p>
+<p>自动安装包含如下过程：</p>
+<ul>
+<li>检查系统，yum or apt-get or brew</li>
+<li>安装组件</li>
+<li>安装MyVim</li>
+<li>复制vim到.vim</li>
+<li>复制vimrc到.vimrc</li>
+<li>安装Bundle</li>
+<li>执行BundleInstall</li>
+</ul>
+<h2 id="Powerline-font"><a href="#Powerline-font" class="headerlink" title="Powerline font"></a>Powerline font</h2><figure class="highlight crmsh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">git <span class="keyword">clone</span> <span class="title">https</span>://github.com/powerline/fonts.git</div><div class="line">fonts/install.sh</div></pre></td></tr></table></figure>
+<p>##安装中文Help doc</p>
+<p>下载vimdoc包<a href="http://vimcdoc.sourceforge.net/" target="_blank" rel="external">猛击下载</a>，下载的 tar.gz 包括所有翻译过的 vim 文档 (.cnx 文件) 先将其解压缩：</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">tar zxvf vimcdoc-&lt;version&gt;<span class="selector-class">.tar</span><span class="selector-class">.gz</span></div></pre></td></tr></table></figure>
+<p>然后进入 vimcdoc- 目录并执行</p>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./vimcdoc.<span class="keyword">sh</span> -<span class="built_in">i</span></div></pre></td></tr></table></figure>
+<p>就可以了。该安装程序会自动识别 Vim 的安装路径，将中文的文档拷贝 到相应的地方。原有的英文文档不受影响。</p>
+<h2 id="插件简介"><a href="#插件简介" class="headerlink" title="插件简介"></a>插件简介</h2><h3 id="NERDtree"><a href="#NERDtree" class="headerlink" title="NERDtree"></a>NERDtree</h3><p>在nerdtree窗口常用操作：<br><figure class="highlight clean"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">x.......Close the current nodes parent收起当前目录树</div><div class="line">R.......Recursively refresh the current root刷新根目录树</div><div class="line">r.......Recursively refresh the current directory刷新当前目录</div><div class="line">P.......Jump to the root node</div><div class="line">p.......Jump to current nodes parent</div><div class="line">K.......Jump up inside directories at the current tree depth  到同目录第一个节点</div><div class="line">J.......Jump down inside directories at the current tree depth 最后一个节点</div><div class="line">o.......Open files, directories and bookmarks</div><div class="line">i.......Open selected file <span class="keyword">in</span> a split window上下分屏</div><div class="line">s.......Open selected file <span class="keyword">in</span> a new vsplit左右分屏</div></pre></td></tr></table></figure></p>
+<h2 id="配置解析"><a href="#配置解析" class="headerlink" title="配置解析"></a>配置解析</h2><figure class="highlight vim"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">set</span> nocompatible               <span class="comment">" be iMproved</span></div><div class="line"><span class="keyword">set</span> <span class="keyword">shell</span>=/bin/<span class="keyword">sh</span></div><div class="line"><span class="keyword">set</span> tabstop=<span class="number">4</span></div><div class="line"><span class="keyword">set</span> softtabstop=<span class="number">4</span></div><div class="line"><span class="keyword">set</span> <span class="built_in">shiftwidth</span>=<span class="number">4</span></div><div class="line"><span class="comment">" FIXME</span></div><div class="line"><span class="keyword">set</span> expandtab</div><div class="line"><span class="keyword">set</span> autoindent</div><div class="line"><span class="keyword">set</span> <span class="keyword">nu</span></div><div class="line"><span class="keyword">set</span> ruler</div><div class="line"><span class="keyword">colorscheme</span> molokai</div><div class="line"><span class="keyword">set</span> showcmd</div><div class="line"><span class="comment">" 高亮搜索</span></div><div class="line"><span class="keyword">set</span> hlsearch</div><div class="line"><span class="comment">" 跟随搜索</span></div><div class="line"><span class="keyword">set</span> incsearch</div><div class="line"><span class="keyword">set</span> mouse=<span class="keyword">a</span></div><div class="line"><span class="keyword">set</span> linebreak</div><div class="line"><span class="keyword">set</span> mousemodel=<span class="keyword">popup</span></div><div class="line"><span class="keyword">set</span> autowrite</div><div class="line"><span class="keyword">set</span> cmdheight=<span class="number">2</span></div><div class="line"><span class="comment">" 去掉输入错的提示音</span></div><div class="line"><span class="keyword">set</span> noeb</div><div class="line"><span class="keyword">set</span> ignorecase</div><div class="line"><span class="keyword">set</span> wildmenu</div><div class="line"><span class="comment">"FIXME 允许backspace和光标跨越行边界</span></div><div class="line"><span class="keyword">set</span> backspace=eol,start,<span class="built_in">indent</span></div><div class="line"><span class="keyword">set</span> whichwrap+=&lt;,&gt;,h,<span class="keyword">l</span></div><div class="line"><span class="keyword">set</span> linespace=<span class="number">0</span></div><div class="line"><span class="keyword">set</span> wildmenu</div><div class="line"><span class="keyword">set</span> completeopt=preview,<span class="keyword">menu</span></div><div class="line"><span class="keyword">set</span> completeopt=longest,<span class="keyword">menu</span>  <span class="comment">"tab替换成空格</span></div><div class="line"><span class="keyword">if</span> <span class="keyword">version</span>&gt;=<span class="number">603</span></div><div class="line">    <span class="keyword">set</span> helplang=<span class="keyword">cn</span></div><div class="line">    <span class="keyword">set</span> encoding=utf-<span class="number">8</span></div><div class="line"><span class="keyword">endif</span></div><div class="line"></div><div class="line"><span class="keyword">filetype</span> <span class="keyword">on</span></div><div class="line"><span class="keyword">filetype</span> plugin <span class="keyword">on</span></div><div class="line"><span class="keyword">filetype</span> plugin <span class="built_in">indent</span> <span class="keyword">on</span>     <span class="comment">" required!</span></div><div class="line"><span class="keyword">syntax</span> <span class="keyword">on</span></div><div class="line"><span class="keyword">syntax</span> enable</div><div class="line"></div><div class="line"><span class="keyword">set</span> rtp+=~/.<span class="keyword">vim</span>/bundle/vundle/</div><div class="line"><span class="keyword">call</span> vundle#rc()</div><div class="line"></div><div class="line"><span class="comment">" let Vundle manage Vundle</span></div><div class="line"><span class="comment">" required! </span></div><div class="line"><span class="comment">"这是vundle本身的设置</span></div><div class="line">Bundle <span class="string">'gmarik/vundle'</span>  </div><div class="line"> </div><div class="line"> <span class="comment">" My Bundles here:</span></div><div class="line"> <span class="comment">"这里是设置你自己自定义的插件的设置vundle设置，注意：下载</span></div><div class="line"> <span class="comment">"的插件git为：https://github.com/godlygeek/tabular.git，则设置为Bundle </span></div><div class="line"> <span class="comment">"'godlygeek/tabular';https://github.com/gmarik/vundle.git设置则为</span></div><div class="line"> <span class="comment">" Bundle 'gmarik/vundle'  </span></div><div class="line"> </div><div class="line"> <span class="comment">" original repos on github</span></div><div class="line">Bundle <span class="string">'godlygeek/tabular'</span></div><div class="line"></div><div class="line"> <span class="comment">" vim-scripts repos，vim-scripts的访问地址，格式则如下：</span></div><div class="line">Bundle <span class="string">'L9'</span></div><div class="line">Bundle <span class="string">'FuzzyFinder'</span></div><div class="line"> <span class="comment">" non github repos ，非git的访问地址的，格式如下：</span></div><div class="line">Bundle <span class="string">'git://git.wincent.com/command-t.git'</span></div><div class="line">Bundle <span class="string">'Auto-Pairs'</span></div><div class="line">Bundle <span class="string">'The-NERD-Commenter'</span></div><div class="line"></div><div class="line"><span class="comment">"Bundle 'ctrlp.vim'</span></div><div class="line">Plugin <span class="string">'ctrlp.vim'</span></div><div class="line">Plugin <span class="string">'scrooloose/nerdtree'</span></div><div class="line"></div><div class="line"><span class="comment">"</span></div><div class="line"><span class="comment">" Brief help</span></div><div class="line"><span class="comment">" :BundleList          - list configured bundles</span></div><div class="line"><span class="comment">" :BundleInstall(!)    - install(update) bundles</span></div><div class="line"><span class="comment">" :BundleSearch(!) foo - search(or refresh cache first) for foo</span></div><div class="line"><span class="comment">" :BundleClean(!)      - confirm(or auto-approve) removal of unused bundles</span></div><div class="line"><span class="comment">"</span></div><div class="line"><span class="comment">" see :h vundle for more details or wiki for FAQ</span></div><div class="line"><span class="comment">" <span class="doctag">NOTE:</span> comments after Bundle command are not allowed..</span></div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">nmap</span> tt :%s/\t/    /g<span class="symbol">&lt;CR&gt;</span></div><div class="line"><span class="keyword">map</span> <span class="symbol">&lt;F3&gt;</span> :NERDTreeToggle<span class="symbol">&lt;CR&gt;</span></div><div class="line"><span class="keyword">imap</span> <span class="symbol">&lt;F3&gt;</span> <span class="symbol">&lt;ESC&gt;</span> :NERDTreeToggle<span class="symbol">&lt;CR&gt;</span></div><div class="line"><span class="keyword">map</span> <span class="symbol">&lt;silent&gt;</span> <span class="symbol">&lt;F9&gt;</span> :TlistToggle <span class="symbol">&lt;CR&gt;</span></div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">let</span> Tlist_Auto_Open=<span class="number">1</span></div><div class="line"><span class="keyword">let</span> Tlist_Exit_OnlyWindow=<span class="number">1</span></div><div class="line"><span class="keyword">let</span> Tlist_Use_Right_Window=<span class="number">1</span></div><div class="line"></div><div class="line"><span class="keyword">let</span> NERDTreeIgnore=[<span class="string">'\.pyc'</span>]</div><div class="line"></div><div class="line"><span class="comment">" crtlp setting</span></div><div class="line"><span class="keyword">set</span> wildignore+=*/tmp/*,*.<span class="keyword">so</span>,*.swp,*.zip,*.pyc,*.png,*.jpg,*.gif   <span class="comment">" Mac/Linux</span></div></pre></td></tr></table></figure>
+          
         
       
     </div>
@@ -1476,11 +1861,6 @@
     })();
   </script>
 
-  
-    
-    
-    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
-    <script src="/js/src/hook-duoshuo.js"></script>
   
 
 

@@ -88,7 +88,7 @@
 
 <meta property="og:type" content="website">
 <meta property="og:title" content="Matthew Note">
-<meta property="og:url" content="http://matthewgao.github.io/page/5/index.html">
+<meta property="og:url" content="http://gaoshen.site/page/5/index.html">
 <meta property="og:site_name" content="Matthew Note">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Matthew Note">
@@ -119,7 +119,7 @@
 
 
 
-  <link rel="canonical" href="http://matthewgao.github.io/page/5/"/>
+  <link rel="canonical" href="http://gaoshen.site/page/5/"/>
 
 
 
@@ -268,7 +268,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://matthewgao.github.io/2013-5-20-UDP/">
+  <link itemprop="mainEntityOfPage" href="http://gaoshen.site/2013-5-20-UDP/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="Matthew Gao">
@@ -331,6 +331,10 @@
           
 
           
+              <div class="post-description">
+                  通常我们在使用UDP协议的时候都会建一个socket然后调用sendto和recvfrom来发送接收数据实际上还有其他方案
+              </div>
+          
 
         </div>
       </header>
@@ -344,14 +348,16 @@
 
       
         
-          通常我们在使用UDP协议的时候都会建一个socket然后调用sendto和recvfrom来发送接收数据实际上还有其他方案
-          <!--noindex-->
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2013-5-20-UDP/">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
+          
+            <p>创建UDP客户端的典型过程为：首先调用socket()函数，接下来定义发送和接收数据的远程主机和端口，然后用sendto()和recvfrom()来发送接收数据，如果使用sendto()和recvfrom()函数则可以在发送数据时再指定目标地址及端口。</p>
+<p>除此之外UDP数据报的发送也可以使用write()、send()函数。如果使用write()或send()，则必须事先以UDP套接字为参数调用connect()函数。</p>
+<p>与TCP不同的是，在UDP套接字上收发的数据是作为单独的单元接收或发送的，而不是作为字节流。每次调用write()、send()、或sendto()函数都会在线路上产生一个UDP数据报。接收到的UDP数据报的读取也是一个单独的操作，如果读取报文时提供的缓冲区长度不够，则会返回一个出错代码。</p>
+<p>例如：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">sockaddr_in serv_addr;</div><div class="line"><span class="comment">// create udp socket</span></div><div class="line">m_sock = socket(AF_INET, SOCK_DGRAM, <span class="number">0</span>);</div><div class="line"><span class="keyword">if</span> (m_sock &lt; <span class="number">0</span>)</div><div class="line">&#123;</div><div class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">&#125;</div><div class="line"><span class="built_in">memset</span>(&amp;serv_addr, <span class="number">0</span>, <span class="keyword">sizeof</span>(<span class="keyword">struct</span> sockaddr_in));</div><div class="line">serv_addr.sin_family = AF_INET;</div><div class="line">serv_addr.sin_addr.s_addr = inet_addr(m_serv_addr);</div><div class="line">serv_addr.sin_port = htons(m_serv_port);</div><div class="line"><span class="keyword">if</span> (connect(m_sock, (<span class="keyword">struct</span> sockaddr *)&amp;serv_addr, <span class="keyword">sizeof</span>(serv_addr))&lt;<span class="number">0</span>) </div><div class="line">&#123;</div><div class="line">    <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>,<span class="string">"connect fail.\n"</span>);</div><div class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">&#125;</div><div class="line"><span class="keyword">char</span> buf[]=<span class="string">"abcdefg"</span>;</div><div class="line">send(m_sock,(<span class="keyword">void</span>*)buf,<span class="keyword">sizeof</span>(buf),<span class="number">0</span>);</div></pre></td></tr></table></figure>
+<p>或者我们可以用sendto</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">sockaddr_in serv_addr;</div><div class="line"><span class="comment">// create udp socket</span></div><div class="line">m_sock = socket(AF_INET, SOCK_DGRAM, <span class="number">0</span>);</div><div class="line"><span class="keyword">if</span> (m_sock &lt; <span class="number">0</span>)</div><div class="line">&#123;</div><div class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">&#125;</div><div class="line"><span class="built_in">memset</span>(&amp;serv_addr, <span class="number">0</span>, <span class="keyword">sizeof</span>(<span class="keyword">struct</span> sockaddr_in));</div><div class="line">serv_addr.sin_family = AF_INET;</div><div class="line">serv_addr.sin_addr.s_addr = inet_addr(m_serv_addr);</div><div class="line">serv_addr.sin_port = htons(m_serv_port);</div><div class="line"></div><div class="line"><span class="keyword">char</span> buf[]=<span class="string">"abcdefg"</span>;</div><div class="line">sendto(m_sock,(<span class="keyword">void</span>*)buf,<span class="keyword">sizeof</span>(buf),<span class="number">0</span>,(<span class="keyword">struct</span> sockaddr *)&amp;serv_addr,<span class="keyword">sizeof</span>(serv_addr));</div></pre></td></tr></table></figure>
+
+          
         
       
     </div>
@@ -388,7 +394,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://matthewgao.github.io/2013-5-20-aboutfree/">
+  <link itemprop="mainEntityOfPage" href="http://gaoshen.site/2013-5-20-aboutfree/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="Matthew Gao">
@@ -451,6 +457,10 @@
           
 
           
+              <div class="post-description">
+                  在C语言的实际应用中，我们经常会碰到malloc/free的问题，我们每次free的时候只要给出对应的指针，而不需要给出具体大小，那么这是具体怎么实现的呢
+              </div>
+          
 
         </div>
       </header>
@@ -464,14 +474,21 @@
 
       
         
-          在C语言的实际应用中，我们经常会碰到malloc/free的问题，我们每次free的时候只要给出对应的指针，而不需要给出具体大小，那么这是具体怎么实现的呢
-          <!--noindex-->
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2013-5-20-aboutfree/">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
+          
+            <p>在使用c或者c++的时候我们经常用到malloc/free和new/delete，在使用malloc申请内存的时候我们给定了需要申请的内存大小，但是在free或者delete的时候并不需要提供这个大小，那么程序是怎么实现准确无误的释放内存的呢？</p>
+<p>实际上，在申请内存的时候，申请到的地址会比你实际的地址大一点点，他包含了一个存有申请空间大小的结构体。</p>
+<p>比如你申请了20byte的空间，实际上系统申请了48bytes的block</p>
+<ul>
+<li>16-byte header containing size, special marker, checksum, pointers to next/previous block and so on.</li>
+<li>32 bytes data area (your 20 bytes padded out to a multiple of 16))</li>
+</ul>
+<p>这样在free的时候就不需要提供任何其他的信息，可以正确的释放内存</p>
+<p>这里有个在stackoverflow.com上的提问，可以参考</p>
+<ul>
+<li><a href="http://stackoverflow.com/questions/1518711/c-programming-how-does-free-know-how-much-to-free" target="_blank" rel="external">http://stackoverflow.com/questions/1518711/c-programming-how-does-free-know-how-much-to-free</a></li>
+</ul>
+
+          
         
       
     </div>
@@ -508,127 +525,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://matthewgao.github.io/2013-5-15-info-hiding/">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="Matthew Gao">
-    <meta itemprop="description" content="">
-    <meta itemprop="image" content="/images/avatar.gif">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="Matthew Note">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="Matthew Note" src="">
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2013-5-15-info-hiding/" itemprop="url">
-                  主流数字图像信息隐藏软件的使用方法
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <a href="/2013-5-15-info-hiding/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2013-5-15-info-hiding/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          总结了信息隐藏的常用算法和下载链接
-          <!--noindex-->
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2013-5-15-info-hiding/">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://matthewgao.github.io/2013-5-15-Use-APR-parse-XML/">
+  <link itemprop="mainEntityOfPage" href="http://gaoshen.site/2013-5-15-Use-APR-parse-XML/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="Matthew Gao">
@@ -691,6 +588,10 @@
           
 
           
+              <div class="post-description">
+                  在编写SOAP module的时候遇到了需要解析soap request的问题，发现APR中已经有写好的XML parser，所以这里简单介绍下怎么使用APR中的XML Parser。
+              </div>
+          
 
         </div>
       </header>
@@ -704,14 +605,29 @@
 
       
         
-          在编写SOAP module的时候遇到了需要解析soap request的问题，发现APR中已经有写好的XML parser，所以这里简单介绍下怎么使用APR中的XML Parser。
-          <!--noindex-->
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2013-5-15-Use-APR-parse-XML/">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
+          
+            <h2 id="Apache-portable-runtime（APR）"><a href="#Apache-portable-runtime（APR）" class="headerlink" title="Apache portable runtime（APR）"></a>Apache portable runtime（APR）</h2><p>Apache server中一个非常关键的部分，他剥离了Apache server对于OS的依赖，使得它更容易在不同系统中迁移，另外他实现了垃圾的自动回收，解决了C/C++程序编写中非常头疼的问题。</p>
+<p>这个APR中自带了大量的库文件，XML Parser便是其中一个。</p>
+<h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><p>使用XMLParser需要引用apr_xml.h头文件，文件中定义了基本数据类型，和部分函数。主要的有：</p>
+<ul>
+<li>apr_xml_attr</li>
+<li>apr_xml_elem</li>
+<li>apr_text_header</li>
+<li>apr_text</li>
+<li>apr_xml_doc</li>
+</ul>
+<p>他们的定义如下，看清楚这些结构体有助于更好的使用它：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div></pre></td><td class="code"><pre><div class="line">typedef <span class="class"><span class="keyword">struct</span> <span class="title">apr_text</span></span> apr_text;</div><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">apr_text</span></span> &#123;</div><div class="line"> <span class="keyword">const</span> <span class="keyword">char</span> *text;</div><div class="line"> <span class="class"><span class="keyword">struct</span> <span class="title">apr_text</span></span> *next;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">typedef <span class="class"><span class="keyword">struct</span> <span class="title">apr_text_header</span></span> apr_text_header;</div><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">apr_text_header</span></span> &#123;</div><div class="line"> apr_text *first;</div><div class="line"> apr_text *last;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">typedef <span class="class"><span class="keyword">struct</span> <span class="title">apr_xml_attr</span></span> apr_xml_attr;</div><div class="line">typedef <span class="class"><span class="keyword">struct</span> <span class="title">apr_xml_elem</span></span> apr_xml_elem;</div><div class="line">typedef <span class="class"><span class="keyword">struct</span> <span class="title">apr_xml_doc</span></span> apr_xml_doc;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">apr_xml_attr</span></span> &#123;</div><div class="line"> <span class="keyword">const</span> <span class="keyword">char</span> *name;</div><div class="line"> <span class="keyword">int</span> ns;</div><div class="line"></div><div class="line"> <span class="keyword">const</span> <span class="keyword">char</span> *value;</div><div class="line"></div><div class="line"> <span class="class"><span class="keyword">struct</span> <span class="title">apr_xml_attr</span></span> *next;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">apr_xml_elem</span></span> &#123;</div><div class="line"> <span class="keyword">const</span> <span class="keyword">char</span> *name;</div><div class="line"> <span class="keyword">int</span> ns;</div><div class="line"> <span class="keyword">const</span> <span class="keyword">char</span> *lang;</div><div class="line"></div><div class="line"> apr_text_header first_cdata;</div><div class="line"> apr_text_header following_cdata;</div><div class="line"></div><div class="line"> <span class="class"><span class="keyword">struct</span> <span class="title">apr_xml_elem</span></span> *parent;        </div><div class="line"> <span class="class"><span class="keyword">struct</span> <span class="title">apr_xml_elem</span></span> *next;  </div><div class="line"> <span class="class"><span class="keyword">struct</span> <span class="title">apr_xml_elem</span></span> *first_child;</div><div class="line"> <span class="class"><span class="keyword">struct</span> <span class="title">apr_xml_attr</span></span> *attr;          </div><div class="line"></div><div class="line"> <span class="comment">/* used only during parsing */</span></div><div class="line"> <span class="class"><span class="keyword">struct</span> <span class="title">apr_xml_elem</span></span> *last_child;</div><div class="line"> <span class="class"><span class="keyword">struct</span> <span class="title">apr_xml_ns_scope</span></span> *ns_scope;</div><div class="line"></div><div class="line"> <span class="comment">/* used by modules during request processing */</span></div><div class="line"> void *<span class="keyword">priv</span>;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">#define APR_XML_ELEM_IS_EMPTY(e) ((e)-&gt;first_child == NULL &amp;&amp; \</div><div class="line">							   (e)-&gt;first_cdata.first == NULL)</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">apr_xml_doc</span></span> &#123;</div><div class="line"> apr_xml_elem *root; </div><div class="line"> apr_array_header_t *namespaces;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>所有关于xml的数据都存储在apr_xml_doc中，这里记录了他的子节点，父节点，每个节点的名称，属性和cdata（也就是value），很好的处理好这个结构体，就可以轻松的得到所有你想要的内容。</p>
+<h2 id="怎么使用"><a href="#怎么使用" class="headerlink" title="怎么使用"></a>怎么使用</h2><p>对于解析SOAP非常简单，只需调用ap_xml_parse_input()就可以将request的内容解析为apr_xml_doc格式，下面是一个实例程序：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;ctype.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"httpd.h"</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"http_config.h"</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"http_protocol.h"</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"ap_config.h"</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;apr_xml.h&gt;</span></span></div><div class="line">	</div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> apr_isspace(c)   (isspace(((unsigned char)(c))))</span></div><div class="line"><span class="comment">//if you using g++ to compile the module, extern should be critical.</span></div><div class="line"><span class="keyword">extern</span>  <span class="keyword">module</span> AP_MODULE_DECLARE_DATA soap_module;</div><div class="line"><span class="keyword">extern</span> <span class="string">"C"</span> <span class="function"><span class="keyword">int</span> <span class="title">ap_xml_parse_input</span>	<span class="params">(request_rec * r,apr_xml_doc ** pdoc)</span></span>;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">const</span> <span class="keyword">char</span> * <span class="title">soap_xml_get_cdata</span><span class="params">(<span class="keyword">const</span> apr_xml_elem *elem, <span class="keyword">apr_pool_t</span> *pool,</span></span></div><div class="line">								  <span class="keyword">int</span> strip_white);</div><div class="line"><span class="comment">/* The sample content handler */</span></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">dump_xml</span><span class="params">(request_rec *r, apr_xml_elem *root)</span></span>&#123;</div><div class="line"></div><div class="line">	<span class="keyword">if</span>(root==<span class="literal">NULL</span>)</div><div class="line">		<span class="keyword">return</span>;</div><div class="line">	<span class="keyword">if</span>(root-&gt;name!=<span class="literal">NULL</span>)</div><div class="line">		ap_rprintf(r,<span class="string">" Name:%s  \n"</span>, root-&gt;name);</div><div class="line">	<span class="keyword">if</span>(root-&gt;lang!=<span class="literal">NULL</span>)</div><div class="line">		ap_rprintf(r,<span class="string">" lang:%s  \n"</span>, root-&gt;lang );</div><div class="line">	<span class="keyword">if</span>(root-&gt;attr!=<span class="literal">NULL</span>)</div><div class="line">		ap_rprintf(r,<span class="string">" Attr: %s:%s \n"</span>, root-&gt;attr-&gt;name,root-&gt;attr-&gt;value );</div><div class="line">	<span class="keyword">if</span>(root-&gt;first_cdata.first!=<span class="literal">NULL</span>)&#123;</div><div class="line">		apr_text *itr=root-&gt;first_cdata.first;</div><div class="line">		<span class="keyword">for</span>(;itr!=<span class="literal">NULL</span>;itr=itr-&gt;next)</div><div class="line">			ap_rprintf(r,<span class="string">" cdata:%s  \n"</span>, itr-&gt;text);</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">if</span>(root-&gt;following_cdata.first!=<span class="literal">NULL</span>)&#123;</div><div class="line">		apr_text *itr=root-&gt;following_cdata.first;</div><div class="line">		<span class="keyword">for</span>(;itr!=<span class="literal">NULL</span>;itr=itr-&gt;next)</div><div class="line">			ap_rprintf(r,<span class="string">" following_cdata:%s  \n"</span>, itr-&gt;text);</div><div class="line">	&#125;</div><div class="line">	 <span class="comment">/*       </span></div><div class="line">	const char * buf=soap_xml_get_cdata(root, r-&gt;pool,1);</div><div class="line">	if(buf==NULL)</div><div class="line">		ap_rprintf(r,"Buf is NULL");</div><div class="line">	else</div><div class="line">		ap_rprintf(r," Value: %s \n", buf );</div><div class="line">	 */</div><div class="line">	dump_xml(r,root-&gt;first_child);</div><div class="line">	dump_xml(r,root-&gt;next);</div><div class="line">			</div><div class="line">	<span class="comment">//dump_xml(r,root-&gt;parent);       </span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">mod_soap_handler</span><span class="params">(request_rec *r)</span></span></div><div class="line">&#123;</div><div class="line">	<span class="keyword">int</span> result;</div><div class="line">	<span class="keyword">if</span> (<span class="built_in">strcmp</span>(r-&gt;handler, <span class="string">"mod_soap"</span>)) &#123;</div><div class="line">		<span class="keyword">return</span> DECLINED;</div><div class="line">	&#125;</div><div class="line">	r-&gt;content_type = <span class="string">"text/html"</span>;      </div><div class="line"></div><div class="line">	apr_xml_doc *doc = <span class="literal">NULL</span>;</div><div class="line">	<span class="keyword">if</span> ((result = ap_xml_parse_input(r, &amp;doc)) != <span class="number">0</span>)</div><div class="line">	&#123;   </div><div class="line">                ap_rputs(<span class="string">"parse the xml fail\n"</span>, r);  </div><div class="line">        &#125;</div><div class="line"></div><div class="line">	<span class="keyword">if</span>(doc==<span class="literal">NULL</span>)</div><div class="line">	&#123;  </div><div class="line">                ap_rprintf(r,<span class="string">" Doc is NULL"</span>);</div><div class="line">		<span class="keyword">return</span> OK;</div><div class="line">	&#125; </div><div class="line">	<span class="keyword">if</span>(doc-&gt;root==<span class="literal">NULL</span>)</div><div class="line">	&#123;</div><div class="line">		ap_rprintf(r,<span class="string">"  root is NULL"</span>);</div><div class="line">		<span class="keyword">return</span> OK;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	dump_xml(r,doc-&gt;root);</div><div class="line">	<span class="keyword">return</span> OK;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">mod_soap_register_hooks</span><span class="params">(<span class="keyword">apr_pool_t</span> *p)</span></span></div><div class="line">&#123;</div><div class="line">	ap_hook_handler(mod_soap_handler, <span class="literal">NULL</span>, <span class="literal">NULL</span>, APR_HOOK_MIDDLE);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">/* Dispatch list for API hooks */</span></div><div class="line"></div><div class="line"><span class="keyword">module</span> AP_MODULE_DECLARE_DATA soap_module = &#123;</div><div class="line">	STANDARD20_MODULE_STUFF, </div><div class="line">	<span class="literal">NULL</span>,                  <span class="comment">/* create per-dir    config structures */</span></div><div class="line">	<span class="literal">NULL</span>,                  <span class="comment">/* merge  per-dir    config structures */</span></div><div class="line">	<span class="literal">NULL</span>,                  <span class="comment">/* create per-server config structures */</span></div><div class="line">	<span class="literal">NULL</span>,                  <span class="comment">/* merge  per-server config structures */</span></div><div class="line">	<span class="literal">NULL</span>,                  <span class="comment">/* table of config file commands       */</span></div><div class="line">	mod_soap_register_hooks  <span class="comment">/* register hooks                      */</span></div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>Install这个module，之后向apache发送一个SOAP request，例如：</p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">&lt;soapen<span class="variable">v:Envelope</span> xmln<span class="variable">s:xsi</span>=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span> xmln<span class="variable">s:xsd</span>=<span class="string">"http://www.w3.org/2001/XMLSchema"</span> xmln<span class="variable">s:soapenv</span>=<span class="string">"http://schemas.xmlsoap.org/soap/envelope/"</span> xmln<span class="variable">s:urn</span>=<span class="string">"urn:AventailLogonV2"</span>&gt;</div><div class="line">   &lt;soapen<span class="variable">v:Header</span>/&gt;</div><div class="line">   &lt;soapen<span class="variable">v:Body</span>&gt;</div><div class="line">	  &lt;urn:getMicroInterrogationList soapen<span class="variable">v:encodingStyle</span>=<span class="string">"http://schemas.xmlsoap.org/soap/encoding/"</span>&gt;</div><div class="line">		 &lt;<span class="keyword">version</span> xsi:<span class="built_in">type</span>=<span class="string">"xsd:int"</span>&gt;<span class="number">2</span>&lt;/<span class="keyword">version</span>&gt;</div><div class="line">		 &lt;logonId xsi:<span class="built_in">type</span>=<span class="string">"xsd:string"</span>&gt;QAABAFrlfQsUJvsQVh5kRozpavo=&lt;/logonId&gt;</div><div class="line">	  &lt;/urn:getMicroInterrogationList&gt;</div><div class="line">   &lt;/soapen<span class="variable">v:Body</span>&gt;</div><div class="line">&lt;/soapen<span class="variable">v:Envelope</span>&gt;</div></pre></td></tr></table></figure>
+<p>Apache server会回复如下内容：</p>
+<figure class="highlight delphi"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">Name</span>：Envelope</div><div class="line">cdata：</div><div class="line"><span class="keyword">Name</span>：Header</div><div class="line">cdata：</div><div class="line"><span class="keyword">Name</span>：Body</div><div class="line">cdata：</div><div class="line"><span class="keyword">Name</span>：getMicroInterrogationList</div><div class="line">cdata：	</div><div class="line"><span class="keyword">Name</span>：version</div><div class="line">cdata：<span class="number">2</span></div><div class="line"><span class="keyword">Name</span>：logonId</div><div class="line">cdata：QAABAFrlfQsUJvsQVh5kRozpavo=</div></pre></td></tr></table></figure>
+<h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p>进一步的开发就很容易了，只要按照自己的需要去处理数据就可以了。</p>
+
+          
         
       
     </div>
@@ -748,7 +664,147 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://matthewgao.github.io/2013-5-14-Apache-with-cpp/">
+  <link itemprop="mainEntityOfPage" href="http://gaoshen.site/2013-5-15-info-hiding/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Matthew Gao">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/avatar.gif">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Matthew Note">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="Matthew Note" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2013-5-15-info-hiding/" itemprop="url">
+                  主流数字图像信息隐藏软件的使用方法
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <a href="/2013-5-15-info-hiding/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2013-5-15-info-hiding/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+              <div class="post-description">
+                  总结了信息隐藏的常用算法和下载链接
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>硕士期间做过隐写分析，在生成训练图片时候费了很大周折去找F5，Outguess，MB，Jsteg等软件的程序，网上又没有很明确的说明，所以只能自己逐渐摸索，为了给后人铺路，这里我做一总结。<br>空域的LSB方法就不说了，这个自己用Matlab编起来也不是很麻烦，这里就说说变换域的：</p>
+<h2 id="F5"><a href="#F5" class="headerlink" title="F5"></a>F5</h2><p>F5是Westfeld 2001年提出来的一个嵌入算法，本来在他个人的主页中是可以下载的，但是后来由于学校网页的变动，下载不到了，我前几天给westfeld发了邮件，他又重新把它放到网上了</p>
+<ul>
+<li><a href="http://www2.htw-dresden.de/~westfeld/publikationen/f5r11.zip" target="_blank" rel="external">Download F5</a></li>
+<li><a href="https://github.com/matthewgao/F5-steganography" target="_blank" rel="external">Download F5 in github</a></li>
+</ul>
+<p>这还有一个在google code上的</p>
+<ul>
+<li><a href="http://code.google.com/p/f5-steganography/" target="_blank" rel="external">Download F5 in google code</a></li>
+</ul>
+<p>他们其实是一样的</p>
+<p>这个是一个Java写的程序，有兴趣的人可以去看一下他的源代码，其实并不是非常复杂，他没有提供更改嵌入率的参数，这个问题我也问过westfeld本人，他的确没写这块，可以改写下Java程序，根据其capacity来控制嵌入文本的长度以实现。</p>
+<h2 id="Outguess"><a href="#Outguess" class="headerlink" title="Outguess"></a>Outguess</h2><p>Outguess就非常恶心了，他是unix下的程序，所以你要到linux里去跑，还好有ubuntu，ubuntu的软件库里已经有了这个软件，可以ubuntu的新立得软件中心去搜索outguess，安装就可以了，他同样不能更改嵌入率，所以采用的方法和F5一样，根据其容量来控制嵌入文本的长度，在outguess.c的文件中，有一个mmap_file函数，这个函数便是打开文本的，在里面你可以把fs.st_size赋值为bitmap-&gt;bits/16，然后通过乘上一个ratio来实现</p>
+<h2 id="MB"><a href="#MB" class="headerlink" title="MB"></a>MB</h2><p>MB1和MB2就非常善良了，有他的Matlab程序，这个就不用多说了，你只要改就可以了 </p>
+<ul>
+<li><a href="http://www.philsallee.com/mbsteg/index.html" target="_blank" rel="external">Download MB</a></li>
+</ul>
+<h2 id="RS分析"><a href="#RS分析" class="headerlink" title="RS分析"></a>RS分析</h2><p>自己写过一个RS分析的Matlab程序，可以方便的画出RS分析的特性曲线，我把他放在了github上，有兴趣的同学可以下载使用：</p>
+<ul>
+<li><a href="https://github.com/matthewgao/RS-analysis" target="_blank" rel="external">Download RS</a></li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://gaoshen.site/2013-5-14-Apache-with-cpp/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="Matthew Gao">
@@ -811,6 +867,10 @@
           
 
           
+              <div class="post-description">
+                  如何编译一个含有C++的Apache module，这里不能够使用apxs来编译，只能够用g++，但是会出现一些小问题需要解决
+              </div>
+          
 
         </div>
       </header>
@@ -824,14 +884,18 @@
 
       
         
-          如何编译一个含有C++的Apache module，这里不能够使用apxs来编译，只能够用g++，但是会出现一些小问题需要解决
-          <!--noindex-->
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2013-5-14-Apache-with-cpp/">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
+          
+            <h2 id="为什么要用C"><a href="#为什么要用C" class="headerlink" title="为什么要用C++"></a>为什么要用C++</h2><p>很多时候我们可以不必使用C++，很多时候linux开发只要用C就可以了，但是在对于一些大型应用程序，他本身就是由C++编写，而Apache Module又只能默认使用C，所以不能够用apxs来编译module，只能够通过g++，但是这里就需要一点要的技巧来搞定它。</p>
+<h2 id="Why"><a href="#Why" class="headerlink" title="Why"></a>Why</h2><p>因为Apache是通过dlopen()/dlsym()来加载module的，但是这两个函数不能够很好的处理C++的命名方式，所以如果用g++来编译so文件，就会出现不能够找到module的情况。</p>
+<h2 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h2><p>所以我们要强制它以C语言的方式来编译，在module的声明前加上extern 或者extern “C”</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">extern</span>  <span class="keyword">module</span> AP_MODULE_DECLARE_DATA soap_module;</div></pre></td></tr></table></figure>
+<p>或者</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">extern</span> “C” <span class="keyword">module</span> AP_MODULE_DECLARE_DATA soap_module;</div></pre></td></tr></table></figure>
+<p>更进一步的，可以使用如下定义：</p>
+<figure class="highlight dts"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> __cplusplus</span></div><div class="line">extern <span class="string">"C"</span> &#123;</div><div class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></div><div class="line"><span class="comment">//TO-DO</span></div><div class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> __cplusplus</span></div><div class="line">&#125;</div><div class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></div><div class="line">~~~	</div><div class="line">再通过g++来编译</div><div class="line"></div><div class="line">~~~	</div><div class="line">g++ -fPIC -shared -o mod_soap.so mod_soap.c test.o -I<span class="meta-keyword">/usr/</span>include/apr<span class="number">-1.0</span> -I<span class="meta-keyword">/usr/</span>include/openssl -I<span class="meta-keyword">/usr/</span>include/xmltok -pthread -I<span class="meta-keyword">/usr/</span>include/apache2 -I<span class="meta-keyword">/usr/</span>include/apr<span class="number">-1.0</span>  -I<span class="meta-keyword">/usr/</span>include/apr<span class="number">-1.0</span> -I<span class="meta-keyword">/usr/</span>include/httpd -std=c++<span class="number">0</span>x</div></pre></td></tr></table></figure>
+<p>就可以得到正确的module了，下面就可以使用apxs来安装module</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo apxs2 -<span class="selector-tag">i</span> mod_soap.so</div></pre></td></tr></table></figure>
+          
         
       
     </div>
@@ -868,7 +932,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://matthewgao.github.io/2013-5-13-Bitcoin/">
+  <link itemprop="mainEntityOfPage" href="http://gaoshen.site/2013-5-13-Bitcoin/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="Matthew Gao">
@@ -931,6 +995,10 @@
           
 
           
+              <div class="post-description">
+                  Bitcoin 最近犹豫冲上了250USD的高点，成为了世界瞩目的焦点，2年前我接触过Bitcoin写下了这篇文章。
+              </div>
+          
 
         </div>
       </header>
@@ -944,14 +1012,36 @@
 
       
         
-          Bitcoin 最近犹豫冲上了250USD的高点，成为了世界瞩目的焦点，2年前我接触过Bitcoin写下了这篇文章。
-          <!--noindex-->
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2013-5-13-Bitcoin/">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
+          
+            <p>Bitcoin是最早实现“加密货币”这一概念的系统，该设想最早由戴伟（Dai Wei,音译）于1998年在cypherpunks函件用户组首次提出的。 它建立在这样一个概念之上，即货币可以是任何东西或记录，只要它在一个国家或社会经济体系内被接受为商品服务的支付方式，或是债务偿还的方式。比特币的设计核心思想是以数学题答案作为货币，其发行权独立于任何中央机构之外。</p>
+<p>我是最近接触Bitcoin的，他的复杂的机制和需要大规模的计算来换取BTC（bitcoin的缩写）很吸引我，我花了些时间简单的了解他的机理，由于网上对他的介绍的中文很少，而且有些写得不是很对，容易误导，官网wiki中文只翻译了部分，所以我写了这个，供大家参考。</p>
+<h2 id="明确概念"><a href="#明确概念" class="headerlink" title="明确概念"></a>明确概念</h2><ul>
+<li>第一个是BTC，就是这个货币，和RMB一样是个单位</li>
+<li>第二，Transaction，表示一条交易记录，里面包含了货币接收方的address和BTC数量</li>
+<li>第三，Block，多个Transaction打包存为一个Block，每一个人的机器上都会自动下载所有的Blocks，从而才能够进行转账和查看address中金额，也就是说每个人的电脑都存数了网络上所有的交易（Transaction）</li>
+<li>第四，Blocks-chain，所有的Block都是连起来的，组成一个Block链。address相当于我们现实生活中的帐号，是你账户的唯一标识。</li>
+</ul>
+<h2 id="密码学的知识"><a href="#密码学的知识" class="headerlink" title="密码学的知识"></a>密码学的知识</h2><p>公开密钥加密（Public-key cryptography，也称为非对称密钥加密），该加密算法使用两个不同的密钥，各名为加密密钥和解密密钥。前者公开，又称公开密钥，简称公钥。后者保密，又称私有密钥，简称私钥。这两个金钥是数学相关，用某用户加密密钥加密后所得的信息，只能用该用户的解密密钥才能解密。公钥加密的另一用途是身份验证：用私钥加密的信息，可以用公钥对其解密。接收者由此可知：这条信息确实来自于拥有私钥的某人，公钥的形式就是数字证书。Bitcoin正是利用了这个加密方法的密钥不对称性的优点。address（例如1KTj9TdiXtPcerF4XsCsFWU5NEPpFfdLiv）实际上就是一个公钥，每一个有address的人的计算机中都会存有这个公钥对应的私钥，每一次对这个address中的BTC的转出交易必须有私钥进行签署，如果你的私钥丢失了，那么你的这个address里的BTC就再也拿不出来了。</p>
+<h2 id="工作原理"><a href="#工作原理" class="headerlink" title="工作原理"></a>工作原理</h2><p>转账的过程是这样的：把你要转到的address和金额合并成一个Transaction，并用你自己的私钥进行签署，并发到整个P2P的网络上，所以网络上所有的拥有你address的人都可以看的到这笔Transaction是要从哪里转到哪里转了多少钱，但是由于没有私钥，他们没有办法修改。</p>
+<p>我们有了一个新的Transaction就要有一个Block来存储它，所以要不断的生成Block，按照计划平均每十分钟生成一个Block，这个block成功生成后会给生成这个Block的人一笔奖赏，这就是miner赚钱的方法，这个我们一会再说。生成了一个存有这个transaction的block之后，那么整个blocks-chain的长度就增加了一个，所以网络上会以丢弃所有比这个短的block-chain的分支，所有的在线节点也会自动下载这个新的Block加到自己的index中来，当在网络上有一定人数的人认可你的transaction了，那么交易就认为合法。</p>
+<h2 id="防伪造"><a href="#防伪造" class="headerlink" title="防伪造"></a>防伪造</h2><p>怎么防止伪造货币？由于每一笔Transaction中都存数了来源address和目的addresss，所以每一笔钱都是可以追根溯源的，如果你想非法造币，那么你要修改整条chain，还要保证你的chain最后最长，所以如果你想自己伪造BTC货币那么你就要控制P2P网络上相当大一部分的机器，要他们生成新Block的速度比你自己伪造的速度慢，这样你伪造的才可能被公认，但是这个是相当小概率事件，几乎绝对不可能。</p>
+<p>如果 p2p 网络过大，交易Transaction不能尽量的迅速的广播到全网络。就会出来 p2p 的网络的局部保持有小群体共同认可的一份全局Transaction。多个全局Transaction的分支同时发展是有可能的。因为每个小群体都可能认为他们看见的那部分更长更有效。但是， 只有有人发现另一条分支更长，它就会转换阵营。所以，有一定的可能性，你的Transaction被一个小群体接受，但在一段时间后，被更大的阵营抛弃，所以非法的总会是非法的。</p>
+<h2 id="挖矿"><a href="#挖矿" class="headerlink" title="挖矿"></a>挖矿</h2><p>下面我们说怎么赚钱，也就是mining，挖矿，block的生成非常苛刻，一定要保证block的hash值的前几位为0，这个0的个数越多，需要计算的时间就越长，复杂度越大，所以如果网络中有一个人用了最短的时间生成了这个Block他将有权利在这个block中生成一个Transaction，而这个Transaction是给他的address中存取一定数额的BTC，现在这个数额是50BTC，按照规则，每四年数额减半，那么若干年后，BTC的数额少的可怜时候，谁来做miner，那么有另一个机制，就是可以从你给打包的Transaction那里收取fee，也就是消费，如果他给的多那么你当然会把它加进你的Block中来，从而你可以从所有的Block中的所有Transactions的fee中获得利润。</p>
+<p>所以现在开始mining吧，根据现在的BTC对USD的汇率是8.1，这个汇率每天都在浮动，如果你能自己创建一个block，那你就有50*8.1美元了。</p>
+<p>首先你要有一个address，所以你要去下载一个client，然后安装它，运行时会自动生成一个address，之后他会自动从网上下载所有的blocks，现在大概有128000个blocks，这个时候你的address才能够进行转账和查看transaction信息等等。</p>
+<p>如果你想自己mining，那可能你能制造一个block的概率很低，所以你不如加入一个mining pool，这样你的每一部分贡献会得到一定回报，相当于你贡献出你的计算量大家一起来挖一个。另外，CPU的挖矿能力也不太行了，都要用GPU，我用过一个AMD的CPU只能达到3Mhash/s，但是用GPU就完全不同了，nVIDIA的GPU采用CUDA架构在双精度计算上有优势，但是hash都是整型计算，CUDA似乎并不太适合，也可能是他用openCL的标准性能不高，总是ATI要比nVIDA的效率高，我用两张Tesla C1060的卡只能达到104Mhash/s，但是用ati的5870一张卡就能达到370Mhash/s。</p>
+<p>总之下载好GPU挖矿的软件，去注册个mining pool的帐号，我用的是<a href="http://deepbit.net/，然后绑定你的address，设置好最小的收款金额，就可以开始挖矿啦。我挖了两天已经有0.34BTC了。" target="_blank" rel="external">http://deepbit.net/，然后绑定你的address，设置好最小的收款金额，就可以开始挖矿啦。我挖了两天已经有0.34BTC了。</a></p>
+<p>对了，由于你的address是要你自己维护的，要备份好wallet.dat文件，因为这里存储的是你的私钥，如果这个丢了那么你的钱就没有了，为了避免这个悲剧发生，简易你去注册个wallet，我用的是<a href="https://www.mybitcoin.com" target="_blank" rel="external">https://www.mybitcoin.com</a> 这样wallet都有他们来托管，我们只要用账户登录就可以了（和支付宝有那么一点相似）</p>
+<h2 id="参考连接"><a href="#参考连接" class="headerlink" title="参考连接"></a>参考连接</h2><ul>
+<li>[1] <a href="https://en.bitcoin.it/wiki/Main_Page" target="_blank" rel="external">https://en.bitcoin.it/wiki/Main_Page</a>   官方WIKI</li>
+<li>[2] <a href="http://www.bitcoin.org/" target="_blank" rel="external">http://www.bitcoin.org/</a>  官方网站</li>
+<li>[3] <a href="http://shaneliu.org/archives/506" target="_blank" rel="external">http://shaneliu.org/archives/506</a>  强烈推荐看看这篇</li>
+<li>[4] <a href="http://btcchina.com/index.php" target="_blank" rel="external">http://btcchina.com/index.php</a> 一个中文论坛</li>
+<li>[5] <a href="https://github.com/downloads/Kiv/poclbm/guiminer-20110521.exe" target="_blank" rel="external">https://github.com/downloads/Kiv/poclbm/guiminer-20110521.exe</a>  GUI的GPU挖矿程序</li>
+</ul>
+<p>如果你觉得我写的对你有帮助可以denote我，我的address是：1H8FR8aWYCBd8MoXCBoEQUqw6pH7bq6kXi</p>
+
+          
         
       
     </div>
@@ -988,7 +1078,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://matthewgao.github.io/2013-5-13-Apache/">
+  <link itemprop="mainEntityOfPage" href="http://gaoshen.site/2013-5-13-Apache/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="Matthew Gao">
@@ -1051,6 +1141,10 @@
           
 
           
+              <div class="post-description">
+                  Apache module开发的资料少之又少，除了有一本书之外，其他资料不大好找，这里介绍下apache模块开发，作为入门
+              </div>
+          
 
         </div>
       </header>
@@ -1064,14 +1158,30 @@
 
       
         
-          Apache module开发的资料少之又少，除了有一本书之外，其他资料不大好找，这里介绍下apache模块开发，作为入门
-          <!--noindex-->
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2013-5-13-Apache/">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
+          
+            <p>Actually to build a apache module is not very hard if you can find a nice way to do it. Here I want to show you my way.</p>
+<h2 id="The-Environment"><a href="#The-Environment" class="headerlink" title="The Environment"></a>The Environment</h2><p>To build a apache module you have to install two things:</p>
+<ul>
+<li>Apache http server</li>
+<li>APR(apache portable runtime)</li>
+</ul>
+<p>Nothing much to describe How to install these, Just apt-get install!!(Debian)</p>
+<h2 id="Build-a-Module-sample"><a href="#Build-a-Module-sample" class="headerlink" title="Build a Module sample"></a>Build a Module sample</h2><p>if you have successfuly installed these two kinds of thing above, you can use the following command to automatically build a module sample</p>
+<figure class="highlight excel"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo apxs2 -<span class="built_in">n</span> mod_foo -g</div></pre></td></tr></table></figure>
+<p>Now you can see a mod_foo.c and a Makefile in your working dirtectroy. Next!</p>
+<h2 id="How-to-use-it"><a href="#How-to-use-it" class="headerlink" title="How to use it?"></a>How to use it?</h2><p>To play with this sample module first compile it into a DSO file and install it into Apache’s modules directory by running:</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">apxs -c -<span class="selector-tag">i</span> mod_foo.c</div></pre></td></tr></table></figure>
+<p>Then activate it in Apache’s apache2.conf file for instance for the URL /foo in as follows:</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="selector-id">#apache2</span><span class="selector-class">.conf</span></div><div class="line">LoadModule foo_module modules/mod_foo<span class="selector-class">.so</span></div><div class="line">&lt;Location /foo&gt;</div><div class="line">    SetHandler foo</div><div class="line">&lt;/Location&gt;</div></pre></td></tr></table></figure>
+<p>Then after restarting Apache via</p>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="attribute">apachectl restart</span></div></pre></td></tr></table></figure>
+<p>you immediately can request the URL /foo and watch for the output of this module. This can be achieved for instance via:</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">lynx -mime_header <span class="string">http:</span><span class="comment">//localhost/foo</span></div></pre></td></tr></table></figure>
+<p>The output should be similar to the following one:</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">HTTP/1.1 <span class="number">200</span> OK</div><div class="line"><span class="attribute">Date</span>: Tue, 31 Mar 1998 14:42:22 GMT</div><div class="line"><span class="attribute">Server</span>: Apache/1.3.4 (Unix)</div><div class="line"><span class="attribute">Connection</span>: close</div><div class="line"><span class="attribute">Content-Type</span>: text/html</div></pre></td></tr></table></figure>
+<p>More infomation: Looking at 《The Apache Module Book》you can find a pdf version on the internet.</p>
+
+          
         
       
     </div>
@@ -1108,7 +1218,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://matthewgao.github.io/Markdown-sample/">
+  <link itemprop="mainEntityOfPage" href="http://gaoshen.site/Markdown-sample/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="Matthew Gao">
@@ -1171,6 +1281,10 @@
           
 
           
+              <div class="post-description">
+                  Markdown ʾ��
+              </div>
+          
 
         </div>
       </header>
@@ -1184,14 +1298,49 @@
 
       
         
-          Markdown ʾ��
-          <!--noindex-->
-          <div class="post-more-link text-center">
-            <a class="btn" href="/Markdown-sample/">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
+          
+            <h2 id="Head1"><a href="#Head1" class="headerlink" title="Head1"></a>Head1</h2><h3 id="Head2"><a href="#Head2" class="headerlink" title="Head2"></a>Head2</h3><h4 id="Head3"><a href="#Head3" class="headerlink" title="Head3"></a>Head3</h4><p><del>ajgjgrrg</del></p>
+<p><em>This text will be italic</em></p>
+<p><strong>This text will be bold</strong></p>
+<p>In the words of Abraham Lincoln:</p>
+<blockquote>
+<p>Pardon my french</p>
+</blockquote>
+<ol>
+<li>Item 1<ol>
+<li>Item 2</li>
+</ol>
+</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">ֵ</th>
+<th style="text-align:center">����</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">baseline</td>
+<td style="text-align:center">Ĭ��Ԫ�ط����ڸ�Ԫ�صĻ�����</td>
+</tr>
+<tr>
+<td style="text-align:center">sub</td>
+<td style="text-align:center">��ֱ�����ı����±�</td>
+</tr>
+<tr>
+<td style="text-align:center">super</td>
+<td style="text-align:center">��ֱ�����ı����ϱ�</td>
+</tr>
+<tr>
+<td style="text-align:center">top</td>
+<td style="text-align:center">��Ԫ�صĶ�������������Ԫ�صĶ��˶���</td>
+</tr>
+</tbody>
+</table>
+<p><a href="http://www.philsallee.com/mbsteg/index.html" target="_blank" rel="external">Reference of /proc/sys/net/core</a></p>
+
+          
         
       
     </div>
@@ -1476,11 +1625,6 @@
     })();
   </script>
 
-  
-    
-    
-    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
-    <script src="/js/src/hook-duoshuo.js"></script>
   
 
 

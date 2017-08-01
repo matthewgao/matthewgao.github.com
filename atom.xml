@@ -4,9 +4,9 @@
   
   <link href="/atom.xml" rel="self"/>
   
-  <link href="http://matthewgao.github.io/"/>
-  <updated>2017-06-06T14:49:18.000Z</updated>
-  <id>http://matthewgao.github.io/</id>
+  <link href="http://gaoshen.site/"/>
+  <updated>2017-08-01T02:19:08.000Z</updated>
+  <id>http://gaoshen.site/</id>
   
   <author>
     <name>Matthew Gao</name>
@@ -16,11 +16,11 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>再见2016</title>
-    <link href="http://matthewgao.github.io/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/"/>
-    <id>http://matthewgao.github.io/分布式锁/</id>
+    <title>分布式锁</title>
+    <link href="http://gaoshen.site/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/"/>
+    <id>http://gaoshen.site/分布式锁/</id>
     <published>2016-12-31T03:50:05.000Z</published>
-    <updated>2017-06-06T14:49:18.000Z</updated>
+    <updated>2017-08-01T02:19:08.000Z</updated>
     
     <content type="html"><![CDATA[<h2 id="0x01-简介"><a href="#0x01-简介" class="headerlink" title="0x01 简介"></a>0x01 简介</h2><ul>
 <li>数据库</li>
@@ -78,17 +78,17 @@
     
     </summary>
     
-      <category term="回顾" scheme="http://matthewgao.github.io/categories/%E5%9B%9E%E9%A1%BE/"/>
+      <category term="回顾" scheme="http://gaoshen.site/categories/%E5%9B%9E%E9%A1%BE/"/>
     
     
-      <category term="生活" scheme="http://matthewgao.github.io/tags/%E7%94%9F%E6%B4%BB/"/>
+      <category term="生活" scheme="http://gaoshen.site/tags/%E7%94%9F%E6%B4%BB/"/>
     
   </entry>
   
   <entry>
     <title>Golang Note</title>
-    <link href="http://matthewgao.github.io/go/"/>
-    <id>http://matthewgao.github.io/go/</id>
+    <link href="http://gaoshen.site/go/"/>
+    <id>http://gaoshen.site/go/</id>
     <published>2016-12-02T15:40:07.000Z</published>
     <updated>2017-06-10T14:20:09.000Z</updated>
     
@@ -268,17 +268,17 @@
     
     </summary>
     
-      <category term="GO" scheme="http://matthewgao.github.io/categories/GO/"/>
+      <category term="GO" scheme="http://gaoshen.site/categories/GO/"/>
     
     
-      <category term="go" scheme="http://matthewgao.github.io/tags/go/"/>
+      <category term="go" scheme="http://gaoshen.site/tags/go/"/>
     
   </entry>
   
   <entry>
     <title>PHP Note</title>
-    <link href="http://matthewgao.github.io/php/"/>
-    <id>http://matthewgao.github.io/php/</id>
+    <link href="http://gaoshen.site/php/"/>
+    <id>http://gaoshen.site/php/</id>
     <published>2016-11-12T10:18:05.000Z</published>
     <updated>2017-01-06T02:57:49.000Z</updated>
     
@@ -318,17 +318,17 @@
     
     </summary>
     
-      <category term="PHP" scheme="http://matthewgao.github.io/categories/PHP/"/>
+      <category term="PHP" scheme="http://gaoshen.site/categories/PHP/"/>
     
     
-      <category term="php" scheme="http://matthewgao.github.io/tags/php/"/>
+      <category term="php" scheme="http://gaoshen.site/tags/php/"/>
     
   </entry>
   
   <entry>
     <title>Java Note</title>
-    <link href="http://matthewgao.github.io/java/"/>
-    <id>http://matthewgao.github.io/java/</id>
+    <link href="http://gaoshen.site/java/"/>
+    <id>http://gaoshen.site/java/</id>
     <published>2016-11-02T15:43:03.000Z</published>
     <updated>2016-11-02T15:43:03.000Z</updated>
     
@@ -352,17 +352,17 @@
     
     </summary>
     
-      <category term="Java" scheme="http://matthewgao.github.io/categories/Java/"/>
+      <category term="Java" scheme="http://gaoshen.site/categories/Java/"/>
     
     
-      <category term="java" scheme="http://matthewgao.github.io/tags/java/"/>
+      <category term="java" scheme="http://gaoshen.site/tags/java/"/>
     
   </entry>
   
   <entry>
     <title>回顾我的第一份工作</title>
-    <link href="http://matthewgao.github.io/firstjob/"/>
-    <id>http://matthewgao.github.io/firstjob/</id>
+    <link href="http://gaoshen.site/firstjob/"/>
+    <id>http://gaoshen.site/firstjob/</id>
     <published>2016-10-20T15:48:23.000Z</published>
     <updated>2016-10-20T15:48:23.000Z</updated>
     
@@ -418,17 +418,17 @@
     
     </summary>
     
-      <category term="回顾" scheme="http://matthewgao.github.io/categories/%E5%9B%9E%E9%A1%BE/"/>
+      <category term="回顾" scheme="http://gaoshen.site/categories/%E5%9B%9E%E9%A1%BE/"/>
     
     
-      <category term="job" scheme="http://matthewgao.github.io/tags/job/"/>
+      <category term="job" scheme="http://gaoshen.site/tags/job/"/>
     
   </entry>
   
   <entry>
     <title>C\C++ Notes</title>
-    <link href="http://matthewgao.github.io/2014-9-12-cpp-note/"/>
-    <id>http://matthewgao.github.io/2014-9-12-cpp-note/</id>
+    <link href="http://gaoshen.site/2014-9-12-cpp-note/"/>
+    <id>http://gaoshen.site/2014-9-12-cpp-note/</id>
     <published>2016-10-19T06:21:46.000Z</published>
     <updated>2017-01-06T05:44:44.000Z</updated>
     
@@ -842,19 +842,19 @@ c.front()/back(); //返回的是元素的引用
     
     </summary>
     
-      <category term="C/C++" scheme="http://matthewgao.github.io/categories/C-C/"/>
+      <category term="C/C++" scheme="http://gaoshen.site/categories/C-C/"/>
     
     
-      <category term="c" scheme="http://matthewgao.github.io/tags/c/"/>
+      <category term="c" scheme="http://gaoshen.site/tags/c/"/>
     
-      <category term="c++" scheme="http://matthewgao.github.io/tags/c/"/>
+      <category term="c++" scheme="http://gaoshen.site/tags/c/"/>
     
   </entry>
   
   <entry>
     <title>Linux Command Notes</title>
-    <link href="http://matthewgao.github.io/2014-9-2-linux-command-note/"/>
-    <id>http://matthewgao.github.io/2014-9-2-linux-command-note/</id>
+    <link href="http://gaoshen.site/2014-9-2-linux-command-note/"/>
+    <id>http://gaoshen.site/2014-9-2-linux-command-note/</id>
     <published>2016-09-29T10:07:24.000Z</published>
     <updated>2017-05-09T01:57:08.000Z</updated>
     
@@ -1155,21 +1155,21 @@ c.front()/back(); //返回的是元素的引用
     
     </summary>
     
-      <category term="Linux" scheme="http://matthewgao.github.io/categories/Linux/"/>
+      <category term="Linux" scheme="http://gaoshen.site/categories/Linux/"/>
     
     
-      <category term="shell" scheme="http://matthewgao.github.io/tags/shell/"/>
+      <category term="shell" scheme="http://gaoshen.site/tags/shell/"/>
     
-      <category term="command" scheme="http://matthewgao.github.io/tags/command/"/>
+      <category term="command" scheme="http://gaoshen.site/tags/command/"/>
     
-      <category term="linux" scheme="http://matthewgao.github.io/tags/linux/"/>
+      <category term="linux" scheme="http://gaoshen.site/tags/linux/"/>
     
   </entry>
   
   <entry>
     <title>HTML CSS Notes</title>
-    <link href="http://matthewgao.github.io/html+css/"/>
-    <id>http://matthewgao.github.io/html+css/</id>
+    <link href="http://gaoshen.site/html+css/"/>
+    <id>http://gaoshen.site/html+css/</id>
     <published>2016-09-12T09:00:59.000Z</published>
     <updated>2016-09-12T09:00:59.000Z</updated>
     
@@ -1184,17 +1184,17 @@ c.front()/back(); //返回的是元素的引用
     
     </summary>
     
-      <category term="Web" scheme="http://matthewgao.github.io/categories/Web/"/>
+      <category term="Web" scheme="http://gaoshen.site/categories/Web/"/>
     
     
-      <category term="html css" scheme="http://matthewgao.github.io/tags/html-css/"/>
+      <category term="html css" scheme="http://gaoshen.site/tags/html-css/"/>
     
   </entry>
   
   <entry>
     <title>GDB Notes</title>
-    <link href="http://matthewgao.github.io/gdb/"/>
-    <id>http://matthewgao.github.io/gdb/</id>
+    <link href="http://gaoshen.site/gdb/"/>
+    <id>http://gaoshen.site/gdb/</id>
     <published>2016-08-31T09:34:24.000Z</published>
     <updated>2016-08-31T09:34:24.000Z</updated>
     
@@ -1235,17 +1235,17 @@ c.front()/back(); //返回的是元素的引用
     
     </summary>
     
-      <category term="GDB" scheme="http://matthewgao.github.io/categories/GDB/"/>
+      <category term="GDB" scheme="http://gaoshen.site/categories/GDB/"/>
     
     
-      <category term="gdb" scheme="http://matthewgao.github.io/tags/gdb/"/>
+      <category term="gdb" scheme="http://gaoshen.site/tags/gdb/"/>
     
   </entry>
   
   <entry>
     <title>SHELL Command/Script Notes</title>
-    <link href="http://matthewgao.github.io/2014-9-2-shell-note/"/>
-    <id>http://matthewgao.github.io/2014-9-2-shell-note/</id>
+    <link href="http://gaoshen.site/2014-9-2-shell-note/"/>
+    <id>http://gaoshen.site/2014-9-2-shell-note/</id>
     <published>2016-07-28T15:59:04.000Z</published>
     <updated>2016-12-05T15:58:22.000Z</updated>
     
@@ -1297,17 +1297,17 @@ c.front()/back(); //返回的是元素的引用
     
     </summary>
     
-      <category term="Linux" scheme="http://matthewgao.github.io/categories/Linux/"/>
+      <category term="Linux" scheme="http://gaoshen.site/categories/Linux/"/>
     
     
-      <category term="shell" scheme="http://matthewgao.github.io/tags/shell/"/>
+      <category term="shell" scheme="http://gaoshen.site/tags/shell/"/>
     
   </entry>
   
   <entry>
     <title>ElasticSearch Note</title>
-    <link href="http://matthewgao.github.io/elasticsearch/"/>
-    <id>http://matthewgao.github.io/elasticsearch/</id>
+    <link href="http://gaoshen.site/elasticsearch/"/>
+    <id>http://gaoshen.site/elasticsearch/</id>
     <published>2016-07-28T06:10:37.000Z</published>
     <updated>2016-07-28T06:10:37.000Z</updated>
     
@@ -1428,17 +1428,17 @@ c.front()/back(); //返回的是元素的引用
     
     </summary>
     
-      <category term="ELK" scheme="http://matthewgao.github.io/categories/ELK/"/>
+      <category term="ELK" scheme="http://gaoshen.site/categories/ELK/"/>
     
     
-      <category term="elasticsearch" scheme="http://matthewgao.github.io/tags/elasticsearch/"/>
+      <category term="elasticsearch" scheme="http://gaoshen.site/tags/elasticsearch/"/>
     
   </entry>
   
   <entry>
     <title>XSLT and XPATH</title>
-    <link href="http://matthewgao.github.io/xslt/"/>
-    <id>http://matthewgao.github.io/xslt/</id>
+    <link href="http://gaoshen.site/xslt/"/>
+    <id>http://gaoshen.site/xslt/</id>
     <published>2016-07-19T05:47:09.000Z</published>
     <updated>2016-07-19T05:47:09.000Z</updated>
     
@@ -1471,14 +1471,14 @@ c.front()/back(); //返回的是元素的引用
     </summary>
     
     
-      <category term="xml" scheme="http://matthewgao.github.io/tags/xml/"/>
+      <category term="xml" scheme="http://gaoshen.site/tags/xml/"/>
     
   </entry>
   
   <entry>
     <title>Vagrant</title>
-    <link href="http://matthewgao.github.io/vagrant/"/>
-    <id>http://matthewgao.github.io/vagrant/</id>
+    <link href="http://gaoshen.site/vagrant/"/>
+    <id>http://gaoshen.site/vagrant/</id>
     <published>2016-07-19T05:45:27.000Z</published>
     <updated>2016-07-19T05:45:27.000Z</updated>
     
@@ -1500,17 +1500,17 @@ c.front()/back(); //返回的是元素的引用
     
     </summary>
     
-      <category term="automation" scheme="http://matthewgao.github.io/categories/automation/"/>
+      <category term="automation" scheme="http://gaoshen.site/categories/automation/"/>
     
     
-      <category term="vagrant" scheme="http://matthewgao.github.io/tags/vagrant/"/>
+      <category term="vagrant" scheme="http://gaoshen.site/tags/vagrant/"/>
     
   </entry>
   
   <entry>
     <title>A Samba Issue</title>
-    <link href="http://matthewgao.github.io/samba-issue/"/>
-    <id>http://matthewgao.github.io/samba-issue/</id>
+    <link href="http://gaoshen.site/samba-issue/"/>
+    <id>http://gaoshen.site/samba-issue/</id>
     <published>2016-07-19T05:44:47.000Z</published>
     <updated>2016-07-19T05:44:47.000Z</updated>
     
@@ -1529,16 +1529,16 @@ c.front()/back(); //返回的是元素的引用
     </summary>
     
     
-      <category term="linux" scheme="http://matthewgao.github.io/tags/linux/"/>
+      <category term="linux" scheme="http://gaoshen.site/tags/linux/"/>
     
-      <category term="samba" scheme="http://matthewgao.github.io/tags/samba/"/>
+      <category term="samba" scheme="http://gaoshen.site/tags/samba/"/>
     
   </entry>
   
   <entry>
     <title>MySQL Note</title>
-    <link href="http://matthewgao.github.io/mysql/"/>
-    <id>http://matthewgao.github.io/mysql/</id>
+    <link href="http://gaoshen.site/mysql/"/>
+    <id>http://gaoshen.site/mysql/</id>
     <published>2016-07-19T05:44:30.000Z</published>
     <updated>2017-08-01T02:15:07.000Z</updated>
     
@@ -1612,17 +1612,17 @@ c.front()/back(); //返回的是元素的引用
     
     </summary>
     
-      <category term="Database" scheme="http://matthewgao.github.io/categories/Database/"/>
+      <category term="Database" scheme="http://gaoshen.site/categories/Database/"/>
     
     
-      <category term="mysql" scheme="http://matthewgao.github.io/tags/mysql/"/>
+      <category term="mysql" scheme="http://gaoshen.site/tags/mysql/"/>
     
   </entry>
   
   <entry>
     <title>JavaScript Note</title>
-    <link href="http://matthewgao.github.io/javascript/"/>
-    <id>http://matthewgao.github.io/javascript/</id>
+    <link href="http://gaoshen.site/javascript/"/>
+    <id>http://gaoshen.site/javascript/</id>
     <published>2016-07-19T05:43:06.000Z</published>
     <updated>2016-07-19T05:43:06.000Z</updated>
     
@@ -1704,17 +1704,17 @@ c.front()/back(); //返回的是元素的引用
     
     </summary>
     
-      <category term="Javascript" scheme="http://matthewgao.github.io/categories/Javascript/"/>
+      <category term="Javascript" scheme="http://gaoshen.site/categories/Javascript/"/>
     
     
-      <category term="javascript" scheme="http://matthewgao.github.io/tags/javascript/"/>
+      <category term="javascript" scheme="http://gaoshen.site/tags/javascript/"/>
     
   </entry>
   
   <entry>
     <title>Docker</title>
-    <link href="http://matthewgao.github.io/docker/"/>
-    <id>http://matthewgao.github.io/docker/</id>
+    <link href="http://gaoshen.site/docker/"/>
+    <id>http://gaoshen.site/docker/</id>
     <published>2016-07-12T14:38:39.000Z</published>
     <updated>2016-07-12T14:38:39.000Z</updated>
     
@@ -1745,14 +1745,14 @@ c.front()/back(); //返回的是元素的引用
     </summary>
     
     
-      <category term="docker" scheme="http://matthewgao.github.io/tags/docker/"/>
+      <category term="docker" scheme="http://gaoshen.site/tags/docker/"/>
     
   </entry>
   
   <entry>
     <title>Python Notes</title>
-    <link href="http://matthewgao.github.io/python-notes/"/>
-    <id>http://matthewgao.github.io/python-notes/</id>
+    <link href="http://gaoshen.site/python-notes/"/>
+    <id>http://gaoshen.site/python-notes/</id>
     <published>2016-06-07T08:21:48.000Z</published>
     <updated>2016-06-07T08:21:48.000Z</updated>
     
@@ -1986,17 +1986,17 @@ c.front()/back(); //返回的是元素的引用
     
     </summary>
     
-      <category term="Python" scheme="http://matthewgao.github.io/categories/Python/"/>
+      <category term="Python" scheme="http://gaoshen.site/categories/Python/"/>
     
     
-      <category term="python" scheme="http://matthewgao.github.io/tags/python/"/>
+      <category term="python" scheme="http://gaoshen.site/tags/python/"/>
     
   </entry>
   
   <entry>
     <title>Sublime Text &amp; Plugin</title>
-    <link href="http://matthewgao.github.io/sublime-and-its-plugin/"/>
-    <id>http://matthewgao.github.io/sublime-and-its-plugin/</id>
+    <link href="http://gaoshen.site/sublime-and-its-plugin/"/>
+    <id>http://gaoshen.site/sublime-and-its-plugin/</id>
     <published>2016-04-18T15:10:33.000Z</published>
     <updated>2016-04-18T15:10:33.000Z</updated>
     
@@ -2030,19 +2030,19 @@ c.front()/back(); //返回的是元素的引用
     
     </summary>
     
-      <category term="IDE" scheme="http://matthewgao.github.io/categories/IDE/"/>
+      <category term="IDE" scheme="http://gaoshen.site/categories/IDE/"/>
     
     
-      <category term="editor" scheme="http://matthewgao.github.io/tags/editor/"/>
+      <category term="editor" scheme="http://gaoshen.site/tags/editor/"/>
     
-      <category term="sublime" scheme="http://matthewgao.github.io/tags/sublime/"/>
+      <category term="sublime" scheme="http://gaoshen.site/tags/sublime/"/>
     
   </entry>
   
   <entry>
     <title>Makefile Notes</title>
-    <link href="http://matthewgao.github.io/2014-9-26-makefile/"/>
-    <id>http://matthewgao.github.io/2014-9-26-makefile/</id>
+    <link href="http://gaoshen.site/2014-9-26-makefile/"/>
+    <id>http://gaoshen.site/2014-9-26-makefile/</id>
     <published>2016-04-17T16:50:55.000Z</published>
     <updated>2016-04-17T16:50:55.000Z</updated>
     
@@ -2079,10 +2079,10 @@ c.front()/back(); //返回的是元素的引用
     
     </summary>
     
-      <category term="Dev Tool" scheme="http://matthewgao.github.io/categories/Dev-Tool/"/>
+      <category term="Dev Tool" scheme="http://gaoshen.site/categories/Dev-Tool/"/>
     
     
-      <category term="makefile" scheme="http://matthewgao.github.io/tags/makefile/"/>
+      <category term="makefile" scheme="http://gaoshen.site/tags/makefile/"/>
     
   </entry>
   

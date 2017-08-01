@@ -88,7 +88,7 @@
 
 <meta property="og:type" content="website">
 <meta property="og:title" content="Matthew Note">
-<meta property="og:url" content="http://matthewgao.github.io/page/2/index.html">
+<meta property="og:url" content="http://gaoshen.site/page/2/index.html">
 <meta property="og:site_name" content="Matthew Note">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Matthew Note">
@@ -119,7 +119,7 @@
 
 
 
-  <link rel="canonical" href="http://matthewgao.github.io/page/2/"/>
+  <link rel="canonical" href="http://gaoshen.site/page/2/"/>
 
 
 
@@ -268,7 +268,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://matthewgao.github.io/gdb/">
+  <link itemprop="mainEntityOfPage" href="http://gaoshen.site/gdb/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="Matthew Gao">
@@ -331,6 +331,10 @@
           
 
           
+              <div class="post-description">
+                  GDB 相关笔记
+              </div>
+          
 
         </div>
       </header>
@@ -344,14 +348,38 @@
 
       
         
-          GDB 相关笔记
-          <!--noindex-->
-          <div class="post-more-link text-center">
-            <a class="btn" href="/gdb/">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
+          
+            <h3 id="print-f-expr"><a href="#print-f-expr" class="headerlink" title="print /f expr"></a><code>print /f expr</code></h3><p>expr is an expression (in the source language). By default the value of expr is printed in a format appropriate to its data type; you can choose a different format by specifying ‘/f’, where f is a letter specifying the format.</p>
+<h3 id="explore-arg"><a href="#explore-arg" class="headerlink" title="explore arg"></a><code>explore arg</code></h3><p>Another way of examining values of expressions and type information is through the Python extension command explore (available only if the gdb build is configured with –with-python). It offers an interactive way to start at the highest level (or, the most abstract level) of the data type of an expression (or, the data type itself) and explore all the way down to leaf scalar values/fields embedded in the higher level data types.</p>
+<blockquote>
+<p>arg is either an expression (in the source language), or a type visible in the current context of the program being debugged.</p>
+</blockquote>
+<p>In general, at any stage of exploration, you can go deeper towards the leaf values by responding to the prompts appropriately, or hit the return key to return to the enclosing data structure (the higher level data structure).</p>
+<p>Similar to exploring values, you can use the explore command to explore types. Instead of specifying a value (which is typically a variable name or an expression valid in the current context of the program being debugged), you specify a type name. If you consider the same example as above, your can explore the type struct ComplexStruct by passing the argument struct ComplexStruct to the explore command.</p>
+<figure class="highlight crystal"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(gdb) explore <span class="class"><span class="keyword">struct</span> <span class="title">ComplexStruct</span></span></div></pre></td></tr></table></figure>
+<p>By responding to the prompts appropriately in the subsequent interactive session, you can explore the type struct ComplexStruct in a manner similar to how the value cs was explored in the above example.</p>
+<p>The explore command also has two sub-commands, explore value and explore type. The former sub-command is a way to explicitly specify that value exploration of the argument is being invoked, while the latter is a way to explicitly specify that type exploration of the argument is being invoked.</p>
+<p><code>explore value expr</code><br>This sub-command of explore explores the value of the expression expr (if expr is an expression valid in the current context of the program being debugged). The behavior of this command is identical to that of the behavior of the explore command being passed the argument expr.<br><code>explore type arg</code><br>This sub-command of explore explores the type of arg (if arg is a type visible in the current context of program being debugged), or the type of the value/expression arg (if arg is an expression valid in the current context of the program being debugged). If arg is a type, then the behavior of this command is identical to that of the explore command being passed the argument arg. If arg is an expression, then the behavior of this command will be identical to that of the explore command being passed the type of arg as the argument.</p>
+<h3 id="Examining-Memory"><a href="#Examining-Memory" class="headerlink" title="Examining Memory"></a>Examining Memory</h3><p>You can use the command x (for “examine”) to examine memory in any of several formats, independently of your program’s data types.<br><code>x/nfu addr</code><br><code>x addr</code><br><code>x</code><br>Use the x command to examine memory.<br>n, f, and u are all optional parameters that specify how much memory to display and how to format it; addr is an expression giving the address where you want to start displaying memory. If you use defaults for nfu, you need not type the slash ‘/’. Several commands set convenient defaults for addr.</p>
+<ul>
+<li>n, the repeat count<br>The repeat count is a decimal integer; the default is 1. It specifies how much memory (counting by units u) to display. If a negative number is specified, memory is examined backward from addr. </li>
+<li>f, the display format<br>The display format is one of the formats used by print (‘x’, ‘d’, ‘u’, ‘o’, ‘t’, ‘a’, ‘c’, ‘f’, ‘s’), and in addition ‘i’ (for machine instructions). The default is ‘x’ (hexadecimal) initially. The default changes each time you use either x or print. </li>
+<li>u: the unit size The unit size is any of<ul>
+<li>b Bytes. </li>
+<li>h Halfwords (two bytes). </li>
+<li>w Words (four bytes). This is the initial default. </li>
+<li>g Giant words (eight bytes).</li>
+</ul>
+</li>
+</ul>
+<p>The default for addr is usually just after the last address examined—but several other commands also set the default address: info breakpoints (to the address of the last breakpoint listed), info line (to the starting address of a line), and print (if you use it to display a value from memory).</p>
+<h2 id="Tip"><a href="#Tip" class="headerlink" title="Tip"></a>Tip</h2><ul>
+<li>Support pretty-print(python): info pretty-printer</li>
+<li>info sharedlibrary: 显示关联的动态库</li>
+<li>info set 有环境变量？</li>
+</ul>
+
+          
         
       
     </div>
@@ -388,7 +416,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://matthewgao.github.io/2014-9-2-shell-note/">
+  <link itemprop="mainEntityOfPage" href="http://gaoshen.site/2014-9-2-shell-note/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="Matthew Gao">
@@ -451,6 +479,10 @@
           
 
           
+              <div class="post-description">
+                  SHELL学习笔记
+              </div>
+          
 
         </div>
       </header>
@@ -464,14 +496,49 @@
 
       
         
-          SHELL学习笔记
-          <!--noindex-->
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2014-9-2-shell-note/">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
+          
+            <h2 id=""><a href="#" class="headerlink" title="$"></a>$</h2><ul>
+<li><code>$$</code> 返回PID， $是个内部变量</li>
+<li><code>$?</code> 表示上一个指令的返回值</li>
+<li><code>$0</code> 表示函数或者shell的第一个参数，后面类推</li>
+<li><code>$@</code> 返回所有参数</li>
+<li>当读取参数个数超过9的时候需要加括号<code>$(10)</code>，这是历史原因</li>
+</ul>
+<h2 id="set-unset"><a href="#set-unset" class="headerlink" title="set unset"></a>set unset</h2><ul>
+<li>设置程序自定义变量（只对本shell）</li>
+<li>unset不仅可以unset变量，也可以是函数</li>
+</ul>
+<h2 id="export"><a href="#export" class="headerlink" title="export"></a>export</h2><p>设置为全局环境变量</p>
+<h2 id="declare"><a href="#declare" class="headerlink" title="declare"></a>declare</h2><p>将环境变量转成自定义变量</p>
+<h2 id="查找历史命令并执行"><a href="#查找历史命令并执行" class="headerlink" title="查找历史命令并执行"></a>查找历史命令并执行</h2><figure class="highlight vim"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$(<span class="keyword">history</span> | <span class="keyword">grep</span> -E <span class="string">'^ +1148'</span> | awk -F<span class="string">' '</span> <span class="string">'&#123;$1="";print&#125;'</span>)</div></pre></td></tr></table></figure>
+<h2 id="参数扩展"><a href="#参数扩展" class="headerlink" title="参数扩展"></a>参数扩展</h2><ul>
+<li><code>${param:-default}</code> 如果param为空，就把他设置成default</li>
+<li><code>${ #param}</code> 给出param长度</li>
+<li><code>${var:-string}</code>: 若变量var为空，则用在命令行中用string来替换<code>${var:-string}</code>，否则变量var不为空时，则用变量var的值来替换<code>${var:-string}</code>；</li>
+<li><code>${var:=string}</code>: 替换规则和<code>${var:-string}</code>是一样的，所不同之处是<code>${var:=string}</code>若var为空时，用string替换<code>${var:=string}</code>的同时，把string赋给变量var：<code>${var:=string}</code>很常用的一种用法是，判断某个变量是否赋值，没有的话则给它赋上一个默认值。</li>
+<li><code>${var:+string}</code>的替换规则和上面的相反，即只有当var不是空的时候才替换成string，若var为空时则不替换或者说是替换成变量 var的值，即空值。(因为变量var此时为空，所以这两种说法是等价的) </li>
+<li><code>${var:?string}</code>替换规则为：若变量var不为空，则用变量var的值来替换<code>${var:?string}</code>；若变量var为空，则把string输出到标准错误中，并从脚本中退出。我们可利用此特性来检查是否设置了变量的值。</li>
+</ul>
+<h2 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h2><p>变量仅仅在声明时、赋值时、被删除时（unset）、被导出时（export），算术运算中使用双括号结构时或在代表信号时（signal，查看样例 32-5）才不需要有 $ 前缀。赋值可以是使用 =（比如 var1=27），可以是在 read 语句中，也可以是在循环的头部（for var2 in 1 2 3）。1</p>
+<p>变量即使在双引号””中被引用也不会影响变量替换。我们称之为部分引用，有时候也称弱引用。而使用单引号’’引用时，变量将会作为字符串显示，变量替换也不会发生。我们称之为全引用，有时也称强引用。<code>${var}</code>和用双引号一个效果</p>
+<h2 id="输出脚本每一行执行的内容"><a href="#输出脚本每一行执行的内容" class="headerlink" title="输出脚本每一行执行的内容"></a>输出脚本每一行执行的内容</h2><p>打开这个功能，脚本执行的时候回返回每一个执行的命令<br><figure class="highlight applescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">set</span> -x <span class="comment">#打开</span></div><div class="line"><span class="keyword">set</span> +x <span class="comment">#关闭</span></div></pre></td></tr></table></figure></p>
+<h2 id="expect"><a href="#expect" class="headerlink" title="expect"></a>expect</h2><p>用于人机交互，属于密码什么的</p>
+<h2 id="dev-tty"><a href="#dev-tty" class="headerlink" title="/dev/tty"></a>/dev/tty</h2><p>读取它会自动重定向到一个终端，这在程序必须读取人工输入（比如密码）时候特别有用</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">printf</span> <span class="string">"Enter password"</span></div><div class="line">stty -echo <span class="comment">#关闭自动打印输入内容</span></div><div class="line"><span class="built_in">read</span> pass &lt; /dev/tty</div><div class="line">stty <span class="built_in">echo</span> <span class="comment">#打开打印输入内容</span></div></pre></td></tr></table></figure>
+<h2 id="PATH中添加当前路径"><a href="#PATH中添加当前路径" class="headerlink" title="PATH中添加当前路径"></a>PATH中添加当前路径</h2><p><code>PATH=:$PATH</code> 这样会先查找本地路径，也可以用一个点，更明显一点，通常不建议这么用，会有安全问题</p>
+<h2 id="各种括号"><a href="#各种括号" class="headerlink" title="各种括号"></a>各种括号</h2><ul>
+<li><code>$(command)</code> 与 <code>\</code>command`` 是一样的，但是后者已经不建议使用</li>
+<li>${VAR} 用来执行一些变量相关的动作，前面有描述</li>
+<li>$((expr)) 用来执行一些运算</li>
+<li>单引号不扩展字符串中变量</li>
+<li>双引号会扩展字符串中变量</li>
+</ul>
+<h2 id="exec"><a href="#exec" class="headerlink" title="exec"></a>exec</h2><figure class="highlight gradle"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">exec <span class="number">2</span> &gt; <span class="regexp">/tmp/</span><span class="keyword">file</span> # <span class="number">2</span>重定向到<span class="keyword">file</span></div><div class="line">exec <span class="number">3</span> &lt; <span class="regexp">/home/</span><span class="keyword">file</span>  #打开新文件描述符<span class="number">3</span></div></pre></td></tr></table></figure>
+<h2 id="lt-gt"><a href="#lt-gt" class="headerlink" title="&lt;&gt;"></a>&lt;&gt;</h2><p><code>&lt;&gt;</code>打开一个文件作为输入输出</p>
+<h2 id="subShell与代码块"><a href="#subShell与代码块" class="headerlink" title="subShell与代码块"></a>subShell与代码块</h2><p>subShell是一群被括在圆括号里的命令，这些命令会在另外的进程中执行</p>
+<p>~~<br>tar -cf - . | (cd /newdir; tar -xpf -)<br>~~</p>
+
+          
         
       
     </div>
@@ -508,7 +575,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://matthewgao.github.io/elasticsearch/">
+  <link itemprop="mainEntityOfPage" href="http://gaoshen.site/elasticsearch/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="Matthew Gao">
@@ -571,6 +638,10 @@
           
 
           
+              <div class="post-description">
+                  搞一搞ELK
+              </div>
+          
 
         </div>
       </header>
@@ -584,14 +655,118 @@
 
       
         
-          搞一搞ELK
-          <!--noindex-->
-          <div class="post-more-link text-center">
-            <a class="btn" href="/elasticsearch/">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
+          
+            <h1 id="ElasticSearch"><a href="#ElasticSearch" class="headerlink" title="ElasticSearch"></a>ElasticSearch</h1><hr>
+<h2 id="Concept"><a href="#Concept" class="headerlink" title="Concept"></a>Concept</h2><h3 id="index-indices"><a href="#index-indices" class="headerlink" title="index/indices"></a>index/indices</h3><p>index包含多个type</p>
+<h3 id="type"><a href="#type" class="headerlink" title="type"></a>type</h3><p>type包含多个documents</p>
+<h3 id="documents"><a href="#documents" class="headerlink" title="documents"></a>documents</h3><p>每一条记录是一个documents</p>
+<h2 id="Restriction"><a href="#Restriction" class="headerlink" title="Restriction"></a>Restriction</h2><ul>
+<li>对于SQL类似的Join命令，ES并不擅长，会消耗大量的计算cycle，间接上只支持子查询</li>
+</ul>
+<h3 id="Index-Limitation"><a href="#Index-Limitation" class="headerlink" title="Index Limitation"></a>Index Limitation</h3><p>Each Elasticsearch shard is a Lucene index. There is a maximum number of documents you can have in a single Lucene index. As of <a href="https://issues.apache.org/jira/browse/LUCENE-5843" target="_blank" rel="external">LUCENE-5843</a>, the limit is 2,147,483,519 (= Integer.MAX_VALUE - 128) documents. You can monitor shard sizes using the <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/cat-shards.html" target="_blank" rel="external">_cat/shards</a> api.</p>
+<h2 id="Analyzed-String"><a href="#Analyzed-String" class="headerlink" title="Analyzed String"></a>Analyzed String</h2><p>默认所有string进来都是analyzed，这意味着可能会被分词，所以要在插入数据之前用MAPPing的API设置好<a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-put-mapping.html" target="_blank" rel="external">MAPPing API</a></p>
+<h2 id="Search"><a href="#Search" class="headerlink" title="Search"></a>Search</h2><p>支持lucence的语法<a href="https://lucene.apache.org/core/2_9_4/queryparsersyntax.html" target="_blank" rel="external">Lucence语法</a>和JSON的DSL语法</p>
+<ul>
+<li>Lucence<br>Enter a query string in the Search field:<ol>
+<li>To perform a free text search, simply enter a text string. For example, if you’re searching web server logs, you could enter safari to search all fields for the term safari.</li>
+<li>To search for a value in a specific field, you prefix the value with the name of the field. For example, you could enter status:200 to limit the results to entries that contain the value 200 in the status field.</li>
+<li>To search for a range of values, you can use the bracketed range syntax, <code>[START_VALUE TO END_VALUE]</code>. For example, to find entries that have 4xx status codes, you could enter status:[400 TO 499].</li>
+<li>To specify more complex search criteria, you can use the Boolean operators AND, OR, and NOT. For example, to find entries that have 4xx status codes and have an extension of php or html, you could enter status:[400 TO 499] AND (extension:php OR extension:html).</li>
+</ol>
+</li>
+<li>支持夸index查詢</li>
+<li>Automatic index creation can be disabled by setting <code>action.auto_create_index</code> to false in the config file of all nodes. Automatic mapping creation can be disabled by setting index.mapper.dynamic to false in the config files of all nodes (or on the specific index settings).</li>
+<li>The index operation can be executed without specifying the id. In such a case, an id will be generated automatically. In addition, the op_type will automatically be set to <code>create</code>. Here is an example (note the POST used instead of PUT)</li>
+<li>A child document can be indexed by specifying its parent when indexing. When indexing a child document, the routing value is automatically set to be the same as its parent, unless the routing value is explicitly specified using the routing parameter. 需要設置mapping，dynamic mapping不能自动配置parant/child</li>
+<li>If you only need one or two fields from the complete <code>_source</code>, you can use the <code>_source_include</code> &amp; <code>_source_exclude</code> parameters to include or filter out that parts you need. This can be especially helpful with large documents where partial retrieval can save on network overhead. Both parameters take a comma separated list of fields or wildcard expressions. Example:</li>
+</ul>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="attribute">curl</span> -XGET <span class="string">'http://localhost:9200/twitter/tweet/1?_source_include=*.id&amp;_source_exclude=entities'</span></div><div class="line"><span class="comment"># shorter notation</span></div><div class="line">curl -XGET <span class="string">'http://localhost:9200/twitter/tweet/1?_source=*.id,retweeted'</span></div></pre></td></tr></table></figure>
+<ul>
+<li>inner_hit用来处理nested/child/parent search, 不然他会返回最上级的结果，而不是你期待的，似乎ES本身不支持nested，nested也是会被flatten</li>
+<li>global aggregation, 可以控制aggs不受query结果影响， 与此类似reverse_nested 可以取回他的父结构的element</li>
+<li>significant Terms???</li>
+<li><strong>pipeline aggregation</strong>, 还在试验阶段，这个<strong>牛逼</strong>啊</li>
+<li><a href="https://www.elastic.co/guide/en/elasticsearch/guide/current/complex-core-fields.html#inner-objects" target="_blank" rel="external">Complex Core Field Types</a></li>
+</ul>
+<h3 id="filter-path"><a href="#filter-path" class="headerlink" title="filter_path"></a>filter_path</h3><p>URI可以指定一个filter_path参数来表示返回那些值，例如：</p>
+<figure class="highlight xquery"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">curl -XGET <span class="string">'localhost:9200/_nodes/stats?filter_path=nodes.*.ho*'</span></div><div class="line">&#123;</div><div class="line">  <span class="string">"nodes"</span> : &#123;</div><div class="line">    <span class="string">"lvJHed8uQQu4brS-SXKsNA"</span> : &#123;</div><div class="line">      <span class="string">"host"</span> : <span class="string">"portable"</span></div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="Bucket-Aggregations"><a href="#Bucket-Aggregations" class="headerlink" title="Bucket Aggregations"></a>Bucket Aggregations</h3><p>Aggregation的结果用于后续bucket或者metric aggregation使用，它只是取得子集<a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/search-aggregations-bucket.html" target="_blank" rel="external">Bucket Aggregations</a><br>Buckets are analogous to SQL GROUP BY statements</p>
+<h3 id="Metric-Aggregations"><a href="#Metric-Aggregations" class="headerlink" title="Metric Aggregations"></a>Metric Aggregations</h3><p>Aggregation成可度量的数字<a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/search-aggregations-metrics.html" target="_blank" rel="external">Metric Aggregations</a></p>
+<h3 id="Scripted-fields"><a href="#Scripted-fields" class="headerlink" title="Scripted fields"></a>Scripted fields</h3><p>Scripted fields use the Lucene expression syntax. For more information, see <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-scripting.html#_lucene_expressions_scripts" target="_blank" rel="external">Lucene Expressions</a> Scripts.</p>
+<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><ul>
+<li>nested 数据结构，导致insert的资源耗费上升大概50%，因为ES对于update采用的是DELETE-&gt;INSERT的方法，所以额外开销在这里，另外查询也会耗费一定时间，用indexID检索可以忽略这部分</li>
+<li>正常的syslog like结构，插入数据高效，但是结构并不是特别清晰</li>
+<li>官方文档上说Child/Parant方式查询效率远比nested低<a href="https://www.elastic.co/guide/en/elasticsearch/guide/current/parent-child-performance.html" target="_blank" rel="external">Practical Considerations</a>, 如果index时间要求比search要求高，那么可以考虑用parant/child模式</li>
+<li>Append<a href="https://www.elastic.co/guide/en/elasticsearch/guide/current/partial-updates.html" target="_blank" rel="external">Partial Updates to Documents</a>数据只能使用script方式，默认是关闭的，因为他有注入的风险，所以谨慎使用<a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-scripting.html" target="_blank" rel="external">Scripting</a></li>
+<li><code>include_in_parent</code> 可以把nested的数据，以flat的格式加到他的父节点上，但是这个功能似乎已经deprecate了，开了这个速度有所下降，因为他会反过来搜索parent的element</li>
+<li>设计一个以时间为主线的Log分析系统的时候建议使用<code>index_name+time</code>作为index名字，这样更加方便管理和做shard</li>
+</ul>
+<h1 id="Kibana"><a href="#Kibana" class="headerlink" title="Kibana"></a>Kibana</h1><hr>
+<ul>
+<li>filter is global??</li>
+<li>Include/Exclude Pattern</li>
+<li>Include/Exclude Pattern Flags</li>
+<li>JSON input</li>
+<li>Discover的query不能是一个最终统计值，只是检索数据</li>
+<li>Sense 是个好插件，省了用Curl了</li>
+</ul>
+<h2 id="Restriction-1"><a href="#Restriction-1" class="headerlink" title="Restriction"></a>Restriction</h2><ul>
+<li>暂时不支持nested、parant/child的可视化，但是已经有人在做了，不久的将来应该会有</li>
+<li>table不支持导出</li>
+<li>Discover展开数据也不够友好</li>
+</ul>
+<h1 id="Requirement-amp-Desgin"><a href="#Requirement-amp-Desgin" class="headerlink" title="Requirement &amp; Desgin"></a>Requirement &amp; Desgin</h1><hr>
+<h2 id="Runtime"><a href="#Runtime" class="headerlink" title="Runtime"></a>Runtime</h2><p>实际上Runtime数据不应该是一个log analyzer应该处理的事情，但是我们依旧暂时假定支持这样做</p>
+<ul>
+<li>Active user: 检查session template是否有endtime</li>
+<li>Active user’s Realm/Zone/Community/IP</li>
+</ul>
+<h2 id="Statistics"><a href="#Statistics" class="headerlink" title="Statistics"></a>Statistics</h2><ul>
+<li>TopN Resource的inbound/outbound总和</li>
+<li>TopN User的inbound/outbound总和</li>
+<li>总的Realm/Zone/Community个数</li>
+<li>最常访问资源TopN</li>
+<li>inbound/outbound流量TopN资源</li>
+<li>AccessAgent总个数</li>
+<li>Platform总个数</li>
+<li>地理位置范围</li>
+<li>TopN failure profile</li>
+</ul>
+<p>以上都可以做细致区分，比如Active User的如上结果，Web Access的如上结果，Tunnel的如上结果，已经断开连接用户的如上结果</p>
+<blockquote>
+<p>是否是web用户可以通过是否有IP来确定，但是有误差</p>
+</blockquote>
+<h2 id="Design"><a href="#Design" class="headerlink" title="Design"></a>Design</h2><p>基本包含两个数据类型：</p>
+<ul>
+<li>SessionInfo: 包含Username, Realm, Community, ClientIP, assigned IP, starttime, endtime, failure profile, Zone, Platform, AccessAgent, 所有这些信息可以通过partial update, 来在后期插入，资源开销基本可控, sessionInfo都以<code>teamID</code>作为<code>_id</code></li>
+<li>AccessInfo: 包含teamID, destination, port, protocol, inbound, outbound, 以及所有SessionInfo的数据（可以尝试通过parent/child方式实现), 实际上我们只需要复制一些基础的信息，比如teamID，username，两个IP，accessAgent， 对于其他的item和access resource没有直接关系，也不大可能去分析他们之间的关系，为了这个可能需要KernelSession发送一个teamID（12bytes）出来</li>
+<li>CurrentUser: 一个单一的数据，只通过partial update更新</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">Type</th>
+<th style="text-align:center">Public</th>
+<th style="text-align:center">Internal</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">Modules</td>
+<td style="text-align:center">lower_with_under</td>
+<td style="text-align:center">_lower_with_under</td>
+</tr>
+</tbody>
+</table>
+<h1 id="TODO"><a href="#TODO" class="headerlink" title="TODO"></a>TODO</h1><hr>
+<ul>
+<li>定义timestamp</li>
+<li>检索所有不重复的teamId列表(nested query)</li>
+<li>scripted update可以自加 自減，对于concurrent user可能有用<a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-update.html" target="_blank" rel="external">Update Doc</a>, access 记录都加到同一个document下面（会不会有性能问题），kibana支持nested aggregation</li>
+<li>Upsert 可以处理存在更新， 不存在创建的问题</li>
+</ul>
+
+          
         
       
     </div>
@@ -628,7 +803,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://matthewgao.github.io/xslt/">
+  <link itemprop="mainEntityOfPage" href="http://gaoshen.site/xslt/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="Matthew Gao">
@@ -691,6 +866,10 @@
           
 
           
+              <div class="post-description">
+                  更多XSLT、XPATH的内容还是要看W3C的标准，W3CSHOOL讲的太含糊
+              </div>
+          
 
         </div>
       </header>
@@ -704,14 +883,29 @@
 
       
         
-          更多XSLT、XPATH的内容还是要看W3C的标准，W3CSHOOL讲的太含糊
-          <!--noindex-->
-          <div class="post-more-link text-center">
-            <a class="btn" href="/xslt/">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
+          
+            <h2 id="xslt"><a href="#xslt" class="headerlink" title="xslt"></a>xslt</h2><p>这次是为了用xslt来转换一个xml所以临时学习了下xslt</p>
+<h3 id="call-template和apply-templates"><a href="#call-template和apply-templates" class="headerlink" title="call-template和apply-templates"></a>call-template和apply-templates</h3><p>对xml模板 来说，name属性是很关键的 call-template /apply-template 的name必须要和模板的name相对应。模板相当于一个函数，可以暂时这么看。而name相当于函数名称.</p>
+<p>简单说apply是应用，call是调用。<br>用apply时，引擎自动搜索与当前select指定xpath的匹配节点相匹配的template（该template必须有属性match）并使用该template进行处理，此时需要指定的是select的path。<br>用call时就跟其它语言调用函数一样，必须指定name属性，相应的，该template必须有name属性，当然，也可以在这时with-param(当然相应的模板中有对应的param才行，不过这个不强制要求)。</p>
+<ol>
+<li>从名字区分：call-template，一次只对一个node名字有效；而apply-templates，注意是是复数，所以这个是对所有符合条件的node有效。</li>
+<li><p>从手法上：call-template，手段是通过name；apply-templates手段是通过match。</p>
+</li>
+<li><p>使用apply调用的模板,   其中的上下文节点是与之匹配的节点。使用call调用的模板,   它没有上下文节点，参数通过param进行传递</p>
+</li>
+</ol>
+<h2 id="xpath"><a href="#xpath" class="headerlink" title="xpath"></a>xpath</h2><p><code>xsl:if</code>的<code>test</code>，一般对象的<code>select</code>都是一个xpath的表达式</p>
+<ul>
+<li><code>name()</code>函数可以用来取当前element的名字</li>
+<li><code>text()</code>可以取当前element的内容</li>
+<li><code>count()</code>统计element个数</li>
+<li>一个xpath可以包含一些条件例如<code>$resource_type[@external = &#39;true&#39;]</code>，表示attribute有externel且为true的节点</li>
+</ul>
+<figure class="highlight dust"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="xml"><span class="tag">&lt;<span class="name">xsl:element</span> <span class="attr">name</span>=<span class="string">"</span></span></span><span class="template-variable">&#123;name($resource_type)&#125;</span><span class="xml"><span class="tag"><span class="string">"</span>&gt;</span></span></div><div class="line">    <span class="tag">&lt;<span class="name">xsl:attribute</span> <span class="attr">name</span>=<span class="string">"count"</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">xsl:value-of</span> <span class="attr">select</span>=<span class="string">"count($resource_type)"</span> /&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">xsl:attribute</span>&gt;</span></div><div class="line">    </div><div class="line">    <span class="tag">&lt;<span class="name">xsl:if</span> <span class="attr">test</span>=<span class="string">"count($resource_type[@external = 'true']) != 0"</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">xsl:element</span> <span class="attr">name</span>=<span class="string">"externalServer"</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">xsl:attribute</span> <span class="attr">name</span>=<span class="string">"count"</span>&gt;</span></div><div class="line">                <span class="tag">&lt;<span class="name">xsl:value-of</span> <span class="attr">select</span>=<span class="string">"count($resource_type[@external= 'true'])"</span> /&gt;</span></div><div class="line">            <span class="tag">&lt;/<span class="name">xsl:attribute</span>&gt;</span></div><div class="line">        <span class="tag">&lt;/<span class="name">xsl:element</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">xsl:if</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">xsl:element</span>&gt;</span></div></pre></td></tr></table></figure>
+<h2 id="parser"><a href="#parser" class="headerlink" title="parser"></a>parser</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#!/usr/bin/env python3</span></div><div class="line"><span class="comment"># coding=utf-8</span></div><div class="line"><span class="comment"># Created Time: 2016-06-20</span></div><div class="line"></div><div class="line">__author__ = <span class="string">'Matthew Gao'</span></div><div class="line"></div><div class="line"><span class="keyword">import</span> lxml.etree <span class="keyword">as</span> ET</div><div class="line"><span class="keyword">import</span> pprint</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">parse</span><span class="params">()</span>:</span></div><div class="line">    pp = pprint.PrettyPrinter(indent=<span class="number">4</span>)</div><div class="line">    xml_filename = <span class="string">'amc_one_of_everything.xml'</span></div><div class="line">    xsl_filename = <span class="string">'phonehometranslator.xsl'</span></div><div class="line"></div><div class="line">    dom = ET.parse(xml_filename)</div><div class="line">    xslt = ET.parse(xsl_filename)</div><div class="line">    transform = ET.XSLT(xslt)</div><div class="line">    newdom = transform(dom)</div><div class="line">    <span class="comment"># print(ET.tostring(newdom, pretty_print=True))</span></div><div class="line">    pp.pprint(ET.tostring(newdom, pretty_print=<span class="keyword">True</span>).decode())</div><div class="line"></div><div class="line">    print(transform.error_log)</div><div class="line"></div><div class="line">    <span class="keyword">for</span> entry <span class="keyword">in</span> transform.error_log:</div><div class="line">        print(<span class="string">'message from line %s, col %s: %s'</span> % (entry.line, entry.column, entry.message))</div><div class="line">        print(<span class="string">'domain: %s (%d)'</span> % (entry.domain_name, entry.domain))</div><div class="line">        print(<span class="string">'type: %s (%d)'</span> % (entry.type_name, entry.type))</div><div class="line">        print(<span class="string">'level: %s (%d)'</span> % (entry.level_name, entry.level))</div><div class="line">        print(<span class="string">'filename: %s'</span> % entry.filename)</div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</div><div class="line">    parse()</div></pre></td></tr></table></figure>
+<h2 id="调试"><a href="#调试" class="headerlink" title="调试"></a>调试</h2><p>有人会说用<xsl:message>来调试，但是这个在解析出错的时候似乎帮助不大，有些xslt的编辑器可以调试，但是都是付费的，所以没有具体尝试</xsl:message></p>
+
+          
         
       
     </div>
@@ -748,7 +942,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://matthewgao.github.io/vagrant/">
+  <link itemprop="mainEntityOfPage" href="http://gaoshen.site/vagrant/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="Matthew Gao">
@@ -811,6 +1005,10 @@
           
 
           
+              <div class="post-description">
+                  Vagrant Notes
+              </div>
+          
 
         </div>
       </header>
@@ -824,14 +1022,19 @@
 
       
         
-          Vagrant Notes
-          <!--noindex-->
-          <div class="post-more-link text-center">
-            <a class="btn" href="/vagrant/">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
+          
+            <h2 id="安装和启动"><a href="#安装和启动" class="headerlink" title="安装和启动"></a>安装和启动</h2><hr>
+<p>首先安装如下</p>
+<ul>
+<li>VirutalBox</li>
+<li>Vagrant</li>
+</ul>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">mkdir</span> test</div><div class="line">vagrant init [an <span class="built_in">image</span> path]</div><div class="line">vagrant up <span class="meta"># start that image</span></div><div class="line">vagrant ssh <span class="meta"># ssh to that host</span></div><div class="line"></div><div class="line">vagrant destroy #删除</div></pre></td></tr></table></figure>
+<h2 id="要点"><a href="#要点" class="headerlink" title="要点"></a>要点</h2><hr>
+<h3 id="文件共享"><a href="#文件共享" class="headerlink" title="文件共享"></a>文件共享</h3><p>默认vagrant会连接到本地的一个/vagrant目录，所以要小心不要删除了host上的文件</p>
+<h3 id="Isolate"><a href="#Isolate" class="headerlink" title="Isolate"></a>Isolate</h3><p>每个vagrant都会共享同一个base image，但是他们并不会修改那个image，所以可以放心使用</p>
+
+          
         
       
     </div>
@@ -868,7 +1071,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://matthewgao.github.io/samba-issue/">
+  <link itemprop="mainEntityOfPage" href="http://gaoshen.site/samba-issue/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="Matthew Gao">
@@ -931,6 +1134,10 @@
           
 
           
+              <div class="post-description">
+                  最近抛弃ubuntu改用Mate版本的Mint，但是在配置Samba的时候遇到了一个很诡异的问题
+              </div>
+          
 
         </div>
       </header>
@@ -944,14 +1151,15 @@
 
       
         
-          最近抛弃ubuntu改用Mate版本的Mint，但是在配置Samba的时候遇到了一个很诡异的问题
-          <!--noindex-->
-          <div class="post-more-link text-center">
-            <a class="btn" href="/samba-issue/">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
+          
+            <h2 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h2><p>在安装好Samba之后按照如下配置配置好</p>
+<figure class="highlight nix"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">[Public]</div><div class="line">    <span class="attr">path</span> = /home/myname</div><div class="line">    guest <span class="attr">ok</span> = yes</div><div class="line">    <span class="attr">writable</span> = yes</div><div class="line">    <span class="attr">browsable</span> = yes</div><div class="line">    read <span class="attr">only</span> = no</div></pre></td></tr></table></figure>
+<p>但是发现windows并不能访问，始终说没有权限，用其他linux系统可以正常访问</p>
+<h2 id="问题定位"><a href="#问题定位" class="headerlink" title="问题定位"></a>问题定位</h2><p>检查Log，发现多处backtrace</p>
+<figure class="highlight scheme"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line">[<span class="name">2016/04/20</span> <span class="number">21</span>:52:16.574827,  <span class="number">0</span>] ../source3/lib/util.c:900(<span class="name">log_stack_trace</span>)</div><div class="line">  BACKTRACE: <span class="number">29</span> stack frames:</div><div class="line">   #<span class="number">0</span> /usr/lib/x86_64-linux-gnu/samba/libsmbregistry.so.0(<span class="name">log_stack_trace+0x1a</span>) [<span class="name">0x7f470509616a</span>]</div><div class="line">   #<span class="number">1</span> /usr/lib/x86_64-linux-gnu/samba/libsmbregistry.so.0(<span class="name">smb_panic_s3+0x20</span>) [<span class="name">0x7f4705096240</span>]</div><div class="line">   #<span class="number">2</span> /usr/lib/x86_64-linux-gnu/libsamba-util.so.0(<span class="name">smb_panic+0x2f</span>) [<span class="name">0x7f4705e0c8ef</span>]</div><div class="line">   #<span class="number">3</span> /usr/lib/x86_64-linux-gnu/libtalloc.so.2(<span class="name">+0x1b5f</span>) [<span class="name">0x7f4702b94b5f</span>]</div><div class="line">   #<span class="number">4</span> /usr/lib/x86_64-linux-gnu/libtalloc.so.2(<span class="name">_talloc_steal_loc+0xab</span>) [<span class="name">0x7f4702b9b77b</span>]</div><div class="line">   #<span class="number">5</span> /usr/lib/x86_64-linux-gnu/libtalloc.so.2(<span class="name">_talloc_move+0x13</span>) [<span class="name">0x7f4702b9b7b3</span>]</div><div class="line">   #<span class="number">6</span> /usr/lib/x86_64-linux-gnu/samba/libsmbd-base.so.0(<span class="name">+0x19c868</span>) [<span class="name">0x7f4705a60868</span>]</div><div class="line">   #<span class="number">7</span> /usr/lib/x86_64-linux-gnu/samba/libsmbd-base.so.0(<span class="name">get_share_mode_lock+0x17e</span>) [<span class="name">0x7f4705a6149e</span>]</div><div class="line">   #<span class="number">8</span> /usr/lib/x86_64-linux-gnu/samba/libsmbd-base.so.0(<span class="name">+0x107b8b</span>) [<span class="name">0x7f47059cbb8b</span>]</div><div class="line">   #<span class="number">9</span> /usr/lib/x86_64-linux-gnu/samba/libsmbd-base.so.0(<span class="name">+0x10c1bc</span>) [<span class="name">0x7f47059d01bc</span>]</div><div class="line">   #<span class="number">10</span> /usr/lib/x86_64-linux-gnu/samba/libsmbd-base.so.0(<span class="name">create_file_default+0x1cf</span>) [<span class="name">0x7f47059d164f</span>]</div><div class="line">   #<span class="number">11</span> /usr/lib/x86_64-linux-gnu/samba/libsmbd-base.so.0(<span class="name">+0x1dab6e</span>) [<span class="name">0x7f4705a9eb6e</span>]</div><div class="line">   #<span class="number">12</span> /usr/lib/x86_64-linux-gnu/samba/libsmbd-base.so.0(<span class="name">smb_vfs_call_create_file+0xd8</span>) [<span class="name">0x7f47059d7e78</span>]</div><div class="line">   #<span class="number">13</span> /usr/lib/x86_64-linux-gnu/samba/libsmbd-base.so.0(<span class="name">smbd_smb2_request_process_create+0xaff</span>) [<span class="name">0x7f4705a059ff</span>]</div><div class="line">   #<span class="number">14</span> /usr/lib/x86_64-linux-gnu/samba/libsmbd-base.so.0(<span class="name">smbd_smb2_request_dispatch+0xc4d</span>) [<span class="name">0x7f47059fe3ed</span>]</div><div class="line">   #<span class="number">15</span> /usr/lib/x86_64-linux-gnu/samba/libsmbd-base.so.0(<span class="name">+0x13b072</span>) [<span class="name">0x7f47059ff072</span>]</div><div class="line">   #<span class="number">16</span> /usr/lib/x86_64-linux-gnu/libsmbconf.so.0(<span class="name">run_events_poll+0x16c</span>) [<span class="name">0x7f4703d2ea8c</span>]</div><div class="line">   #<span class="number">17</span> /usr/lib/x86_64-linux-gnu/libsmbconf.so.0(<span class="name">+0x25ce0</span>) [<span class="name">0x7f4703d2ece0</span>]</div><div class="line">   #<span class="number">18</span> /usr/lib/x86_64-linux-gnu/libtevent.so.0(<span class="name">_tevent_loop_once+0x8d</span>) [<span class="name">0x7f4702988cbd</span>]</div><div class="line">   #<span class="number">19</span> /usr/lib/x86_64-linux-gnu/libtevent.so.0(<span class="name">tevent_common_loop_wait+0x1b</span>) [<span class="name">0x7f4702988e5b</span>]</div><div class="line">   #<span class="number">20</span> /usr/lib/x86_64-linux-gnu/samba/libsmbd-base.so.0(<span class="name">smbd_process+0x6c9</span>) [<span class="name">0x7f47059ed569</span>]</div><div class="line">   #<span class="number">21</span> smbd(<span class="name">+0x96b6</span>) [<span class="name">0x7f47064a66b6</span>]</div><div class="line">   #<span class="number">22</span> /usr/lib/x86_64-linux-gnu/libsmbconf.so.0(<span class="name">run_events_poll+0x16c</span>) [<span class="name">0x7f4703d2ea8c</span>]</div><div class="line">   #<span class="number">23</span> /usr/lib/x86_64-linux-gnu/libsmbconf.so.0(<span class="name">+0x25ce0</span>) [<span class="name">0x7f4703d2ece0</span>]</div><div class="line">   #<span class="number">24</span> /usr/lib/x86_64-linux-gnu/libtevent.so.0(<span class="name">_tevent_loop_once+0x8d</span>) [<span class="name">0x7f4702988cbd</span>]</div><div class="line">   #<span class="number">25</span> /usr/lib/x86_64-linux-gnu/libtevent.so.0(<span class="name">tevent_common_loop_wait+0x1b</span>) [<span class="name">0x7f4702988e5b</span>]</div><div class="line">   #<span class="number">26</span> smbd(<span class="name">main+0x15b4</span>) [<span class="name">0x7f47064a46c4</span>]</div><div class="line">   #<span class="number">27</span> /lib/x86_64-linux-gnu/libc.so.6(<span class="name">__libc_start_main+0xf5</span>) [<span class="name">0x7f47025e1ec5</span>]</div><div class="line">   #<span class="number">28</span> smbd(<span class="name">+0x7a96</span>) [<span class="name">0x7f47064a4a96</span>]</div></pre></td></tr></table></figure>
+<p>原来是他所依赖的库有兼容性问题，所以更新相关的库</p>
+<h2 id="解决"><a href="#解决" class="headerlink" title="解决"></a>解决</h2><figure class="highlight q"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo apt-<span class="built_in">get</span> install -y libsmbclient libsmbclient-<span class="built_in">dev</span> libtevent0 libtalloc2</div></pre></td></tr></table></figure>
+          
         
       
     </div>
@@ -988,7 +1196,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://matthewgao.github.io/mysql/">
+  <link itemprop="mainEntityOfPage" href="http://gaoshen.site/mysql/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="Matthew Gao">
@@ -1051,6 +1259,10 @@
           
 
           
+              <div class="post-description">
+                  MySQL 优化
+              </div>
+          
 
         </div>
       </header>
@@ -1064,14 +1276,71 @@
 
       
         
-          MySQL 优化
-          <!--noindex-->
-          <div class="post-more-link text-center">
-            <a class="btn" href="/mysql/">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
+          
+            <h2 id="基本命名和约束规范"><a href="#基本命名和约束规范" class="headerlink" title="基本命名和约束规范"></a>基本命名和约束规范</h2><ul>
+<li>表字符集选择UTF8 ，如果需要存储emoj表情，需要使用UTF8mb4(MySQL 5.5.3以后支持)</li>
+<li>存储引擎使用InnoDB</li>
+<li>变长字符串尽量使用varchar varbinary</li>
+<li>不在数据库中存储图片、文件等</li>
+<li>单表数据量控制在1亿以下</li>
+<li>库名、表名、字段名不使用保留字</li>
+<li>库名、表名、字段名、索引名使用小写字母，以下划线分割 ，需要见名知意</li>
+<li>库表名不要设计过长，尽可能用最少的字符表达出表的用途</li>
+</ul>
+<h2 id="字段规范"><a href="#字段规范" class="headerlink" title="字段规范"></a>字段规范</h2><ul>
+<li>所有字段均定义为NOT NULL ，除非你真的想存Null</li>
+<li>字段类型在满足需求条件下越小越好，使用UNSIGNED存储非负整数 ，实际使用时候存储负数场景不多</li>
+<li>使用TIMESTAMP存储时间</li>
+<li>使用varchar存储变长字符串 ，当然要注意varchar(M)里的M指的是字符数不是字节数；使用UNSIGNED INT存储IPv4 地址而不是CHAR(15) ，这种方式只能存储IPv4，存储不了IPv6</li>
+<li>使用DECIMAL存储精确浮点数，用float有的时候会有问题</li>
+<li>少用blob text</li>
+</ul>
+<p>关于为什么定义不使用Null的原因</p>
+<ul>
+<li>浪费存储空间，因为InnoDB需要有额外一个字节存储</li>
+<li>表内默认值Null过多会影响优化器选择执行计划</li>
+</ul>
+<h2 id="索引规范"><a href="#索引规范" class="headerlink" title="索引规范"></a>索引规范</h2><ul>
+<li>单个索引字段数不超过5，单表索引数量不超过5，索引设计遵循B+ Tree索引最左前缀匹配原则</li>
+<li>选择区分度高的列作为索引</li>
+<li>建立的索引能覆盖80%主要的查询，不求全，解决问题的主要矛盾</li>
+<li>DML和order by和group by字段要建立合适的索引</li>
+<li>避免索引的隐式转换</li>
+<li>避免冗余索引</li>
+<li>关于索引规范，一定要记住索引这个东西是一把双刃剑，在加速读的同时也引入了很多额外的写入和锁，降低写入能力，这也是为什么要控制索引数原因。之前看到过不少人给表里每个字段都建了索引，其实对查询可能起不到什么作用。</li>
+<li>注意索引引起的死锁问题，会导致性能严重下降，可以通过组合索引来解决这个问题</li>
+<li>控制索引前缀长度可以有效的提高效率</li>
+</ul>
+<p>冗余索引例子</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="title">idx_abc</span><span class="params">(a,b,c)</span></span> </div><div class="line"></div><div class="line"><span class="function"><span class="title">idx_a</span><span class="params">(a)</span></span> 冗余 </div><div class="line"></div><div class="line"><span class="function"><span class="title">idx_ab</span><span class="params">(a,b)</span></span> 冗余</div></pre></td></tr></table></figure>
+<p>隐式转换例子</p>
+<figure class="highlight oxygene"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">字段:remark varchar(<span class="number">50</span>) <span class="keyword">NOT</span> Null </div><div class="line"></div><div class="line">MySQL&gt;<span class="keyword">SELECT</span> id, gift_code <span class="keyword">FROM</span> gift <span class="keyword">WHERE</span> deal_id = <span class="number">640</span> <span class="keyword">AND</span> remark=<span class="number">115127</span>; <span class="number">1</span> row <span class="keyword">in</span> <span class="keyword">set</span> (<span class="number">0.14</span> sec) </div><div class="line"></div><div class="line">MySQL&gt;<span class="keyword">SELECT</span> id, gift_code <span class="keyword">FROM</span> pool_gift WHEREdeal_id = <span class="number">640</span> <span class="keyword">AND</span> remark=‘<span class="number">115127</span>’; <span class="number">1</span> row <span class="keyword">in</span> <span class="keyword">set</span> (<span class="number">0.005</span> sec)</div><div class="line"></div><div class="line">字段定义为varchar，但传入的值是个int，就会导致全表扫描，要求程序端要做好类型检查</div></pre></td></tr></table></figure>
+<h2 id="SQL类规范"><a href="#SQL类规范" class="headerlink" title="SQL类规范"></a>SQL类规范</h2><ul>
+<li>尽量不使用存储过程、触发器、函数等</li>
+<li>避免使用大表的JOIN，MySQL优化器对join优化策略过于简单</li>
+<li>避免在数据库中进行数学运算和其他大量计算任务</li>
+<li>SQL合并，主要是指的DML时候多个value合并，减少和数据库交互</li>
+<li>合理的分页，尤其大分页<br>UPDATE、DELETE语句不使用LIMIT ，容易造成主从不一致</li>
+</ul>
+<h2 id="表设计"><a href="#表设计" class="headerlink" title="表设计"></a>表设计</h2><ul>
+<li>NULL 表示允许是空值，空值是不同于0，‘’这样的值，所以允许空值会降低索引的效率，通常都设置成NOT NULL</li>
+<li>在非STRICT模式下，插入记录时候没有显示的给出一个没有defalut值得时候，不会报错，会默认设置一个默认值，STRICT模式下回直接报错</li>
+</ul>
+<h2 id="Log"><a href="#Log" class="headerlink" title="Log"></a>Log</h2><ol>
+<li>error 日志：记录启动、运行或停止 mysqld 时出现的问题，默认开启。</li>
+<li>general 日志：通用查询日志，记录所有语句和指令，开启数据库会有 5% 左右性能损失。</li>
+<li>binlog 日志：二进制格式，记录所有更改数据的语句，主要用于 slave 复制和数据恢复。</li>
+<li>slow 日志：记录所有执行时间超过 long_query_time 秒的查询或不使用索引的查询，默认关闭。</li>
+<li>Innodb日志：innodb redo log、undo log，用于恢复数据和撤销操作。</li>
+</ol>
+<h2 id="Tips"><a href="#Tips" class="headerlink" title="Tips"></a>Tips</h2><ol>
+<li>innodb不仅会打印出事务和事务持有和等待的锁，而且还有记录本身，不幸的是，它可能超过innodb为输出结果预留的长度(只能打印1M的内容且只能保留最近一次的死锁信息)，如果你无法看到完整的输出，此时可以在任意库下创建innodb_monitor或innodb_lock_monitor表，这样innodb status信息会完整且每15s一次被记录到错误日志中。如：create table innodb_monitor(a int)engine=innodb;，不需要记录到错误日志中时就删掉这个表即可。</li>
+</ol>
+<h2 id="Commands"><a href="#Commands" class="headerlink" title="Commands"></a>Commands</h2><ul>
+<li><code>SHOW ENGINE INNODB STATUS</code></li>
+</ul>
+
+          
         
       
     </div>
@@ -1108,7 +1377,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://matthewgao.github.io/javascript/">
+  <link itemprop="mainEntityOfPage" href="http://gaoshen.site/javascript/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="Matthew Gao">
@@ -1171,6 +1440,10 @@
           
 
           
+              <div class="post-description">
+                  莫名我就喜欢上了JS....
+              </div>
+          
 
         </div>
       </header>
@@ -1184,14 +1457,79 @@
 
       
         
-          莫名我就喜欢上了JS....
-          <!--noindex-->
-          <div class="post-more-link text-center">
-            <a class="btn" href="/javascript/">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
+          
+            <h2 id="作用域和声明提前"><a href="#作用域和声明提前" class="headerlink" title="作用域和声明提前"></a>作用域和声明提前</h2><hr>
+<p>Javascript并不被作用域<code>{}</code>所控制，所以函数内声明的变量在所有的函数内的scope里都是可见的，因此可以把函数所有的变量都放在最开始声明</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> scope = <span class="string">"global"</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">func</span>(<span class="params"></span>)</span>&#123;</div><div class="line">    <span class="built_in">console</span>.log(scope)<span class="comment">// undefine</span></div><div class="line">    <span class="keyword">var</span> scope = <span class="string">"local"</span></div><div class="line">    <span class="built_in">console</span>.log(scope) <span class="comment">// "local"</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>没初始化的变量默认为undefined</li>
+</ul>
+<h2 id="NaN-Infinity"><a href="#NaN-Infinity" class="headerlink" title="NaN Infinity"></a>NaN Infinity</h2><hr>
+<p>不能够用<code>x == NaN</code> 判断是否是NaN或者Infinity，可以使用<code>isNaN()</code>或者<code>isInfinity()</code>来判断</p>
+<h2 id="属性的四个特性"><a href="#属性的四个特性" class="headerlink" title="属性的四个特性"></a>属性的四个特性</h2><hr>
+<h3 id="数据属性"><a href="#数据属性" class="headerlink" title="数据属性"></a>数据属性</h3><ul>
+<li>value</li>
+<li>writable</li>
+<li>enumerable</li>
+<li>configurable</li>
+</ul>
+<h3 id="存取器属性"><a href="#存取器属性" class="headerlink" title="存取器属性"></a>存取器属性</h3><p>不具有value和writable特性，写特性是由有没有setter方法决定的</p>
+<ul>
+<li>get</li>
+<li>set</li>
+<li>enumerable</li>
+<li>configurable</li>
+</ul>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">Object.getOwnPropertyDescriptor(&#123;<span class="string">x:</span><span class="number">1</span>&#125;, <span class="string">'x'</span>) </div><div class="line"><span class="comment">//return &#123;value:1, writable:true, enumerable:true, configurable:true&#125;</span></div><div class="line"></div><div class="line">Object.defineProperty(obj, <span class="string">'x'</span>, &#123;<span class="string">value:</span><span class="number">1</span>, <span class="string">writable:</span><span class="literal">true</span>, <span class="string">enumerable:</span><span class="literal">true</span>, <span class="string">configurable:</span><span class="literal">true</span>&#125;)<span class="comment">//设置属性</span></div><div class="line"><span class="comment">//不能修改继承属性</span></div></pre></td></tr></table></figure>
+<h2 id="this"><a href="#this" class="headerlink" title="this"></a>this</h2><hr>
+<ol>
+<li>在构造函数中的this指向所创建的对象</li>
+<li>一般的this指向他的上下文</li>
+</ol>
+<p>注意他并不遵循 lexical scope, 只是表示上下文（context）</p>
+<h3 id="建议不要使用this"><a href="#建议不要使用this" class="headerlink" title="建议不要使用this"></a>建议不要使用this</h3><p>You actually don’t want to access this in particular, but the object it refers to. That’s why an easy solution is to simply create a new variable that also refers to that object. The variable can have any name, but common ones are self and that.</p>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">MyConstructor</span><span class="params">(data, transport)</span> </span>&#123;</div><div class="line">    <span class="keyword">this</span>.data = data;</div><div class="line">    <span class="keyword">var</span> self = <span class="keyword">this</span>;</div><div class="line">    transport.on(<span class="string">'data'</span>, <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>&#123;</div><div class="line">        alert(self.data);</div><div class="line">    &#125;);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="使用bind"><a href="#使用bind" class="headerlink" title="使用bind"></a>使用bind</h3><h4 id="Explicitly-set-this-of-the-callback"><a href="#Explicitly-set-this-of-the-callback" class="headerlink" title="Explicitly set this of the callback"></a>Explicitly set this of the callback</h4><p>It might look like you have no control over the value of this, because its value is set automatically, but that is actually not the case.</p>
+<p>Every function has the method .bind [docs], which returns a new function with this bound to a value. The function has exactly the same behavior as the one you called .bind on, only that this was set by you. No matter how or when that function is called, this will always refer to the passed value.</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">function MyConstructor(<span class="keyword">data</span>, transport) &#123;</div><div class="line">    <span class="keyword">this</span>.<span class="keyword">data</span> = <span class="keyword">data</span>;</div><div class="line">    <span class="keyword">var</span> boundFunction = (function() &#123; <span class="comment">// parenthesis are not necessary</span></div><div class="line">        alert(<span class="keyword">this</span>.<span class="keyword">data</span>);             <span class="comment">// but might improve readability</span></div><div class="line">    &#125;).bind(<span class="keyword">this</span>); <span class="comment">// &lt;- here we are calling `.bind()` </span></div><div class="line">    transport.on(<span class="string">'data'</span>, boundFunction);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>In this case, we are binding the callback’s this to the value of MyConstructor’s this.</p>
+<h4 id="Set-this-of-the-callback-part-2"><a href="#Set-this-of-the-callback-part-2" class="headerlink" title="Set this of the callback - part 2"></a>Set this of the callback - part 2</h4><p>Some functions/methods which accept callbacks also accept a value to which the callback’s this should refer to. This is basically the same as binding it yourself, but the function/method does it for you. Array#map [docs] is such a method. Its signature is:</p>
+<p><code>array.map(callback[, thisArg])</code><br>The first argument is the callback and the second argument is the value this should refer to. Here is a contrived example:</p>
+<figure class="highlight haxe"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> arr = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];</div><div class="line"><span class="keyword">var</span> obj = &#123;multiplier: <span class="type">42</span>&#125;;</div><div class="line"></div><div class="line"><span class="keyword">var</span> <span class="keyword">new</span><span class="type">_arr</span> = arr.map(<span class="function"><span class="keyword">function</span></span>(v) &#123;</div><div class="line">    <span class="keyword">return</span> v * <span class="built_in">this</span>.multiplier;</div><div class="line">&#125;, obj); <span class="comment">// &lt;- here we are passing `obj` as second argument</span></div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">SmaApi.prototype.trigger_all = <span class="function"><span class="keyword">function</span>(<span class="params">obj</span>)</span>&#123;</div><div class="line">    <span class="keyword">var</span> propNames = <span class="built_in">Object</span>.getOwnPropertyNames(obj);</div><div class="line"></div><div class="line">    propNames.forEach(<span class="function"><span class="keyword">function</span>(<span class="params">name</span>) </span>&#123;</div><div class="line">        <span class="keyword">this</span>.trigger(name);</div><div class="line">    &#125;, <span class="keyword">this</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="argument"><a href="#argument" class="headerlink" title="argument"></a>argument</h2><p>函数会有一个argument属性对应于他的实参</p>
+<h3 id="callee和caller属性"><a href="#callee和caller属性" class="headerlink" title="callee和caller属性"></a>callee和caller属性</h3><ul>
+<li>callee 正在执行的函数</li>
+<li>caller 调用它的函数</li>
+</ul>
+<h2 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h2><hr>
+<h3 id="prototype属性"><a href="#prototype属性" class="headerlink" title="prototype属性"></a>prototype属性</h3><p>每个函数都有一个prototype属性，这个属性是一个对象的引用，每个函数都包含不同的原型对象</p>
+<h3 id="call方法和apply方法"><a href="#call方法和apply方法" class="headerlink" title="call方法和apply方法"></a>call方法和apply方法</h3><p>他可以用来绑定一个函数func到任意对象obj</p>
+<figure class="highlight autoit"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">func</span>.<span class="title">call</span><span class="params">(obj, args...)</span></span></div><div class="line"><span class="function"><span class="keyword">func</span>.<span class="title">apply</span><span class="params">(obj, [args...])</span></span></div></pre></td></tr></table></figure>
+<h3 id="bind"><a href="#bind" class="headerlink" title="bind"></a>bind</h3><p>它和apply和call的不同是，bind返回的是一个函数<br><figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> func2 = <span class="function"><span class="keyword">func</span>.<span class="title">bind</span><span class="params">(obj, args)</span></span></div></pre></td></tr></table></figure></p>
+<h3 id="Function-构造函数"><a href="#Function-构造函数" class="headerlink" title="Function() 构造函数"></a>Function() 构造函数</h3><p>Function()创建的函数并不使用词法作用于，所以他作为嵌套函数的时候不能捕获上层函数的对象</p>
+<h3 id="不完全函数"><a href="#不完全函数" class="headerlink" title="不完全函数"></a>不完全函数</h3><p>把一个函数调用拆成，若干个子调用<code>f(1,2,3,4,5)=&gt;f(1,2)(3,4)(5)</code></p>
+<h2 id="类"><a href="#类" class="headerlink" title="类"></a>类</h2><p>类包含一个构造函数，一个prototype，对于prototype相同的对象是属于一类的。</p>
+<p>Javascript里面的类实际上感觉就是用对象构造对象，他没有其他OO中类的概念</p>
+<ul>
+<li>构造函数中的属性是等同于static</li>
+<li>而prototype的等同于方法/属性</li>
+<li>构造函数并不是生成对象的主体，主体是prototype，构造函数只能作为类似静态方法的方式操作</li>
+</ul>
+<h2 id="TIP"><a href="#TIP" class="headerlink" title="TIP"></a>TIP</h2><hr>
+<ul>
+<li>使用分号</li>
+<li>不区分整数和浮点</li>
+<li>如果没使用var声明一个变量，那么他会默认变成全局的。</li>
+<li><code>a = a || a.func()</code></li>
+<li>JSON.stringify and JSON.parse</li>
+<li>Javascript 相等运算符比较对象时，比较的是引用而不是值，可以用<code>equals()</code>来做完整比较</li>
+<li>代码质量检查 jslint.com</li>
+<li>let 声明块级作用域的变量</li>
+<li>const 声明常量 v &gt;1.8</li>
+</ul>
+
+          
         
       
     </div>
@@ -1476,11 +1814,6 @@
     })();
   </script>
 
-  
-    
-    
-    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
-    <script src="/js/src/hook-duoshuo.js"></script>
   
 
 
